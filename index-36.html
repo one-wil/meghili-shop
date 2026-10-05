@@ -5372,7 +5372,7 @@
 
 
 <style id="cart-trolley-final-design">
-/* ===== عربة التسوق النهائية: مع مقبض علوي أنيق ===== */
+/* ===== عربة التسوق النهائية: بدون مقبض علوي ===== */
 .smart-selected-products .selected-product,
 #page2 .selected-product {
     direction: ltr !important;
@@ -5391,38 +5391,24 @@
     overflow: visible !important;
 }
 
-/* مقبض عربة التسوق: يخرج من أعلى البطاقة بشكل أنيق وواضح */
+/* حافة داخلية فقط — لا مقبض */
 .smart-selected-products .selected-product::before,
 #page2 .selected-product::before {
     content: '' !important;
     position: absolute !important;
-    top: -31px !important;
-    right: 12% !important;
-    width: 112px !important;
-    height: 34px !important;
-    border: 4px solid #2f86df !important;
-    border-bottom: 0 !important;
-    border-radius: 22px 22px 0 0 !important;
+    inset: 5px !important;
+    width: auto !important;
+    height: auto !important;
+    top: 5px !important;
+    left: 5px !important;
+    right: 5px !important;
+    bottom: 5px !important;
+    transform: none !important;
+    border: 1px solid rgba(0,153,255,.20) !important;
+    border-radius: 18px 18px 33px 33px !important;
     background: transparent !important;
-    box-shadow: 0 -2px 0 rgba(255,255,255,.9) inset !important;
     pointer-events: none !important;
-    z-index: 3 !important;
-}
-
-/* قبضة المقبض */
-.smart-selected-products .selected-product .selected-product-info::before,
-#page2 .selected-product .selected-product-info::before {
-    content: '' !important;
-    position: absolute !important;
-    top: -38px !important;
-    right: calc(12% + 18px) !important;
-    width: 76px !important;
-    height: 10px !important;
-    border-radius: 999px !important;
-    background: linear-gradient(90deg, #1d65b5, #2f86df, #1d65b5) !important;
-    box-shadow: 0 3px 6px rgba(0,75,150,.22) !important;
-    pointer-events: none !important;
-    z-index: 4 !important;
+    z-index: 1 !important;
 }
 
 /* العجلتان */
@@ -5460,7 +5446,6 @@
 
 .smart-selected-products .selected-product-info,
 #page2 .selected-product-info {
-    position: relative !important;
     order: 2 !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
@@ -5569,10 +5554,6 @@
     #page2 .selected-product-remove { width: 31px !important; height: 31px !important; }
     .smart-selected-products .selected-product::after,
     #page2 .selected-product::after { bottom: -18px !important; height: 25px !important; }
-    .smart-selected-products .selected-product::before,
-    #page2 .selected-product::before { top: -25px !important; right: 10% !important; width: 82px !important; height: 27px !important; border-width: 3px !important; }
-    .smart-selected-products .selected-product .selected-product-info::before,
-    #page2 .selected-product .selected-product-info::before { top: -31px !important; right: calc(10% + 13px) !important; width: 56px !important; height: 8px !important; }
 }
 </style>
 </head>
