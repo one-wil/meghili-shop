@@ -11523,22 +11523,24 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 </style>
 
 
-<style id="smart-cart-departure-animation-v1">
-/* مغادرة السلة بعد الضغط على «اطلب الآن» */
+<style id="smart-cart-departure-animation-v2">
+/* تركيز سينمائي على عربة السلة ثم مغادرتها */
 .smart-cart-departing{
-  animation: smartCartWalkAway 1.2s cubic-bezier(.22,.75,.24,1) forwards !important;
+  animation: smartCartFocusAndWalkAway 1.2s cubic-bezier(.22,.75,.24,1) forwards !important;
   pointer-events:none !important;
   z-index:50 !important;
+  transform-origin:center center !important;
 }
-@keyframes smartCartWalkAway{
-  0%{transform:translate3d(0,0,0) rotate(0deg);opacity:1}
-  12%{transform:translate3d(14px,-3px,0) rotate(1.2deg);opacity:1}
-  24%{transform:translate3d(34px,2px,0) rotate(-1.5deg);opacity:1}
-  38%{transform:translate3d(62px,-4px,0) rotate(1.8deg);opacity:.98}
-  52%{transform:translate3d(100px,3px,0) rotate(-1.8deg);opacity:.94}
-  68%{transform:translate3d(155px,-2px,0) rotate(1.5deg);opacity:.82}
-  82%{transform:translate3d(235px,5px,0) rotate(-1deg);opacity:.55}
-  100%{transform:translate3d(115vw,0,0) rotate(0deg);opacity:0}
+@keyframes smartCartFocusAndWalkAway{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1);opacity:1;filter:brightness(1) drop-shadow(0 0 0 rgba(0,180,255,0))}
+  10%{transform:translate3d(0,-2px,0) rotate(0deg) scale(1.08);opacity:1;filter:brightness(1.08) drop-shadow(0 0 16px rgba(0,180,255,.45))}
+  20%{transform:translate3d(0,0,0) rotate(0deg) scale(1.05);opacity:1;filter:brightness(1.04) drop-shadow(0 0 11px rgba(0,180,255,.32))}
+  30%{transform:translate3d(18px,-3px,0) rotate(1.4deg) scale(1.02);opacity:1;filter:brightness(1.02) drop-shadow(0 0 8px rgba(0,180,255,.22))}
+  43%{transform:translate3d(55px,2px,0) rotate(-1.6deg) scale(.98);opacity:.98;filter:none}
+  57%{transform:translate3d(105px,-4px,0) rotate(1.8deg) scale(.91);opacity:.91}
+  72%{transform:translate3d(190px,4px,0) rotate(-1.5deg) scale(.78);opacity:.70}
+  86%{transform:translate3d(330px,-2px,0) rotate(1deg) scale(.58);opacity:.38}
+  100%{transform:translate3d(115vw,0,0) rotate(0deg) scale(.18);opacity:0;filter:none}
 }
 @media (prefers-reduced-motion:reduce){.smart-cart-departing{animation-duration:.35s !important}}
 </style>
