@@ -11523,44 +11523,36 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 </style>
 
 
-<style id="smart-cart-departure-animation-v2">
-/* تركيز سينمائي على عربة السلة ثم مغادرتها */
-.smart-cart-departing{
-  animation: smartCartFocusAndWalkAway 1.2s cubic-bezier(.22,.75,.24,1) forwards !important;
-  pointer-events:none !important;
-  z-index:50 !important;
-  transform-origin:center center !important;
-}
-@keyframes smartCartFocusAndWalkAway{
-  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1);opacity:1;filter:brightness(1) drop-shadow(0 0 0 rgba(0,180,255,0))}
-  10%{transform:translate3d(0,-2px,0) rotate(0deg) scale(1.08);opacity:1;filter:brightness(1.08) drop-shadow(0 0 16px rgba(0,180,255,.45))}
-  20%{transform:translate3d(0,0,0) rotate(0deg) scale(1.05);opacity:1;filter:brightness(1.04) drop-shadow(0 0 11px rgba(0,180,255,.32))}
-  30%{transform:translate3d(18px,-3px,0) rotate(1.4deg) scale(1.02);opacity:1;filter:brightness(1.02) drop-shadow(0 0 8px rgba(0,180,255,.22))}
-  43%{transform:translate3d(55px,2px,0) rotate(-1.6deg) scale(.98);opacity:.98;filter:none}
-  57%{transform:translate3d(105px,-4px,0) rotate(1.8deg) scale(.91);opacity:.91}
-  72%{transform:translate3d(190px,4px,0) rotate(-1.5deg) scale(.78);opacity:.70}
-  86%{transform:translate3d(330px,-2px,0) rotate(1deg) scale(.58);opacity:.38}
-  100%{transform:translate3d(115vw,0,0) rotate(0deg) scale(.18);opacity:0;filter:none}
-}
-@media (prefers-reduced-motion:reduce){.smart-cart-departing{animation-duration:.35s !important}}
+<style id="smart-cart-departure-animation-v3">
+.smart-cart-departing-v3{pointer-events:none!important;z-index:99999!important;will-change:transform,opacity,filter!important;}
 </style>
-<script id="smart-cart-departure-controller-v1">
+<script id="smart-cart-departure-controller-v3">
 (function(){
-  'use strict';
   window.smartAnimateCartDeparture=function(){
     return new Promise(function(resolve){
+      var nodes=[];
       try{
-        const cards=Array.from(document.querySelectorAll('#page2 .selected-product, .smart-selected-products .selected-product'));
-        if(!cards.length){resolve();return;}
-        cards.forEach(function(card,index){
-          card.classList.remove('smart-cart-departing');
-          void card.offsetWidth;
-          card.style.animationDelay=(index*90)+'ms';
-          card.classList.add('smart-cart-departing');
+        var container=document.querySelector('#page2 .smart-selected-products');
+        if(container) nodes=[container];
+        else {
+          nodes=Array.from(document.querySelectorAll('#page2 .selected-product'));
+        }
+        if(!nodes.length){ resolve(); return; }
+        nodes.forEach(function(el){
+          el.classList.add('smart-cart-departing-v3');
+          el.style.setProperty('transition','none','important');
+          el.animate([
+            {transform:'translate3d(0,0,0) scale(1)',opacity:1,filter:'brightness(1) drop-shadow(0 0 0 rgba(0,190,255,0))'},
+            {transform:'translate3d(0,-4px,0) scale(1.13)',opacity:1,filter:'brightness(1.15) drop-shadow(0 0 22px rgba(0,190,255,.65))',offset:.14},
+            {transform:'translate3d(0,0,0) scale(1.06)',opacity:1,filter:'brightness(1.06) drop-shadow(0 0 12px rgba(0,190,255,.35))',offset:.28},
+            {transform:'translate3d(70px,0,0) rotate(2deg) scale(.98)',opacity:.98,offset:.48},
+            {transform:'translate3d(240px,0,0) rotate(-2deg) scale(.78)',opacity:.72,offset:.68},
+            {transform:'translate3d(520px,0,0) rotate(3deg) scale(.52)',opacity:.35,offset:.84},
+            {transform:'translate3d(115vw,0,0) rotate(5deg) scale(.18)',opacity:0,filter:'brightness(1) drop-shadow(0 0 0 rgba(0,0,0,0))'}
+          ],{duration:1500,easing:'cubic-bezier(.22,.61,.36,1)',fill:'forwards'});
         });
-        const duration=1200+Math.max(0,cards.length-1)*90;
-        setTimeout(function(){cards.forEach(function(card){card.style.animationDelay='';});resolve();},duration);
-      }catch(err){console.warn('Cart departure animation:',err);resolve();}
+        setTimeout(function(){resolve();},1550);
+      }catch(e){console.warn('Cart departure:',e);resolve();}
     });
   };
 })();
