@@ -1,3 +1,4 @@
+
 // =============================================================================
 // ⚙️ ملف الإعدادات الرئيسي للمتجر
 // =============================================================================
@@ -466,8 +467,6 @@ const STORE_CONFIG = {
       "desk": 400
     }
   },
-  "COMMUNES_SOURCE": "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json",
-
   "FREE_DELIVERY": {
     "desk": {
       "enabled": true,
@@ -490,11 +489,13 @@ const STORE_CONFIG = {
     ]
   },
   "DISCOUNTS": {
-    "enableQuantityDiscount": false,
+    "enableQuantityDiscount": true,
     "minQuantityForDiscount": 0,
-    "discountPerItem": 0,
+    "discountPerItem": 100,
     "discountScope": "selected",
-    "discountProducts": [],
+    "discountProducts": [
+      1789581423689
+    ],
     "enablePromotionalDiscount": false,
     "promotionalDiscountPercent": 0,
     "promotionalDiscountedPrice": null,
@@ -502,7 +503,7 @@ const STORE_CONFIG = {
     "promoDiscountProducts": []
   },
   "STORE_INFO": {
-    "name": "Vol-Shop1",
+    "name": "Meghili-shop",
     "storeIcon": "-",
     "storeTitle": "-",
     "tagline": "متجر الأحلام ",
@@ -762,6 +763,7 @@ const STORE_CONFIG = {
       }
     }
   },
+  "COMMUNES_SOURCE": "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json",
   "POINTS_SYSTEM": {
     "currentPoints": 1000,
     "remainingDays": 30,
