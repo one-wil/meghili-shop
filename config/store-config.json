@@ -462,7 +462,6 @@
       "desk": 400
     }
   },
-  "COMMUNES_SOURCE": "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json",
   "FREE_DELIVERY": {
     "desk": {
       "enabled": true,
@@ -485,11 +484,13 @@
     ]
   },
   "DISCOUNTS": {
-    "enableQuantityDiscount": false,
+    "enableQuantityDiscount": true,
     "minQuantityForDiscount": 0,
-    "discountPerItem": 0,
+    "discountPerItem": 100,
     "discountScope": "selected",
-    "discountProducts": [],
+    "discountProducts": [
+      1789581423689
+    ],
     "enablePromotionalDiscount": false,
     "promotionalDiscountPercent": 0,
     "promotionalDiscountedPrice": null,
@@ -757,6 +758,7 @@
       }
     }
   },
+  "COMMUNES_SOURCE": "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json",
   "POINTS_SYSTEM": {
     "currentPoints": 1000,
     "remainingDays": 30,
