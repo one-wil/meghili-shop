@@ -489,18 +489,20 @@ const STORE_CONFIG = {
     ]
   },
   "DISCOUNTS": {
-    "enableQuantityDiscount": true,
+    "enableQuantityDiscount": false,
     "minQuantityForDiscount": 0,
     "discountPerItem": 100,
     "discountScope": "selected",
     "discountProducts": [
       1789581423689
     ],
-    "enablePromotionalDiscount": false,
+    "enablePromotionalDiscount": true,
     "promotionalDiscountPercent": 0,
     "promotionalDiscountedPrice": null,
     "promoDiscountScope": "selected",
-    "promoDiscountProducts": []
+    "promoDiscountProducts": [
+      1789581423689
+    ]
   },
   "STORE_INFO": {
     "name": "Meghili-shop",
