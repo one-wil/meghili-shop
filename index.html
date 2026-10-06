@@ -10958,58 +10958,71 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 </style>
 
 
-<script id="smart-final-submit-single-click-v3">
+<script id="smart-final-submit-single-click-v4">
 (function(){
   'use strict';
-  let processing = false;
+  let processing=false;
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
-  document.addEventListener('click', function(e){
-    const btn = e.target && e.target.closest ? e.target.closest('#confirmOrderBtn') : null;
+  async function scrollCartClearly(){
+    const cart=document.getElementById('selectedProducts');
+    if(!cart) return false;
+    const card=cart.querySelector('.selected-product');
+    const target=card || cart;
+    try{
+      const rect=target.getBoundingClientRect();
+      const absoluteTop=window.pageYOffset + rect.top;
+      const targetY=Math.max(0, absoluteTop - (window.innerHeight*0.50) + (rect.height*0.50));
+      window.scrollTo({top:targetY,left:0,behavior:'smooth'});
+      await wait(900);
+      // تصحيح نهائي بدون اعتماد على scrollIntoView.
+      const r2=target.getBoundingClientRect();
+      const correction=window.pageYOffset + r2.top - (window.innerHeight*0.50) + (r2.height*0.50);
+      if(Math.abs(r2.top + r2.height/2 - window.innerHeight/2)>35){
+        window.scrollTo({top:Math.max(0,correction),left:0,behavior:'smooth'});
+        await wait(500);
+      }
+      return true;
+    }catch(e){
+      try{target.scrollIntoView({behavior:'smooth',block:'center'});await wait(900);}catch(_e){}
+      return true;
+    }
+  }
+
+  document.addEventListener('click', async function(e){
+    const btn=e.target && e.target.closest ? e.target.closest('#confirmOrderBtn') : null;
     if(!btn || btn.disabled || processing) return;
-
     e.preventDefault();
     e.stopImmediatePropagation();
-    processing = true;
-
-    // إيقاف نبض الزر فوراً، حتى لا يستمر أثناء حركة التأكيد.
+    processing=true;
     btn.classList.remove('smart-confirm-pulse');
-    btn.disabled = true;
+    btn.disabled=true;
 
-    const step4 = document.querySelector('.smart-section-no[data-stage="4"]');
+    const step4=document.querySelector('.smart-section-no[data-stage="4"]');
+    if(step4) step4.classList.remove('step4-black-pulse','smart-explode');
 
-    // نصعد قليلاً حتى يظهر الرقم 4 للمستخدم قبل التأكيد.
-    try {
-      window.scrollBy({ top: -180, left: 0, behavior: 'smooth' });
-    } catch(err) {
-      try { window.scrollBy(0, -180); } catch(e2) {}
-    }
+    // 1 — العلامة الخضراء للمرحلة 4 تظهر أولاً وتبقى ظاهرة.
+    try{
+      if(typeof window.smartShowStageCheckV10==='function') window.smartShowStageCheckV10(4);
+      if(typeof window.smartStageSuccessBell==='function') window.smartStageSuccessBell();
+    }catch(err){}
+    await wait(700);
 
-    // بعد بدء الصعود بقليل: يتوقف نبض 4 أولاً، ثم تظهر العلامة الخضراء والجرس.
-    setTimeout(function(){
-      try {
-        if(step4) step4.classList.remove('step4-black-pulse','smart-explode');
-        if(typeof window.smartShowStageCheckV10 === 'function') {
-          window.smartShowStageCheckV10(4);
-        }
-        if(typeof window.smartStageSuccessBell === 'function') {
-          window.smartStageSuccessBell();
-        }
-      } catch(err) {}
+    // 2 — ننتقل بوضوح إلى بطاقة السلة ونضعها في منتصف الشاشة.
+    await scrollCartClearly();
+    await wait(450);
 
-      // بعد الإشارة الخضراء: ننتقل تلقائياً إلى بطاقة السلة، ثم تبدأ حركة المغادرة.
-      // لا يتم إرسال الطلب إلا بعد انتهاء الحركة كاملة.
-      const departure = (typeof window.playOrderDepartureAnimation === 'function')
-        ? window.playOrderDepartureAnimation()
-        : Promise.resolve();
-      Promise.resolve(departure).then(function(){
-        const form = document.getElementById('orderForm');
-        if(form && typeof form.requestSubmit === 'function') {
-          form.requestSubmit(btn);
-        } else if(form) {
-          form.dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}));
-        }
-      });
-    }, 300);
+    // 3 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
+    try{
+      if(typeof window.playOrderDepartureAnimation==='function'){
+        await window.playOrderDepartureAnimation({alreadyScrolled:true});
+      }
+    }catch(err){ console.warn('Departure sequence:',err); }
+
+    // 4 — الإرسال لا يبدأ إلا بعد انتهاء الحركة.
+    const form=document.getElementById('orderForm');
+    if(form && typeof form.requestSubmit==='function') form.requestSubmit(btn);
+    else if(form) form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
   }, true);
 })();
 </script>
@@ -11753,37 +11766,41 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
-\n\n<style id="professional-order-departure-animation-v1">\n/* ============================================================\n   حركة مغادرة الطلب بعد الإشارة الخضراء\n   1) فتح مقبض السلة\n   2) ارتفاع بسيط للصورة\n   3) خروج أفقي مستقيم من الشاشة\n   ============================================================ */\n.selected-product.order-departure-card{\n  overflow:visible !important;\n}\n.selected-product.order-departure-card::before{\n  animation:orderCartHandleOpen 420ms cubic-bezier(.22,.8,.25,1) forwards !important;\n  transform-origin:50% 100% !important;\n}\n@keyframes orderCartHandleOpen{\n  0%{transform:translateX(-50%) rotate(0deg) scaleY(1);}\n  55%{transform:translateX(-50%) rotate(-28deg) scaleY(1.05);}\n  100%{transform:translateX(-50%) rotate(-42deg) scaleY(1.08);}\n}\n\n.selected-product.order-departure-card > img{\n  position:relative !important;\n  z-index:5 !important;\n  will-change:transform,opacity !important;\n  animation:orderProductImageDeparture 1450ms cubic-bezier(.18,.78,.18,1) 180ms forwards !important;\n}\n@keyframes orderProductImageDeparture{\n  0%{\n    transform:translate3d(0,0,0) scale(1);\n    opacity:1;\n  }\n  18%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  32%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate3d(-125vw,-24px,0) scale(1.045);\n    opacity:0;\n  }\n}\n\n/* بقية محتوى بطاقة الطلب يبقى ثابتاً أثناء مغادرة الصورة */\n.selected-product.order-departure-card > .selected-product-info{\n  position:relative !important;\n  z-index:2 !important;\n}\n\n/* لمسة انتقال خفيفة على البطاقة، دون تحريك مسار الصورة */\n.selected-product.order-departure-card{\n  animation:orderCardDepartureFade 1450ms ease 180ms forwards !important;\n}\n@keyframes orderCardDepartureFade{\n  0%,55%{opacity:1;}\n  100%{opacity:.92;}\n}\n\n@media (prefers-reduced-motion: reduce){\n  .selected-product.order-departure-card::before,\n  .selected-product.order-departure-card > img,\n  .selected-product.order-departure-card{\n    animation-duration:1ms !important;\n  }\n}\n</style>\n\n<script id="professional-order-departure-animation-v1-js">\n(function(){\n  'use strict';\n  window.playOrderDepartureAnimation=function(){
-    return new Promise(function(resolve){
-      try{
-        const container=document.getElementById('selectedProducts');
-        if(!container){ resolve(); return; }
-        const cards=container.querySelectorAll('.selected-product');
-        if(!cards.length){ resolve(); return; }
+\n\n<style id="professional-order-departure-animation-v1">\n/* ============================================================\n   حركة مغادرة الطلب بعد الإشارة الخضراء\n   1) فتح مقبض السلة\n   2) ارتفاع بسيط للصورة\n   3) خروج أفقي مستقيم من الشاشة\n   ============================================================ */\n.selected-product.order-departure-card{\n  overflow:visible !important;\n}\n.selected-product.order-departure-card::before{\n  animation:orderCartHandleOpen 420ms cubic-bezier(.22,.8,.25,1) forwards !important;\n  transform-origin:50% 100% !important;\n}\n@keyframes orderCartHandleOpen{\n  0%{transform:translateX(-50%) rotate(0deg) scaleY(1);}\n  55%{transform:translateX(-50%) rotate(-28deg) scaleY(1.05);}\n  100%{transform:translateX(-50%) rotate(-42deg) scaleY(1.08);}\n}\n\n.selected-product.order-departure-card > img{\n  position:relative !important;\n  z-index:5 !important;\n  will-change:transform,opacity !important;\n  animation:orderProductImageDeparture 1450ms cubic-bezier(.18,.78,.18,1) 180ms forwards !important;\n}\n@keyframes orderProductImageDeparture{\n  0%{\n    transform:translate3d(0,0,0) scale(1);\n    opacity:1;\n  }\n  18%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  32%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate3d(-125vw,-24px,0) scale(1.045);\n    opacity:0;\n  }\n}\n\n/* بقية محتوى بطاقة الطلب يبقى ثابتاً أثناء مغادرة الصورة */\n.selected-product.order-departure-card > .selected-product-info{\n  position:relative !important;\n  z-index:2 !important;\n}\n\n/* لمسة انتقال خفيفة على البطاقة، دون تحريك مسار الصورة */\n.selected-product.order-departure-card{\n  animation:orderCardDepartureFade 1450ms ease 180ms forwards !important;\n}\n@keyframes orderCardDepartureFade{\n  0%,55%{opacity:1;}\n  100%{opacity:.92;}\n}\n\n@media (prefers-reduced-motion: reduce){\n  .selected-product.order-departure-card::before,\n  .selected-product.order-departure-card > img,\n  .selected-product.order-departure-card{\n    animation-duration:1ms !important;\n  }\n}\n</style>\n\n<script id="professional-order-departure-animation-v2-js">
+(function(){
+  'use strict';
+  window.playOrderDepartureAnimation=function(options){
+    options=options||{};
+    return new Promise(async function(resolve){
+      const container=document.getElementById('selectedProducts');
+      if(!container){resolve();return;}
+      const cards=Array.from(container.querySelectorAll('.selected-product'));
+      if(!cards.length){resolve();return;}
 
-        // ننقل الشاشة أولاً إلى بطاقة السلة حتى يشاهد الزبون الصورة بوضوح.
+      if(!options.alreadyScrolled){
         try{
-          container.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'});
-        }catch(scrollErr){
-          try{ container.scrollIntoView(); }catch(e){}
-        }
-
-        // بعد انتهاء التمرير تقريباً، نفتح المقبض ثم نرفع الصورة قليلاً ونرسلها أفقياً.
-        setTimeout(function(){
-          cards.forEach(function(card){
-            card.classList.remove('order-departure-card');
-            void card.offsetWidth;
-            card.classList.add('order-departure-card');
-          });
-          // 180ms تأخير داخل الحركة + 1450ms خروج = انتظار كامل قبل الإرسال.
-          setTimeout(resolve,1700);
-        },850);
-      }catch(err){
-        console.warn('Order departure animation:',err);
-        resolve();
+          const target=cards[0];
+          const rect=target.getBoundingClientRect();
+          const y=Math.max(0,window.pageYOffset+rect.top-(window.innerHeight/2)+(rect.height/2));
+          window.scrollTo({top:y,left:0,behavior:'smooth'});
+          await new Promise(r=>setTimeout(r,1000));
+        }catch(e){}
       }
+
+      cards.forEach(function(card){
+        card.classList.remove('order-departure-card');
+        void card.offsetWidth;
+        card.classList.add('order-departure-card');
+      });
+
+      // 220ms فتح المقبض، ثم ارتفاع الصورة، ثم تثبيت قصير، ثم خروج أفقي.
+      await new Promise(r=>setTimeout(r,2050));
+      cards.forEach(function(card){card.classList.remove('order-departure-card');});
+      resolve();
     });
-  };\n})();\n</script>\n</html>
+  };
+})();
+</script>\n</html>
 <style id="index31-size-match-color-final">
 /* =========================================================
    INDEX-31 FINAL SIZE SELECTOR MATCH
@@ -12171,26 +12188,31 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 }
 </style>
 
-<style id="professional-order-departure-final-fix-v2">
-.selected-product.order-departure-card{overflow:visible !important;}
-.selected-product.order-departure-card > img{
-  position:relative !important; z-index:50 !important; display:block !important;
-  will-change:transform,opacity !important;
-  animation:orderProductImageDepartureV2 1450ms cubic-bezier(.18,.78,.18,1) 180ms forwards !important;
-}
-@keyframes orderProductImageDepartureV2{
-  0%{transform:translate3d(0,0,0) scale(1);opacity:1;}
-  18%{transform:translate3d(0,-28px,0) scale(1.06);opacity:1;}
-  34%{transform:translate3d(0,-28px,0) scale(1.06);opacity:1;}
-  100%{transform:translate3d(-125vw,-28px,0) scale(1.06);opacity:0;}
-}
+<style id="professional-order-departure-final-fix-v3">
+.selected-product.order-departure-card{overflow:visible!important;position:relative!important;z-index:20!important;}
 .selected-product.order-departure-card::before{
-  z-index:60 !important; transform-origin:50% 100% !important;
-  animation:orderCartHandleOpenV2 420ms cubic-bezier(.22,.8,.25,1) forwards !important;
+  content:''!important;position:absolute!important;top:-11px!important;left:50%!important;
+  width:58px!important;height:18px!important;border:3px solid #0066CC!important;border-bottom:0!important;
+  border-radius:18px 18px 0 0!important;background:transparent!important;pointer-events:none!important;
+  z-index:100!important;transform-origin:50% 100%!important;
+  animation:orderHandleOpenV3 520ms cubic-bezier(.2,.85,.2,1) forwards!important;
 }
-@keyframes orderCartHandleOpenV2{
-  0%{transform:translateX(-50%) rotate(0deg) scaleY(1);}
-  55%{transform:translateX(-50%) rotate(-30deg) scaleY(1.05);}
-  100%{transform:translateX(-50%) rotate(-44deg) scaleY(1.08);}
+@keyframes orderHandleOpenV3{
+  0%{transform:translateX(-50%) rotate(0deg) scale(1);}
+  45%{transform:translateX(-50%) rotate(-32deg) scale(1.08);}
+  100%{transform:translateX(-50%) rotate(-50deg) scale(1.12);}
 }
+.selected-product.order-departure-card > img{
+  position:relative!important;z-index:101!important;display:block!important;
+  will-change:transform,opacity!important;
+  animation:orderImageDepartureV3 1900ms cubic-bezier(.18,.78,.18,1) 120ms forwards!important;
+}
+@keyframes orderImageDepartureV3{
+  0%{transform:translate3d(0,0,0) scale(1);opacity:1;}
+  20%{transform:translate3d(0,-30px,0) scale(1.08);opacity:1;}
+  48%{transform:translate3d(0,-30px,0) scale(1.08);opacity:1;}
+  100%{transform:translate3d(-130vw,-30px,0) scale(1.08);opacity:0;}
+}
+.selected-product.order-departure-card::after{animation:none!important;}
+@media(prefers-reduced-motion:reduce){.selected-product.order-departure-card::before,.selected-product.order-departure-card>img{animation-duration:1ms!important;}}
 </style>
