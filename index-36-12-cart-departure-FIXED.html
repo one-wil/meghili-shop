@@ -11523,48 +11523,105 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 </style>
 
 
-<style id="smart-cart-departure-animation-v4">
-#smartCartDepartureGhostV4{
- position:fixed!important; left:0!important; top:0!important;
- margin:0!important; pointer-events:none!important; z-index:2147483647!important;
- transform-origin:center center!important; will-change:transform,opacity,filter!important;
+<style id="smart-cart-departure-animation-v5">
+#smartCartDepartureGhostV5{
+ position:fixed!important;
+ left:50%!important;
+ top:50%!important;
+ margin:0!important;
+ pointer-events:none!important;
+ z-index:2147483647!important;
+ transform:translate(-50%,-50%) scale(1)!important;
+ transform-origin:center center!important;
+ will-change:transform,opacity,filter!important;
+}
+#smartCartDepartureGhostV5 .smart-depart-wheel{
+ position:absolute!important;
+ bottom:-22px!important;
+ width:32px!important;
+ height:32px!important;
+ border-radius:50%!important;
+ background:radial-gradient(circle,#203f70 0 8px,#eef6ff 8.5px 12px,#6ca8e5 12.5px 16px)!important;
+ border:1px solid rgba(32,63,112,.35)!important;
+ box-shadow:0 2px 5px rgba(0,60,120,.28)!important;
+ z-index:20!important;
+ transform-origin:center!important;
+}
+#smartCartDepartureGhostV5 .smart-depart-wheel.left{left:8%!important}
+#smartCartDepartureGhostV5 .smart-depart-wheel.right{right:8%!important}
+#smartCartDepartureGhostV5 .smart-depart-wheel.spinning{
+ animation:smartDepartureWheelSpin .18s linear infinite!important;
+}
+@keyframes smartDepartureWheelSpin{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
+}
+@keyframes smartCartDepartureExitV5{
+ 0%{transform:translate(-50%,-50%) scale(1.06);opacity:1;filter:brightness(1.08) drop-shadow(0 0 22px rgba(0,190,255,.5))}
+ 12%{transform:translate(-50%,-50%) scale(1.02);opacity:1;filter:brightness(1)}
+ 100%{transform:translate(calc(-50% - 125vw),-50%) scale(.30) rotate(-4deg);opacity:0;filter:brightness(1)}
 }
 </style>
-<script id="smart-cart-departure-controller-v4">
+<script id="smart-cart-departure-controller-v5">
 (function(){
   window.smartAnimateCartDeparture=function(){
     return new Promise(function(resolve){
       try{
         var original=document.querySelector('#page2 .smart-selected-products') || document.querySelector('#page2 .selected-product');
         if(!original){ resolve(); return; }
+
         var rect=original.getBoundingClientRect();
         var ghost=original.cloneNode(true);
-        ghost.id='smartCartDepartureGhostV4';
+        ghost.id='smartCartDepartureGhostV5';
         ghost.style.width=rect.width+'px';
         ghost.style.height=rect.height+'px';
-        ghost.style.left=rect.left+'px';
-        ghost.style.top=rect.top+'px';
+        ghost.style.maxWidth=rect.width+'px';
         ghost.style.boxSizing='border-box';
+        ghost.style.visibility='visible';
+        ghost.style.display='flex';
         ghost.style.opacity='1';
+        ghost.style.position='fixed';
         document.body.appendChild(ghost);
+
+        // عجلات مستقلة حتى يكون دورانها واضحاً فعلياً.
+        var wheelL=document.createElement('span');
+        var wheelR=document.createElement('span');
+        wheelL.className='smart-depart-wheel left spinning';
+        wheelR.className='smart-depart-wheel right spinning';
+        ghost.appendChild(wheelL);
+        ghost.appendChild(wheelR);
+
+        // إخفاء العربة الأصلية فقط أثناء العرض، ولا نحذفها قبل انتهاء الحركة.
         original.style.visibility='hidden';
-        var anim=ghost.animate([
-          {transform:'translate3d(0,0,0) scale(1)',opacity:1,filter:'brightness(1) drop-shadow(0 0 0 rgba(0,190,255,0))'},
-          {transform:'translate3d(0,-5px,0) scale(1.14)',opacity:1,filter:'brightness(1.18) drop-shadow(0 0 25px rgba(0,190,255,.72))',offset:.16},
-          {transform:'translate3d(0,0,0) scale(1.07)',opacity:1,filter:'brightness(1.08) drop-shadow(0 0 14px rgba(0,190,255,.38))',offset:.30},
-          {transform:'translate3d(80px,0,0) rotate(2deg) scale(.98)',opacity:.98,offset:.50},
-          {transform:'translate3d(260px,0,0) rotate(-2deg) scale(.78)',opacity:.70,offset:.70},
-          {transform:'translate3d(560px,0,0) rotate(3deg) scale(.50)',opacity:.34,offset:.86},
-          {transform:'translate3d(115vw,0,0) rotate(5deg) scale(.16)',opacity:0,filter:'brightness(1) drop-shadow(0 0 0 rgba(0,0,0,0))'}
-        ],{duration:1400,easing:'cubic-bezier(.22,.61,.36,1)',fill:'forwards'});
-        anim.onfinish=function(){ if(ghost.parentNode) ghost.parentNode.removeChild(ghost); resolve(); };
-        setTimeout(function(){ if(ghost.parentNode) ghost.parentNode.removeChild(ghost); resolve(); },1500);
-      }catch(e){ console.warn('Cart departure V4:',e); resolve(); }
+
+        // المرحلة الأولى: العربة في منتصف الشاشة والعجلات تدور لمدة 1.5 ثانية.
+        setTimeout(function(){
+          wheelL.classList.remove('spinning');
+          wheelR.classList.remove('spinning');
+
+          // المرحلة الثانية: مغادرة كاملة في الجهة العكسية (إلى اليسار).
+          var anim=ghost.animate([
+            {transform:'translate(-50%,-50%) scale(1.06)',opacity:1,filter:'brightness(1.08) drop-shadow(0 0 22px rgba(0,190,255,.5))'},
+            {transform:'translate(calc(-50% - 8vw),-50%) scale(1.02) rotate(-1deg)',opacity:1,offset:.16},
+            {transform:'translate(calc(-50% - 42vw),-50%) scale(.86) rotate(-2deg)',opacity:.92,offset:.48},
+            {transform:'translate(calc(-50% - 82vw),-50%) scale(.58) rotate(-3deg)',opacity:.58,offset:.76},
+            {transform:'translate(calc(-50% - 125vw),-50%) scale(.30) rotate(-4deg)',opacity:0}
+          ],{duration:1500,easing:'cubic-bezier(.22,.61,.36,1)',fill:'forwards'});
+
+          anim.onfinish=function(){
+            if(ghost.parentNode)ghost.parentNode.removeChild(ghost);
+            resolve();
+          };
+        },1500);
+      }catch(e){
+        console.warn('Cart departure V5:',e);
+        resolve();
+      }
     });
   };
 })();
 </script>
-<script id="smart-final-submit-single-click-v4">
+<script id="smart-final-submit-single-click-v5">
 (function(){
  'use strict';
  let processing=false;
@@ -11581,13 +11638,19 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
        if(typeof window.smartShowStageCheckV10==='function')window.smartShowStageCheckV10(4);
        if(typeof window.smartStageSuccessBell==='function')window.smartStageSuccessBell();
      }catch(err){}
-     // تبدأ حركة نسخة مرئية من العربة؛ لذلك تستمر حتى لو قامت عملية إرسال الطلب بإفراغ السلة.
-     if(typeof window.smartAnimateCartDeparture==='function')window.smartAnimateCartDeparture();
-     setTimeout(function(){
+
+     // ننتظر انتهاء كامل حركة العربة قبل إرسال الطلب وإفراغ السلة.
+     if(typeof window.smartAnimateCartDeparture==='function'){
+       window.smartAnimateCartDeparture().then(function(){
+         const form=document.getElementById('orderForm');
+         if(form&&typeof form.requestSubmit==='function')form.requestSubmit(btn);
+         else if(form)form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+       });
+     }else{
        const form=document.getElementById('orderForm');
        if(form&&typeof form.requestSubmit==='function')form.requestSubmit(btn);
        else if(form)form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
-     },1450);
+     }
    },300);
  },true);
 })();
