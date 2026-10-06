@@ -8967,10 +8967,13 @@ updateDeliveryCost();
         }
 
         function showOrderSuccessAndRedirect(orderData) {
+            const modal = document.getElementById('orderConfirmationModal');
             const loading = document.getElementById('confirmationLoading');
             const success = document.getElementById('confirmationSuccess');
             const orderSummary = document.getElementById('orderSummary');
             
+            // بعد انتهاء حركة مغادرة الصورة، أظهر بطاقة النجاح من جديد.
+            if (modal) modal.classList.add('show');
             loading.style.display = 'none';
             success.style.display = 'block';
             
