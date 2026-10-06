@@ -7325,21 +7325,20 @@ body.order-departure-focus .order-departure-clone{
                     `;
                     
                     colorOption.addEventListener('click', function(event) {
-                        // اللون أحادي: نفس اللون مرة ثانية = إلغاء، ولون آخر = استبدال السابق.
+                        // اختيار متعدد للألوان: الضغط على اللون يضيفه/يزيله دون إلغاء بقية الألوان.
                         const wasSelected = colorOption.classList.contains('selected');
-                        document.querySelectorAll('#colorOptions .color-option-small').forEach(option => {
-                            option.classList.remove('selected');
-                            option.classList.remove('blinking-color');
-                        });
-                        selectedColors = [];
-                        selectedColor = null;
-                        selectedAges = [];
-                        selectedAge = null;
-                        if (!wasSelected) {
+                        if (wasSelected) {
+                            colorOption.classList.remove('selected');
+                            colorOption.classList.remove('blinking-color');
+                            selectedColors = selectedColors.filter(c => c !== color);
+                        } else {
                             colorOption.classList.add('selected');
-                            selectedColors = [color];
-                            selectedColor = color;
+                            colorOption.classList.remove('blinking-color');
+                            if (!selectedColors.includes(color)) selectedColors.push(color);
                         }
+
+                        // selectedColor يبقى اللون الأول لأجل المعاينة والصورة الحالية.
+                        selectedColor = selectedColors[0] || null;
                         const sc = document.getElementById('modernSelectedColor');
                         if (sc) sc.textContent = selectedColors.length ? selectedColors.join('، ') : 'لم يتم الاختيار';
                         if (selectedColors.length) stopColorBlinking(colorOption);
@@ -8437,17 +8436,21 @@ updateDeliveryCost();
         }
 
         // ===== Helper Functions =====
-        // إضافة الاختيارات بدقة: لون واحد فقط + كل المقاسات المحددة،
-        // وكل مقاس يُحفظ في السلة باسمه الحقيقي كما يظهر في صفحة المقاسات.
+        // إضافة جميع التركيبات المحددة: كل الألوان المختارة × كل المقاسات المختارة.
+        // كل تركيبة تُحفظ كسطر مستقل في السلة حتى يمكن طلب أكثر من لون في نفس الطلب.
         function addSelectedVariantsToCart(quantity, event) {
-            const color = selectedColor || (selectedColors[0] || null);
+            const colors = Array.isArray(selectedColors) && selectedColors.length
+                ? [...selectedColors]
+                : (selectedColor ? [selectedColor] : []);
             const selectedOptions = Array.from(document.querySelectorAll('#ageOptions .size-option-small.selected'));
-            if (!currentProductKey || !color || !selectedOptions.length) return;
+            if (!currentProductKey || !colors.length || !selectedOptions.length) return;
 
-            selectedOptions.forEach(option => {
-                const age = option.dataset.age || '';
-                const size = option.dataset.size || '';
-                if (size) addToCart(currentProductKey, quantity, age, color, size, event);
+            colors.forEach(color => {
+                selectedOptions.forEach(option => {
+                    const age = option.dataset.age || '';
+                    const size = option.dataset.size || '';
+                    if (size) addToCart(currentProductKey, quantity, age, color, size, event);
+                });
             });
         }
 
@@ -10612,13 +10615,30 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
   function afterSuccessfulOrder(){
     removeAllStagePulses();
     if(typeof window.smartClearStageChecksV10==='function')window.smartClearStageChecksV10();
-    const btn=$('confirmOrderBtn');if(btn){btn.classList.remove('smart-confirm-pulse');btn.disabled=true}
+    window.smartIntroSequenceActive=false;
+
+    const btn=$('confirmOrderBtn');if(btn){btn.classList.remove('smart-confirm-pulse','smart-order-explode','smart-guided-target');btn.disabled=true}
     const region=$('smartRegionPanel'),delivery=$('smartDeliveryPanel'),customer=$('personalInfoSection');
     if(region)region.style.display='none';if(delivery)delivery.style.display='none';if(customer)customer.style.display='none';
+
+    // إعادة تهيئة حالة المتجر البصرية بالكامل حتى تبدأ الطلبية التالية من الصفر.
     try{document.getElementById('orderForm').reset()}catch(e){}
     try{cartItems=[]}catch(e){}
     try{selectedWilaya=null;selectedDeliveryType=null}catch(e){}
-    const w=$('wilaya');if(w){w.value='';w.disabled=true}
+    try{selectedAge=null;selectedColor=null;selectedAges=[];selectedColors=[]}catch(e){}
+    try{isAnimationRunning=false}catch(e){}
+
+    const w=$('wilaya');if(w){w.value='';w.disabled=true;w.classList.remove('smart-wilaya-pulse','fast-pulse','smart-pulse')}
+    const cart=$('cartSummary');
+    if(cart)cart.classList.remove('cart-shake','pulse-animation');
+    const badge=$('cartBadge');
+    if(badge)badge.classList.remove('pulse-animation');
+    const floating=$('floatingCountersContainer');
+    if(floating)floating.innerHTML='';
+
+    if(typeof window.updateCartDisplay==='function')window.updateCartDisplay();
+    if(typeof window.updateMobileCartBar==='function')window.updateMobileCartBar();
+
     if(typeof window.switchPage==='function')window.switchPage('page1');
     setTimeout(()=>window.scrollTo({top:0,left:0,behavior:'auto'}),50);
   }
