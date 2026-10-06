@@ -5375,12 +5375,6 @@
 body.order-departure-focus .order-departure-clone{
   visibility:visible !important;
 }
-body.order-departure-focus .order-departure-clone{
-  display:block !important;
-  opacity:1 !important;
-  pointer-events:none !important;
-  z-index:2147483647 !important;
-}
 </style>
 </head>
 <body>
@@ -11821,8 +11815,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
       // بهذه الطريقة لا يمكن لأي overflow أو transform في البطاقة أن يخفي حركة الخروج.
       const clones=[];
       cards.forEach(function(card){
-        // نلتقط صورة المنتج نفسها حتى لو تغيّر تركيب البطاقة الداخلي.
-        const img=card.querySelector('img');
+        const img=card.querySelector(':scope > img');
         if(!img) return;
         const r=img.getBoundingClientRect();
         if(r.width<=1 || r.height<=1) return;
@@ -11833,7 +11826,6 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
         clone.classList.add('order-departure-clone');
         clone.style.cssText=[
           'position:fixed',
-          'visibility:visible',
           'left:'+r.left+'px',
           'top:'+r.top+'px',
           'width:'+r.width+'px',
@@ -11850,13 +11842,9 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
           'opacity:1',
           'transform:translate3d(0,0,0) scale(1)',
           'transform-origin:center center',
-          'will-change:transform,opacity',
-          'contain:none',
-          'filter:none'
+          'will-change:transform,opacity'
         ].join(';');
-        clone.style.setProperty('visibility','visible','important');
         document.body.appendChild(clone);
-        clone.style.setProperty('visibility','visible','important');
         clones.push({clone:clone,rect:r});
 
         // أخفِ الصورة الأصلية فقط بعد أن أصبحت النسخة فوقها.
