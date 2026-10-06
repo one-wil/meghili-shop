@@ -11019,7 +11019,8 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     }catch(err){}
     await wait(120);
     await scrollCartClearly();
-    await wait(180);
+    // تقليل زمن التوقف بعد استقرار السلة في منتصف الشاشة إلى النصف.
+    await wait(90);
 
     // 4 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
     try{
