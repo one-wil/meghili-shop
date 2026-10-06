@@ -1196,36 +1196,51 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        /* بطاقة المنتج في السلة على هيئة عربة تسوق أنيقة — بدون مقبض علوي */
         .selected-product {
             display: flex;
             align-items: center;
-            padding: 0.85rem 1rem 1.25rem;
-            background: linear-gradient(145deg, #ffffff 0%, #f4faff 58%, #e8f4ff 100%);
-            border-radius: 24px 24px 38px 38px;
-            margin: 1.15rem 0 1.45rem;
-            border: 3px solid #2f86df;
+            padding: 0.6rem;
+            background-color: var(--white-pure);
+            border-radius: 22px 22px 30px 30px;
+            margin: 1rem 0 0.7rem;
+            border: 2px solid #cfd8e3;
             color: var(--dark);
             font-weight: 600;
             font-size: 0.8rem;
             transition: background-color 1s ease, transform 0.25s ease, box-shadow 0.25s ease;
-            box-shadow: 0 8px 18px rgba(0, 102, 204, 0.16), inset 0 -7px 0 rgba(0, 102, 204, 0.045);
+            box-shadow: 0 5px 14px rgba(0, 102, 204, 0.10), inset 0 -4px 0 rgba(0, 102, 204, 0.035);
             position: relative;
             overflow: visible;
         }
 
-        /* حافة عربة التسوق: لا يوجد أي مقبض في الأعلى */
+        /* إطار بطاقة المنتج في السلة على هيئة سلة تسوق صغيرة */
         .selected-product::before {
             content: '';
             position: absolute;
-            inset: 5px;
-            border: 1px solid rgba(0, 153, 255, 0.20);
-            border-radius: 18px 18px 31px 31px;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 58px;
+            height: 18px;
+            border: 3px solid var(--secondary);
+            border-bottom: 0;
+            border-radius: 18px 18px 0 0;
+            background: transparent;
             pointer-events: none;
-            z-index: 1;
+            z-index: 3;
         }
 
-        /* تم حذف عجلتي عربة التسوق */
+        .selected-product::after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            right: 8px;
+            bottom: 5px;
+            height: 3px;
+            border-radius: 50%;
+            background: rgba(0, 102, 204, 0.10);
+            pointer-events: none;
+        }
 
         .selected-product-title {
             font-weight: 700;
@@ -3484,14 +3499,12 @@
             }
             
             .selected-product {
-                flex-direction: row;
-                text-align: right;
-                padding: 0.65rem 0.55rem 1rem;
-                border-radius: 20px 20px 32px 32px;
+                flex-direction: column;
+                text-align: center;
             }
             
             .selected-product img {
-                margin: 0 0.45rem 0 0;
+                margin: 0 0 0.6rem 0;
             }
             
             .header-content {
@@ -5357,192 +5370,6 @@
 }
 </style>
 
-
-<style id="cart-trolley-final-design">
-/* ===== عربة التسوق النهائية: بدون مقبض علوي ===== */
-.smart-selected-products .selected-product,
-#page2 .selected-product {
-    direction: ltr !important;
-    position: relative !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 0.65rem !important;
-    padding: 0.9rem 1rem 1.25rem !important;
-    margin: 1.15rem 0 1.55rem !important;
-    min-height: 145px !important;
-    background: linear-gradient(145deg, #ffffff 0%, #f4faff 58%, #e7f3ff 100%) !important;
-    border: 3px solid #2f86df !important;
-    border-radius: 24px 24px 40px 40px !important;
-    box-shadow: 0 9px 20px rgba(0,102,204,.16), inset 0 -7px 0 rgba(0,102,204,.045) !important;
-    overflow: visible !important;
-}
-
-/* حافة داخلية فقط — لا مقبض */
-.smart-selected-products .selected-product::before,
-#page2 .selected-product::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 5px !important;
-    width: auto !important;
-    height: auto !important;
-    top: 5px !important;
-    left: 5px !important;
-    right: 5px !important;
-    bottom: 5px !important;
-    transform: none !important;
-    border: 1px solid rgba(0,153,255,.20) !important;
-    border-radius: 18px 18px 33px 33px !important;
-    background: transparent !important;
-    pointer-events: none !important;
-    z-index: 1 !important;
-}
-
-/* العجلتان */
-.smart-selected-products .selected-product::after,
-#page2 .selected-product::after {
-    content: '' !important;
-    position: absolute !important;
-    left: 7% !important;
-    right: 7% !important;
-    bottom: -21px !important;
-    width: auto !important;
-    height: 30px !important;
-    border-radius: 0 !important;
-    background:
-      radial-gradient(circle at 12% 50%, #203f70 0 9px, #eef6ff 9.5px 13px, #6ca8e5 13.5px 16px, transparent 16.5px),
-      radial-gradient(circle at 88% 50%, #203f70 0 9px, #eef6ff 9.5px 13px, #6ca8e5 13.5px 16px, transparent 16.5px) !important;
-    pointer-events: none !important;
-    z-index: 0 !important;
-}
-
-.smart-selected-products .selected-product img,
-#page2 .selected-product img {
-    order: 1 !important;
-    flex: 0 0 78px !important;
-    width: 78px !important;
-    height: 78px !important;
-    object-fit: cover !important;
-    border-radius: 12px !important;
-    border: 2px solid #d7e7f7 !important;
-    background: #fff !important;
-    margin: 0 !important;
-    position: relative !important;
-    z-index: 2 !important;
-}
-
-.smart-selected-products .selected-product-info,
-#page2 .selected-product-info {
-    order: 2 !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    direction: rtl !important;
-    text-align: right !important;
-    position: relative !important;
-    z-index: 2 !important;
-}
-
-.smart-selected-products .selected-product-title,
-#page2 .selected-product-title {
-    font-size: .92rem !important;
-    font-weight: 900 !important;
-    margin-bottom: .45rem !important;
-    color: #1252aa !important;
-}
-
-.smart-selected-products .selected-product-details,
-#page2 .selected-product-details {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: .35rem !important;
-    margin-bottom: .45rem !important;
-}
-
-.smart-selected-products .selected-product-detail,
-#page2 .selected-product-detail {
-    background: #eaf6ff !important;
-    border: 1px solid #c5e2fb !important;
-    border-radius: 9px !important;
-    padding: .25rem .5rem !important;
-    color: #145bb5 !important;
-    font-size: .67rem !important;
-    font-weight: 800 !important;
-}
-
-.smart-selected-products .selected-product-price,
-#page2 .selected-product-price {
-    direction: rtl !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: .5rem !important;
-    color: #145bb5 !important;
-}
-
-.smart-selected-products .selected-product-price > div:first-child,
-#page2 .selected-product-price > div:first-child {
-    font-size: .95rem !important;
-}
-
-.smart-selected-products .selected-product-quantity,
-#page2 .selected-product-quantity {
-    display: flex !important;
-    align-items: center !important;
-    gap: .35rem !important;
-}
-
-.smart-selected-products .selected-product-quantity button,
-#page2 .selected-product-quantity button {
-    width: 34px !important;
-    height: 34px !important;
-    border-radius: 50% !important;
-    border: 2px solid #b8d4f0 !important;
-    background: #fff !important;
-    color: #145bb5 !important;
-    font-size: .95rem !important;
-    font-weight: 900 !important;
-    box-shadow: 0 2px 7px rgba(0,102,204,.08) !important;
-}
-
-.smart-selected-products .selected-product-remove,
-#page2 .selected-product-remove {
-    width: 38px !important;
-    height: 38px !important;
-    border-radius: 10px !important;
-    border: 2px solid #c7d9ec !important;
-    background: #fff !important;
-    color: #145bb5 !important;
-}
-
-/* الهاتف: تبقى البطاقة أفقية مثل العربة الحقيقية */
-@media (max-width: 520px) {
-    .smart-selected-products .selected-product,
-    #page2 .selected-product {
-        min-height: 116px !important;
-        padding: .65rem .55rem 1rem !important;
-        gap: .45rem !important;
-        border-width: 2.5px !important;
-        border-radius: 19px 19px 32px 32px !important;
-    }
-    .smart-selected-products .selected-product img,
-    #page2 .selected-product img {
-        flex-basis: 60px !important;
-        width: 60px !important;
-        height: 60px !important;
-        border-radius: 9px !important;
-    }
-    .smart-selected-products .selected-product-title,
-    #page2 .selected-product-title { font-size: .76rem !important; }
-    .smart-selected-products .selected-product-detail,
-    #page2 .selected-product-detail { font-size: .55rem !important; padding: .18rem .35rem !important; }
-    .smart-selected-products .selected-product-quantity button,
-    #page2 .selected-product-quantity button { width: 28px !important; height: 28px !important; font-size: .72rem !important; }
-    .smart-selected-products .selected-product-remove,
-    #page2 .selected-product-remove { width: 31px !important; height: 31px !important; }
-    .smart-selected-products .selected-product::after,
-    #page2 .selected-product::after { bottom: -18px !important; height: 25px !important; }
-}
-</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -11169,7 +10996,10 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
         }
       } catch(err) {}
 
-      // بعد اكتمال حركة التأكيد يبدأ الإرسال الأصلي مرة واحدة فقط.
+      // بعد الإشارة الخضراء: تبدأ حركة مغادرة صورة الطلب، ثم يتم الإرسال.
+      if(typeof window.playOrderDepartureAnimation === 'function') {
+        window.playOrderDepartureAnimation();
+      }
       setTimeout(function(){
         const form = document.getElementById('orderForm');
         if(form && typeof form.requestSubmit === 'function') {
@@ -11177,7 +11007,7 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
         } else if(form) {
           form.dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}));
         }
-      }, 1500);
+      }, 1900);
     }, 300);
   }, true);
 })();
@@ -11922,7 +11752,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
-</html>
+\n\n<style id="professional-order-departure-animation-v1">\n/* ============================================================\n   حركة مغادرة الطلب بعد الإشارة الخضراء\n   1) فتح مقبض السلة\n   2) ارتفاع بسيط للصورة\n   3) خروج أفقي مستقيم من الشاشة\n   ============================================================ */\n.selected-product.order-departure-card{\n  overflow:visible !important;\n}\n.selected-product.order-departure-card::before{\n  animation:orderCartHandleOpen 420ms cubic-bezier(.22,.8,.25,1) forwards !important;\n  transform-origin:50% 100% !important;\n}\n@keyframes orderCartHandleOpen{\n  0%{transform:translateX(-50%) rotate(0deg) scaleY(1);}\n  55%{transform:translateX(-50%) rotate(-28deg) scaleY(1.05);}\n  100%{transform:translateX(-50%) rotate(-42deg) scaleY(1.08);}\n}\n\n.selected-product.order-departure-card > img{\n  position:relative !important;\n  z-index:5 !important;\n  will-change:transform,opacity !important;\n  animation:orderProductImageDeparture 1450ms cubic-bezier(.18,.78,.18,1) 180ms forwards !important;\n}\n@keyframes orderProductImageDeparture{\n  0%{\n    transform:translate3d(0,0,0) scale(1);\n    opacity:1;\n  }\n  18%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  32%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate3d(-125vw,-24px,0) scale(1.045);\n    opacity:0;\n  }\n}\n\n/* بقية محتوى بطاقة الطلب يبقى ثابتاً أثناء مغادرة الصورة */\n.selected-product.order-departure-card > .selected-product-info{\n  position:relative !important;\n  z-index:2 !important;\n}\n\n/* لمسة انتقال خفيفة على البطاقة، دون تحريك مسار الصورة */\n.selected-product.order-departure-card{\n  animation:orderCardDepartureFade 1450ms ease 180ms forwards !important;\n}\n@keyframes orderCardDepartureFade{\n  0%,55%{opacity:1;}\n  100%{opacity:.92;}\n}\n\n@media (prefers-reduced-motion: reduce){\n  .selected-product.order-departure-card::before,\n  .selected-product.order-departure-card > img,\n  .selected-product.order-departure-card{\n    animation-duration:1ms !important;\n  }\n}\n</style>\n\n<script id="professional-order-departure-animation-v1-js">\n(function(){\n  'use strict';\n  window.playOrderDepartureAnimation=function(){\n    try{\n      const container=document.getElementById('selectedProducts');\n      if(!container) return;\n      const cards=container.querySelectorAll('.selected-product');\n      if(!cards.length) return;\n\n      // نحرّك صورة المنتج فقط، ونترك بيانات العميل وباقي الصفحة ثابتة.\n      cards.forEach(function(card){\n        card.classList.remove('order-departure-card');\n        void card.offsetWidth;\n        card.classList.add('order-departure-card');\n      });\n    }catch(err){\n      console.warn('Order departure animation:',err);\n    }\n  };\n})();\n</script>\n</html>
 <style id="index31-size-match-color-final">
 /* =========================================================
    INDEX-31 FINAL SIZE SELECTOR MATCH
