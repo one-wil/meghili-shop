@@ -9050,25 +9050,14 @@ updateDeliveryCost();
         // ===== دالة البرقية الوحيد للعودة إلى المنتجات =====
         function closeOrderConfirmationAndRedirectToProductsSingle() {
             createSingleTelegraphEffect();
-            
+
+            // العودة للمنتجات = Actualiser / Rafraîchir للصفحة الأولى فعلياً.
+            // هذا يعيد تهيئة المتجر وجميع مؤثرات السلة والصورة من الصفر.
             setTimeout(() => {
-                document.getElementById('orderConfirmationModal').classList.remove('show');
-                
-                setTimeout(() => {
-                    switchPage('page1');
-                    
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                    
-                    showNotification('📡 تم تأكيد الإشارة البرقية: العودة إلى قائمة المنتجات!', 'success');
-                    
-                    createSingleTelegraphWelcome();
-                }, 500);
+                window.location.reload();
             }, 1000);
         }
-        
+
         function createSingleTelegraphEffect() {
             for (let i = 0; i < 6; i++) {
                 setTimeout(() => {
