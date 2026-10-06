@@ -8848,10 +8848,6 @@ updateDeliveryCost();
                 const confirmOrderBtn = document.getElementById('confirmOrderBtn');
                 confirmOrderBtn.style.display = 'none';
 
-                // نظهر نافذة المعالجة للحظة قصيرة فقط؛ إرسال الطلب إلى Cloudflare
-                // يستمر في الخلفية ولا ننتظر رد الخادم قبل إظهار النجاح.
-                showOrderConfirmation();
-
                 const saveSuccess = saveOrderToLocalStorage(orderData);
                 if (!saveSuccess) {
                     throw new Error('Local save failed');
@@ -8881,8 +8877,7 @@ updateDeliveryCost();
                     }
                 }
 
-                // لا ننتظر Cloudflare أو Google Sheets؛ النجاح يظهر بسرعة.
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // تظهر رسالة النجاح فقط بعد انتهاء حركة مغادرة صورة المنتج.
                 showOrderSuccessAndRedirect(orderData);
 
                 if (window.trackPurchase) {
@@ -11001,18 +10996,29 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     const step4=document.querySelector('.smart-section-no[data-stage="4"]');
     if(step4) step4.classList.remove('step4-black-pulse','smart-explode');
 
-    // 1 — العلامة الخضراء للمرحلة 4 تظهر أولاً وتبقى ظاهرة.
+    // 1 — العلامة الخضراء للمرحلة 4 تظهر أولاً.
     try{
       if(typeof window.smartShowStageCheckV10==='function') window.smartShowStageCheckV10(4);
       if(typeof window.smartStageSuccessBell==='function') window.smartStageSuccessBell();
     }catch(err){}
-    await wait(700);
+    await wait(300);
 
-    // 2 — ننتقل بوضوح إلى بطاقة السلة ونضعها في منتصف الشاشة.
+    // 2 — رسالة المعالجة تظهر وحدها لمدة ثانيتين بالضبط.
+    try{
+      if(typeof window.showOrderConfirmation==='function') window.showOrderConfirmation();
+    }catch(err){}
+    await wait(2000);
+
+    // 3 — نخفي رسالة المعالجة قبل ظهور السلة، ثم نضع بطاقة السلة وحدها في وسط الشاشة.
+    try{
+      const processingModal=document.getElementById('orderConfirmationModal');
+      if(processingModal) processingModal.classList.remove('show');
+    }catch(err){}
+    await wait(120);
     await scrollCartClearly();
-    await wait(450);
+    await wait(180);
 
-    // 3 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
+    // 4 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
     try{
       if(typeof window.playOrderDepartureAnimation==='function'){
         await window.playOrderDepartureAnimation({alreadyScrolled:true});
