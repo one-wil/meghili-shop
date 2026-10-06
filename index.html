@@ -8882,7 +8882,7 @@ updateDeliveryCost();
                 }
 
                 // لا ننتظر Cloudflare أو Google Sheets؛ النجاح يظهر بسرعة.
-                await new Promise(resolve => setTimeout(resolve, 500));
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 showOrderSuccessAndRedirect(orderData);
 
                 if (window.trackPurchase) {
@@ -11872,25 +11872,6 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   };
 })();
 </script>\n
-<style id="final-order-processing-2s">
-/* طلب المستخدم: نافذة "جاري معالجة طلبك" لمدة ثانيتين */
-#orderConfirmationModal.order-processing-2s #confirmationLoading{display:block!important;}
-</style>
-<script id="final-order-processing-2s-js">
-(function(){
-  const originalShow=window.showOrderConfirmation;
-  window.showOrderConfirmation=function(){
-    if(typeof originalShow==='function') originalShow.apply(this,arguments);
-    const modal=document.getElementById('orderConfirmationModal');
-    if(!modal) return;
-    modal.classList.add('order-processing-2s');
-    clearTimeout(window.__orderProcessing2sTimer);
-    window.__orderProcessing2sTimer=setTimeout(function(){
-      modal.classList.remove('order-processing-2s');
-    },2000);
-  };
-})();
-</script>
 </html>
 <style id="index31-size-match-color-final">
 /* =========================================================
