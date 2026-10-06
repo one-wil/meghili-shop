@@ -5370,6 +5370,12 @@
 }
 </style>
 
+
+<style id="order-departure-clone-visibility">
+body.order-departure-focus .order-departure-clone{
+  visibility:visible !important;
+}
+</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -10572,7 +10578,7 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
         const g=$('smartGuidance');if(g)g.innerHTML='';
         scrollTo('personalInfoSection',100);
         checkFinalState();
-      },500);
+      },250);
     },1000);
   }
   function fieldsReady(){
@@ -11017,7 +11023,7 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
       const processingModal=document.getElementById('orderConfirmationModal');
       if(processingModal) processingModal.classList.remove('show');
     }catch(err){}
-    await wait(120);
+    await wait(220);
     await scrollCartClearly();
     // تقليل زمن التوقف بعد استقرار السلة في منتصف الشاشة إلى النصف.
     await wait(90);
@@ -11797,7 +11803,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
       });
 
       // ننتظر فتح المقبض قبل لمس صورة المنتج.
-      await wait(280);
+      await wait(650);
 
       // نأخذ الصورة الحقيقية وننشئ نسخة ثابتة فوق الصفحة.
       // بهذه الطريقة لا يمكن لأي overflow أو transform في البطاقة أن يخفي حركة الخروج.
@@ -11811,6 +11817,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
         const clone=img.cloneNode(true);
         clone.removeAttribute('id');
         clone.setAttribute('aria-hidden','true');
+        clone.classList.add('order-departure-clone');
         clone.style.cssText=[
           'position:fixed',
           'left:'+r.left+'px',
@@ -11848,9 +11855,9 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
       await Promise.all(clones.map(function(item){
         return new Promise(function(done){
           requestAnimationFrame(function(){
-            item.clone.style.transition='transform 220ms cubic-bezier(.2,.85,.2,1)';
-            item.clone.style.transform='translate3d(0,-34px,0) scale(1.08)';
-            setTimeout(done,240);
+            item.clone.style.transition='transform 360ms cubic-bezier(.2,.85,.2,1)';
+            item.clone.style.transform='translate3d(0,-58px,0) scale(1.06)';
+            setTimeout(done,380);
           });
         });
       }));
@@ -11862,10 +11869,10 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
       const exitDistance=window.innerWidth + Math.max(80, Math.max.apply(null,clones.map(x=>x.rect.right))) + 80;
       await Promise.all(clones.map(function(item){
         return new Promise(function(done){
-          item.clone.style.transition='transform 650ms linear, opacity 650ms linear';
-          item.clone.style.transform='translate3d(-'+exitDistance+'px,-34px,0) scale(1.08)';
+          item.clone.style.transition='transform 780ms linear, opacity 780ms linear';
+          item.clone.style.transform='translate3d(-'+exitDistance+'px,-58px,0) scale(1.06)';
           item.clone.style.opacity='0';
-          setTimeout(done,680);
+          setTimeout(done,810);
         });
       }));
 
