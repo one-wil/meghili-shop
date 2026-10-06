@@ -10579,7 +10579,7 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
         scrollTo('personalInfoSection',100);
         checkFinalState();
       },250);
-    },1000);
+    },400);
   }
   function fieldsReady(){
     if(!cartHasItems() || !$('wilaya')?.value || !selectedDeliveryType)return false;
@@ -11010,7 +11010,8 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
       if(typeof window.smartShowStageCheckV10==='function') window.smartShowStageCheckV10(4);
       if(typeof window.smartStageSuccessBell==='function') window.smartStageSuccessBell();
     }catch(err){}
-    await wait(300);
+    // إبقاء علامة ✓ للمرحلة الرابعة نصف ثانية إضافية قبل اختفائها.
+    await wait(800);
 
     // 2 — رسالة المعالجة تظهر وحدها لمدة ثانيتين بالضبط.
     try{
