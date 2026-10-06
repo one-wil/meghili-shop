@@ -11564,7 +11564,7 @@ body.smart-cart-departure-only-v8{
   border:3px solid #d9a441!important;
   border-radius:24px 24px 42px 42px!important;
   box-shadow:0 12px 26px rgba(153,105,20,.16),inset 0 -8px 0 rgba(190,139,35,.08),inset 0 1px 0 rgba(255,255,255,.95)!important;
-  transform:translate3d(0,0,0)!important;
+  transform:translate3d(var(--cart-x,0px),0,0) scale(var(--cart-scale,1))!important;
   will-change:transform,opacity!important;
   opacity:1!important;
 }
@@ -11757,6 +11757,8 @@ window.smartAnimateCartDeparture=function(){
             'smart-wheels-moving-v8',
             'smart-moving-v8'
           );
+          original.style.removeProperty('--cart-x');
+          original.style.removeProperty('--cart-scale');
           original.style.removeProperty('transform');
           original.style.removeProperty('opacity');
           original.style.removeProperty('width');
@@ -11827,7 +11829,8 @@ window.smartAnimateCartDeparture=function(){
           var scale = 1 - (.70*e);
           var opacity = 1 - e;
 
-          original.style.transform='translate3d('+x+'px,0,0) scale('+scale+')';
+          original.style.setProperty('--cart-x',x+'px');
+          original.style.setProperty('--cart-scale',String(scale));
           original.style.opacity=String(Math.max(0,opacity));
 
           if(t<1){
