@@ -467,7 +467,7 @@ const STORE_CONFIG = {
     "facebookUrl": "",
     "instagramUrl": ".",
     "messengerUrl": ".",
-    "telegramUrl": "https://t.me/95098hassen",
+    "telegramUrl": "https://t.me/213551102155",
     "whatsappNumber": "213671466489",
     "whatsappUrl": "https://wa.me/213671466489",
     "telegramNumber": "https://t.me/213551102155",
