@@ -8958,10 +8958,6 @@ updateDeliveryCost();
         }
 
         function showOrderSuccessAndRedirect(orderData) {
-            // عند ظهور رسالة نجاح الطلب: أوقف نبض «إرسال الطلب» وأعد العبارة الأصلية.
-            if(typeof window.stopCheckoutSendOrderPulse==='function'){
-                window.stopCheckoutSendOrderPulse();
-            }
             const modal = document.getElementById('orderConfirmationModal');
             const loading = document.getElementById('confirmationLoading');
             const success = document.getElementById('confirmationSuccess');
@@ -11034,13 +11030,6 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     await wait(220);
     await scrollCartClearly();
 
-    // عند صعود الصفحة إلى بطاقة السلة، وقبل خروج صورة المنتج:
-    // تختفي «إتمام الطلب»، وتتحول «أكمل طلبك» إلى «إرسال الطلب»
-    // بحجم 150% مع نبض مستمر، ويستمر التأثير طوال حركة خروج الصورة.
-    if(typeof window.startCheckoutSendOrderPulse==='function'){
-      window.startCheckoutSendOrderPulse();
-    }
-
     // لا نعيد زر «الرجوع إلى صفحة المنتجات» هنا.
     // يجب أن يبقى مخفياً حتى تنتهي حركة خروج صورة المنتج بالكامل.
     // سيُعاد إظهاره فقط بعد اكتمال playOrderDepartureAnimation.
@@ -11941,146 +11930,6 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
       resolve();
     });
   };
-})();
-</script>
-<style id="checkout-send-order-pulse-v1">
-/* أثناء صعود الصفحة إلى بطاقة السلة وحتى انتهاء خروج الصورة:
-   «إتمام الطلب» تختفي، و«أكمل طلبك» تصبح «إرسال الطلب» بحجم 150% مع نبض مستمر. */
-#page2 #smartCheckoutIntro.checkout-send-order-mode .smart-kicker{
-  display:none !important;
-}
-#page2 #smartCheckoutIntro.checkout-send-order-mode{
-  position:fixed !important;
-  z-index:99999 !important;
-  display:block !important;
-  width:max-content !important;
-  max-width:calc(100vw - 24px) !important;
-  margin:0 !important;
-  padding:6px 12px !important;
-  text-align:center !important;
-  pointer-events:none !important;
-  background:rgba(255,255,255,.97) !important;
-  border-radius:12px !important;
-  box-shadow:0 6px 22px rgba(0,0,0,.14) !important;
-}
-#page2 #smartCheckoutIntro.checkout-send-order-hidden{
-  display:none !important;
-}
-#page2 #smartCheckoutIntro.checkout-send-order-mode p{
-  display:none !important;
-}
-#page2 #smartCheckoutIntro.checkout-send-order-mode h1{
-  font-size:150% !important;
-  color:#16823b !important;
-  font-weight:900 !important;
-  animation:checkoutSendOrderPulse 0.72s ease-in-out infinite !important;
-  transform-origin:center center !important;
-  will-change:transform,opacity,text-shadow !important;
-  margin:0 !important;
-}
-@keyframes checkoutSendOrderPulse{
-  0%,100%{
-    transform:scale(1);
-    opacity:1;
-    text-shadow:0 0 0 rgba(22,130,59,0);
-  }
-  50%{
-    transform:scale(1.06);
-    opacity:.92;
-    text-shadow:0 0 14px rgba(22,130,59,.38);
-  }
-}
-</style>
-<script id="checkout-send-order-pulse-v1-js">
-(function(){
-  'use strict';
-  const originalKickerText='إتمام الطلب';
-  const originalTitleText='أكمل طلبك';
-
-  function startCheckoutSendOrderPulse(){
-    const head=document.getElementById('smartCheckoutIntro');
-    if(!head) return;
-    const kicker=head.querySelector('.smart-kicker');
-    const title=head.querySelector('h1');
-    const img=document.querySelector('#selectedProducts .selected-product > img');
-    if(!title) return;
-
-    if(!head.dataset.checkoutOriginalTitle){
-      head.dataset.checkoutOriginalTitle=title.textContent;
-    }
-    if(kicker && !head.dataset.checkoutOriginalKicker){
-      head.dataset.checkoutOriginalKicker=kicker.innerHTML;
-    }
-
-    if(kicker) kicker.style.display='none';
-    title.textContent='إرسال الطلب';
-    head.classList.remove('checkout-send-order-hidden','checkout-send-order-mode');
-
-    // ضع «إرسال الطلب» بجانب صورة المنتج، وليس في أعلى الصفحة.
-    if(img){
-      const r=img.getBoundingClientRect();
-      const width=Math.min(240,Math.max(150,window.innerWidth-24));
-      const left=Math.max(12,Math.min(window.innerWidth-width-12,r.left + (r.width-width)/2));
-      const top=Math.max(12,r.top - 48);
-      head.style.left=left+'px';
-      head.style.top=top+'px';
-      head.style.right='auto';
-      head.style.width=width+'px';
-    }
-
-    void head.offsetWidth;
-    head.classList.add('checkout-send-order-mode');
-
-    // النبض يستمر 1.5 ثانية فقط، ثم يتوقف ويختفي أثناء خروج الصورة.
-    clearTimeout(head._sendOrderPulseTimer);
-    head._sendOrderPulseTimer=setTimeout(function(){
-      head.classList.remove('checkout-send-order-mode');
-      head.classList.add('checkout-send-order-hidden');
-    },1500);
-  }
-
-  function stopCheckoutSendOrderPulse(){
-    const head=document.getElementById('smartCheckoutIntro');
-    if(!head) return;
-    const kicker=head.querySelector('.smart-kicker');
-    const title=head.querySelector('h1');
-    if(!title) return;
-
-    clearTimeout(head._sendOrderPulseTimer);
-    head.classList.remove('checkout-send-order-mode','checkout-send-order-hidden');
-    head.style.removeProperty('left');
-    head.style.removeProperty('top');
-    head.style.removeProperty('right');
-    head.style.removeProperty('width');
-    title.textContent=head.dataset.checkoutOriginalTitle || originalTitleText;
-    if(kicker){
-      kicker.innerHTML=head.dataset.checkoutOriginalKicker || '<i class="fas fa-bolt"></i> '+originalKickerText;
-      kicker.style.removeProperty('display');
-    }
-  }
-
-  window.startCheckoutSendOrderPulse=startCheckoutSendOrderPulse;
-  window.stopCheckoutSendOrderPulse=stopCheckoutSendOrderPulse;
-
-  // عند ظهور نجاح الطلب تعود العبارة الأصلية.
-  function hookSuccess(){
-    if(typeof window.showOrderSuccessAndRedirect!=='function') return false;
-    if(window.showOrderSuccessAndRedirect.__sendOrderPulseHooked) return true;
-    const old=window.showOrderSuccessAndRedirect;
-    function wrapped(orderData){
-      stopCheckoutSendOrderPulse();
-      return old.apply(this,arguments);
-    }
-    wrapped.__sendOrderPulseHooked=true;
-    window.showOrderSuccessAndRedirect=wrapped;
-    return true;
-  }
-  if(!hookSuccess()){
-    document.addEventListener('DOMContentLoaded',function(){
-      setTimeout(hookSuccess,50);
-      setTimeout(hookSuccess,300);
-    });
-  }
 })();
 </script>
 </html>
