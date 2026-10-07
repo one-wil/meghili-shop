@@ -5376,8 +5376,6 @@ body.order-departure-focus .order-departure-clone{
   visibility:visible !important;
 }
 </style>
-
-<style id="return-shopping-blue">button.return-shopping-blue,.return-shopping-blue{background:#1976d2 !important;background-color:#1976d2 !important;}</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -5497,8 +5495,11 @@ body.order-departure-focus .order-departure-clone{
             <form id="orderForm" class="order-form smart-order-form">
                 <div class="smart-checkout-head">
                     <button type="button" class="smart-back-btn" onclick="switchPage('page1')">
-                        <i class="fas fa-arrow-right"></i><span>العودة للتسوق</span>
+                        <i class="fas fa-arrow-right"></i><span>متابعة التسوق</span>
                     </button>
+                    <div class="smart-complete-order-link" role="button" tabindex="0" onclick="document.getElementById('smartRegionPanel')?.scrollIntoView({behavior:'smooth',block:'start'});" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+                        <span>إتمام الطلب</span><i class="fas fa-arrow-left"></i>
+                    </div>
                     <div class="smart-checkout-title" id="smartCheckoutIntro">
                         <span class="smart-kicker"><i class="fas fa-bolt"></i> إتمام الطلب</span>
                         <h1>أكمل طلبك</h1>
@@ -7327,34 +7328,28 @@ body.order-departure-focus .order-departure-clone{
                     `;
                     
                     colorOption.addEventListener('click', function(event) {
-                        // اللون أحادي: نفس اللون مرة ثانية = إلغاء، ولون آخر = استبدال السابق.
-                        const wasSelected = colorOption.classList.contains('selected');
+                        // اللون أحادي فقط: اختيار لون جديد يستبدل اللون السابق.
                         document.querySelectorAll('#colorOptions .color-option-small').forEach(option => {
                             option.classList.remove('selected');
                             option.classList.remove('blinking-color');
                         });
-                        selectedColors = [];
-                        selectedColor = null;
-                        selectedAges = [];
-                        selectedAge = null;
-                        if (!wasSelected) {
-                            colorOption.classList.add('selected');
-                            selectedColors = [color];
-                            selectedColor = color;
-                        }
+                        selectedColors = [color];
+                        selectedColor = color;
+                        colorOption.classList.add('selected');
+
                         const sc = document.getElementById('modernSelectedColor');
-                        if (sc) sc.textContent = selectedColors.length ? selectedColors.join('، ') : 'لم يتم الاختيار';
-                        if (selectedColors.length) stopColorBlinking(colorOption);
+                        if (sc) sc.textContent = color;
+                        stopColorBlinking(colorOption);
                         const colorStepCard = document.querySelector('.modern-choice-card');
                         const sizeStepCard = document.getElementById('sizeOptionsContainer');
                         if (colorStepCard) { colorStepCard.classList.remove('step-attention'); colorStepCard.classList.add('step-done'); }
                         if (sizeStepCard) { sizeStepCard.classList.add('step-attention'); sizeStepCard.classList.remove('step-done'); }
-                        renderModernProductGallery(productKey, selectedColors[0] || null);
+                        renderModernProductGallery(productKey, color);
                         stopColorBlinking(colorOption);
 
                         if (selectedColors.length) {
-                            updateProductImageByColor(productKey, selectedColors[0]);
-                            showAvailableSizesForColor(productKey, selectedColors[0]);
+                            updateProductImageByColor(productKey, color);
+                            showAvailableSizesForColor(productKey, color);
 
                             // بعد اختيار اللون: يظهر المقاس فقط.
                             // كل ما بعد المقاس يبقى مخفياً حتى يختار الزبون المقاس فعلياً.
@@ -7509,19 +7504,11 @@ body.order-departure-focus .order-departure-clone{
             const sizeOptionsContainer = document.getElementById('sizeOptionsContainer');
             if (!ageOptions || !sizeOptionsContainer || !product) return;
 
-            // المقاسات المتاحة هي اتحاد المقاسات الخاصة بكل الألوان المفعّلة.
-            const activeColors = selectedColors.length ? selectedColors : (color ? [color] : []);
-            const rangesByKey = new Map();
-            activeColors.forEach(activeColor => {
-                const ranges = (product.colorImages && product.colorImages[activeColor] && product.colorImages[activeColor].ageRanges)
-                    ? product.colorImages[activeColor].ageRanges
-                    : (product.ageRanges || []);
-                ranges.forEach(range => {
-                    const key = `${range.ageFrom}-${range.ageTo}-${range.size}`;
-                    if (!rangesByKey.has(key)) rangesByKey.set(key, range);
-                });
-            });
-            const ageRanges = Array.from(rangesByKey.values());
+            // اللون المختار واحد فقط، لذلك نعرض مقاساته هو فقط.
+            const activeColor = color || selectedColor || selectedColors[0] || null;
+            const ageRanges = (activeColor && product.colorImages && product.colorImages[activeColor] && product.colorImages[activeColor].ageRanges)
+                ? product.colorImages[activeColor].ageRanges
+                : (product.ageRanges || []);
 
             ageOptions.innerHTML = '';
             sizeOptionsContainer.style.display = 'block';
@@ -8439,8 +8426,7 @@ updateDeliveryCost();
         }
 
         // ===== Helper Functions =====
-        // إضافة الاختيارات بدقة: لون واحد فقط + كل المقاسات المحددة،
-        // وكل مقاس يُحفظ في السلة باسمه الحقيقي كما يظهر في صفحة المقاسات.
+        // لون واحد فقط × المقاسات المختارة.
         function addSelectedVariantsToCart(quantity, event) {
             const color = selectedColor || (selectedColors[0] || null);
             const selectedOptions = Array.from(document.querySelectorAll('#ageOptions .size-option-small.selected'));
@@ -9049,25 +9035,14 @@ updateDeliveryCost();
         // ===== دالة البرقية الوحيد للعودة إلى المنتجات =====
         function closeOrderConfirmationAndRedirectToProductsSingle() {
             createSingleTelegraphEffect();
-            
+
+            // العودة للمنتجات = Actualiser / Rafraîchir للصفحة الأولى فعلياً.
+            // هذا يعيد تهيئة المتجر وجميع مؤثرات السلة والصورة من الصفر.
             setTimeout(() => {
-                document.getElementById('orderConfirmationModal').classList.remove('show');
-                
-                setTimeout(() => {
-                    switchPage('page1');
-                    
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                    
-                    showNotification('📡 تم تأكيد الإشارة البرقية: العودة إلى قائمة المنتجات!', 'success');
-                    
-                    createSingleTelegraphWelcome();
-                }, 500);
+                window.location.reload();
             }, 1000);
         }
-        
+
         function createSingleTelegraphEffect() {
             for (let i = 0; i < 6; i++) {
                 setTimeout(() => {
@@ -10614,13 +10589,30 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
   function afterSuccessfulOrder(){
     removeAllStagePulses();
     if(typeof window.smartClearStageChecksV10==='function')window.smartClearStageChecksV10();
-    const btn=$('confirmOrderBtn');if(btn){btn.classList.remove('smart-confirm-pulse');btn.disabled=true}
+    window.smartIntroSequenceActive=false;
+
+    const btn=$('confirmOrderBtn');if(btn){btn.classList.remove('smart-confirm-pulse','smart-order-explode','smart-guided-target');btn.disabled=true}
     const region=$('smartRegionPanel'),delivery=$('smartDeliveryPanel'),customer=$('personalInfoSection');
     if(region)region.style.display='none';if(delivery)delivery.style.display='none';if(customer)customer.style.display='none';
+
+    // إعادة تهيئة حالة المتجر البصرية بالكامل حتى تبدأ الطلبية التالية من الصفر.
     try{document.getElementById('orderForm').reset()}catch(e){}
     try{cartItems=[]}catch(e){}
     try{selectedWilaya=null;selectedDeliveryType=null}catch(e){}
-    const w=$('wilaya');if(w){w.value='';w.disabled=true}
+    try{selectedAge=null;selectedColor=null;selectedAges=[];selectedColors=[]}catch(e){}
+    try{isAnimationRunning=false}catch(e){}
+
+    const w=$('wilaya');if(w){w.value='';w.disabled=true;w.classList.remove('smart-wilaya-pulse','fast-pulse','smart-pulse')}
+    const cart=$('cartSummary');
+    if(cart)cart.classList.remove('cart-shake','pulse-animation');
+    const badge=$('cartBadge');
+    if(badge)badge.classList.remove('pulse-animation');
+    const floating=$('floatingCountersContainer');
+    if(floating)floating.innerHTML='';
+
+    if(typeof window.updateCartDisplay==='function')window.updateCartDisplay();
+    if(typeof window.updateMobileCartBar==='function')window.updateMobileCartBar();
+
     if(typeof window.switchPage==='function')window.switchPage('page1');
     setTimeout(()=>window.scrollTo({top:0,left:0,behavior:'auto'}),50);
   }
@@ -11664,6 +11656,60 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 })();
 </script>
 
+
+<style id="single-color-shopping-back-button">
+/* زر متابعة التسوق: كبير وواضح للعودة لاختيار منتج/لون آخر */
+#page2 .smart-back-btn{
+  min-width:180px !important;
+  min-height:52px !important;
+  padding:12px 22px !important;
+  border:2px solid #0077cc !important;
+  border-radius:14px !important;
+  background:linear-gradient(135deg,#0077cc 0%,#0099ff 100%) !important;
+  color:#fff !important;
+  font-size:1rem !important;
+  font-weight:900 !important;
+  box-shadow:0 6px 18px rgba(0,119,204,.25) !important;
+  justify-content:center !important;
+  gap:9px !important;
+}
+#page2 .smart-back-btn i{color:#fff !important;font-size:1rem !important}
+#page2 .smart-back-btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,119,204,.32) !important}
+
+/* زر إتمام الطلب أسفل متابعة التسوق */
+#page2 .smart-checkout-head{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:10px !important;
+}
+#page2 .smart-complete-order-link{
+  min-width:180px !important;
+  min-height:52px !important;
+  padding:12px 22px !important;
+  border:2px solid #16823b !important;
+  border-radius:14px !important;
+  background:linear-gradient(135deg,#159447 0%,#21b65b 100%) !important;
+  color:#fff !important;
+  font-size:1rem !important;
+  font-weight:900 !important;
+  box-shadow:0 6px 18px rgba(22,130,59,.25) !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  cursor:pointer !important;
+  transition:transform .2s ease,box-shadow .2s ease !important;
+}
+#page2 .smart-complete-order-link i{color:#fff !important;font-size:1rem !important}
+#page2 .smart-complete-order-link:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(22,130,59,.32) !important}
+@media(max-width:520px){
+  #page2 .smart-complete-order-link{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
+}
+@media(max-width:520px){
+  #page2 .smart-back-btn{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
+}
+</style>
 </body>
 
 <style id="index31-size-motion-absolute-final">
@@ -11785,7 +11831,8 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
-\n\n<style id="professional-order-departure-animation-v1">\n/* ============================================================\n   حركة مغادرة الطلب بعد الإشارة الخضراء\n   1) فتح مقبض السلة\n   2) ارتفاع بسيط للصورة\n   3) خروج أفقي مستقيم من الشاشة\n   ============================================================ */\n.selected-product.order-departure-card{\n  overflow:visible !important;\n}\n.selected-product.order-departure-card::before{\n  animation:orderCartHandleOpen 240ms cubic-bezier(.22,.8,.25,1) forwards !important;\n  transform-origin:50% 100% !important;\n}\n@keyframes orderCartHandleOpen{\n  0%{transform:translateX(-50%) rotate(0deg) scaleY(1);}\n  55%{transform:translateX(-50%) rotate(-28deg) scaleY(1.05);}\n  100%{transform:translateX(-50%) rotate(-42deg) scaleY(1.08);}\n}\n\n.selected-product.order-departure-card > img{\n  position:relative !important;\n  z-index:5 !important;\n  will-change:transform,opacity !important;\n  animation:orderProductImageDeparture 650ms cubic-bezier(.18,.78,.18,1) 80ms forwards !important;\n}\n@keyframes orderProductImageDeparture{\n  0%{\n    transform:translate3d(0,0,0) scale(1);\n    opacity:1;\n  }\n  18%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  32%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate3d(-125vw,-24px,0) scale(1.045);\n    opacity:0;\n  }\n}\n\n/* بقية محتوى بطاقة الطلب يبقى ثابتاً أثناء مغادرة الصورة */\n.selected-product.order-departure-card > .selected-product-info{\n  position:relative !important;\n  z-index:2 !important;\n}\n\n/* لمسة انتقال خفيفة على البطاقة، دون تحريك مسار الصورة */\n.selected-product.order-departure-card{\n  animation:orderCardDepartureFade 1450ms ease 180ms forwards !important;\n}\n@keyframes orderCardDepartureFade{\n  0%,55%{opacity:1;}\n  100%{opacity:.92;}\n}\n\n@media (prefers-reduced-motion: reduce){\n  .selected-product.order-departure-card::before,\n  .selected-product.order-departure-card > img,\n  .selected-product.order-departure-card{\n    animation-duration:1ms !important;\n  }\n}\n</style>\n\n<script id="professional-order-departure-animation-v3-js">
+<style id="professional-order-departure-animation-v1">\n/* ============================================================\n   حركة مغادرة الطلب بعد الإشارة الخضراء\n   1) فتح مقبض السلة\n   2) ارتفاع بسيط للصورة\n   3) خروج أفقي مستقيم من الشاشة\n   ============================================================ */\n.selected-product.order-departure-card{\n  overflow:visible !important;\n}\n.selected-product.order-departure-card::before{\n  animation:orderCartHandleOpen 240ms cubic-bezier(.22,.8,.25,1) forwards !important;\n  transform-origin:50% 100% !important;\n}\n@keyframes orderCartHandleOpen{\n  0%{transform:translateX(-50%) rotate(0deg) scaleY(1);}\n  55%{transform:translateX(-50%) rotate(-28deg) scaleY(1.05);}\n  100%{transform:translateX(-50%) rotate(-42deg) scaleY(1.08);}\n}\n\n.selected-product.order-departure-card > img{\n  position:relative !important;\n  z-index:5 !important;\n  will-change:transform,opacity !important;\n  animation:orderProductImageDeparture 650ms cubic-bezier(.18,.78,.18,1) 80ms forwards !important;\n}\n@keyframes orderProductImageDeparture{\n  0%{\n    transform:translate3d(0,0,0) scale(1);\n    opacity:1;\n  }\n  18%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  32%{\n    transform:translate3d(0,-24px,0) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate3d(-125vw,-24px,0) scale(1.045);\n    opacity:0;\n  }\n}\n\n/* بقية محتوى بطاقة الطلب يبقى ثابتاً أثناء مغادرة الصورة */\n.selected-product.order-departure-card > .selected-product-info{\n  position:relative !important;\n  z-index:2 !important;\n}\n\n/* لمسة انتقال خفيفة على البطاقة، دون تحريك مسار الصورة */\n.selected-product.order-departure-card{\n  animation:orderCardDepartureFade 1450ms ease 180ms forwards !important;\n}\n@keyframes orderCardDepartureFade{\n  0%,55%{opacity:1;}\n  100%{opacity:.92;}\n}\n\n@media (prefers-reduced-motion: reduce){\n  .selected-product.order-departure-card::before,\n  .selected-product.order-departure-card > img,\n  .selected-product.order-departure-card{\n    animation-duration:1ms !important;\n  }\n}\n</style>
+<script id="professional-order-departure-animation-v3-js">
 (function(){
   'use strict';
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
@@ -11891,7 +11938,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     });
   };
 })();
-</script>\n
+</script>
 </html>
 <style id="index31-size-match-color-final">
 /* =========================================================
