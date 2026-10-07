@@ -460,7 +460,7 @@ const STORE_CONFIG = {
     "storeTitle": "-",
     "tagline": "متجر الأحلام ",
     "phoneNumbers": [
-      "0671466489",
+      "0666666666",
       "0551102155"
     ],
     "logo": "https://raw.githubusercontent.com/one-wil/lip-waw/main/images/store-logo-1789242847980-file-0000000012a481f4b3f05ecbb28e82cd.png",
