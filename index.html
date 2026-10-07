@@ -10668,6 +10668,13 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
   window.addToCartWithTelegraphEffects=function(event){
     if(event)event.preventDefault();
     if(!selectedColor || !selectedAge){if(typeof window.showColorSizeGuidance==='function')window.showColorSizeGuidance();return}
+
+    // عند الضغط على «أطلب الآن» من تفاصيل المنتج:
+    // إخفاء زر «الرجوع إلى صفحة المنتجات» فوراً.
+    // لا يُعاد إظهاره هنا؛ startStage2() سيعيده فقط عند بدء نبض الولاية.
+    const backShoppingBtn=document.querySelector('#page2 .smart-back-btn');
+    if(backShoppingBtn) backShoppingBtn.classList.add('smart-back-hidden');
+
     const q=parseInt(($('quantityDisplay')?.textContent||'1'),10)||1;
 
     // نفس تأثير الزر الأصلي: البرق + الصوت.
