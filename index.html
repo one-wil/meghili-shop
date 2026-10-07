@@ -5497,9 +5497,7 @@ body.order-departure-focus .order-departure-clone{
                     <button type="button" class="smart-back-btn" onclick="switchPage('page1')">
                         <i class="fas fa-arrow-right"></i><span>الرجوع إلى صفحة المنتجات</span>
                     </button>
-                    <div class="smart-complete-order-link" role="button" tabindex="0" onclick="document.getElementById('smartRegionPanel')?.scrollIntoView({behavior:'smooth',block:'start'});" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
-                        <span>إتمام الطلب</span><i class="fas fa-arrow-left"></i>
-                    </div>
+                    
                     <div class="smart-checkout-title" id="smartCheckoutIntro">
                         <span class="smart-kicker"><i class="fas fa-bolt"></i> إتمام الطلب</span>
                         <h1>أكمل طلبك</h1>
@@ -11723,39 +11721,6 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 #page2 .smart-back-btn i{color:#fff !important;font-size:1rem !important}
 #page2 .smart-back-btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,119,204,.32) !important}
 
-/* زر إتمام الطلب أسفل متابعة التسوق */
-#page2 .smart-checkout-head{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:flex-start !important;
-  gap:10px !important;
-}
-#page2 .smart-complete-order-link{
-  min-width:180px !important;
-  min-height:52px !important;
-  padding:12px 22px !important;
-  border:2px solid #16823b !important;
-  border-radius:14px !important;
-  background:linear-gradient(135deg,#159447 0%,#21b65b 100%) !important;
-  color:#fff !important;
-  font-size:1rem !important;
-  font-weight:900 !important;
-  box-shadow:0 6px 18px rgba(22,130,59,.25) !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap:10px !important;
-  cursor:pointer !important;
-  transition:transform .2s ease,box-shadow .2s ease !important;
-}
-#page2 .smart-complete-order-link i{color:#fff !important;font-size:1rem !important}
-#page2 .smart-complete-order-link:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(22,130,59,.32) !important}
-@media(max-width:520px){
-  #page2 .smart-complete-order-link{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
-}
-@media(max-width:520px){
-  #page2 .smart-back-btn{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
-}
 </style>
 </body>
 
