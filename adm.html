@@ -3352,7 +3352,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 facebookUrl: "",
                 instagramUrl: "",
                 messengerUrl: "",
-                telegramNumber: "",
+                telegramUrl: "",
                 whatsappNumber: "",
                 whatsappUrl: "",
                 tiktokUrl: ""
@@ -5322,10 +5322,11 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     </div>
                     
                     <div class="form-group">
-                        <label>رابط Telegram</label>
-                        <input type="tel" class="form-control" id="telegramNumber" 
-                               value="${CONFIG.STORE_INFO?.telegramNumber || ''}" 
-                               onchange="updateStoreField('telegramNumber', this.value)">
+                        <label>Telegram</label>
+                        <input type="text" class="form-control" id="telegramUrl"
+                               value="${CONFIG.STORE_INFO?.telegramUrl || ''}"
+                               placeholder="Username أو رابط Telegram"
+                               onchange="updateStoreField('telegramUrl', this.value)">
                     </div>
                     
                     <div class="form-group">
@@ -5790,6 +5791,12 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 if (whatsappUrlInput) {
                     whatsappUrlInput.value = CONFIG.STORE_INFO.whatsappUrl;
                 }
+            } else if (field === 'telegramUrl') {
+                const raw = String(value || '').trim();
+                const username = raw.replace(/^https?:\/\/(www\.)?t\.me\//i, '').replace(/^@/, '');
+                CONFIG.STORE_INFO.telegramUrl = username ? `https://t.me/${username}` : '';
+                const telegramInput = document.getElementById('telegramUrl');
+                if (telegramInput) telegramInput.value = username;
             } else {
                 CONFIG.STORE_INFO[field] = value;
             }
