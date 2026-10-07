@@ -5497,6 +5497,9 @@ body.order-departure-focus .order-departure-clone{
                     <button type="button" class="smart-back-btn" onclick="switchPage('page1')">
                         <i class="fas fa-arrow-right"></i><span>الرجوع إلى صفحة المنتجات</span>
                     </button>
+                    <div class="smart-complete-order-link" role="button" tabindex="0" onclick="document.getElementById('smartRegionPanel')?.scrollIntoView({behavior:'smooth',block:'start'});" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+                        <span>إتمام الطلب</span><i class="fas fa-arrow-left"></i>
+                    </div>
                     <div class="smart-checkout-title" id="smartCheckoutIntro">
                         <span class="smart-kicker"><i class="fas fa-bolt"></i> إتمام الطلب</span>
                         <h1>أكمل طلبك</h1>
@@ -8963,6 +8966,15 @@ updateDeliveryCost();
             const success = document.getElementById('confirmationSuccess');
             const orderSummary = document.getElementById('orderSummary');
             
+            // عند ظهور رسالة نجاح الطلب يختفي فوراً نبض «إرسال الطلب».
+            const smartIntro = document.getElementById('smartCheckoutIntro');
+            const smartIntroTitle = smartIntro ? smartIntro.querySelector('h1') : null;
+            if (smartIntro) smartIntro.classList.remove('smart-send-order-pulse');
+            if (smartIntroTitle) {
+                smartIntroTitle.textContent = smartIntroTitle.dataset.previousText || 'أكمل طلبك';
+                delete smartIntroTitle.dataset.previousText;
+            }
+
             // بعد انتهاء حركة مغادرة الصورة، أظهر بطاقة النجاح من جديد.
             if (modal) modal.classList.add('show');
             loading.style.display = 'none';
@@ -10498,8 +10510,6 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     if(delivery)delivery.style.display='none';
     if(customer)customer.style.display='none';
     removeAllStagePulses();
-    const backBtn=document.querySelector('#page2 .smart-back-btn');
-    if(backBtn) backBtn.classList.remove('smart-back-hidden');
     const w=$('wilaya'); if(w)w.classList.add('smart-wilaya-pulse');
     pulseNumber(2);setStage(2);
     scrollTo('smartRegionPanel',0);
@@ -10621,10 +10631,6 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     if(!cartHasItems()) return;
     const head=$('smartCheckoutIntro');
     const delivery=$('smartDeliveryPanel'), customer=$('personalInfoSection'), region=$('smartRegionPanel');
-
-    // «الرجوع إلى صفحة المنتجات» تبقى مخفية منذ بداية Checkout، ولا تظهر إلا بعد انتهاء رمز تأكيد المرحلة الأولى ✓ والانتقال إلى المرحلة 2.
-    const backBtn=document.querySelector('#page2 .smart-back-btn');
-    if(backBtn) backBtn.classList.add('smart-back-hidden');
 
     // نمنع أي دالة قديمة من تشغيل الرقم 2 أثناء المقدمة.
     window.smartIntroSequenceActive = true;
@@ -10916,7 +10922,7 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 }
 #page2 #smartCheckoutIntro.smart-intro-black-pulse .smart-kicker,
 #page2 #smartCheckoutIntro.smart-intro-black-pulse h1{
-  color:#16823b !important;
+  color:#111 !important;
 }
 #page2 #smartCheckoutIntro.smart-intro-black-pulse h1{
   text-shadow:0 0 16px rgba(0,0,0,.38);
@@ -10947,7 +10953,7 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 }
 #page2 #smartCheckoutIntro.smart-intro-black-pulse .smart-kicker,
 #page2 #smartCheckoutIntro.smart-intro-black-pulse h1{
-  color:#16823b !important;
+  color:#111 !important;
 }
 #page2 #smartCheckoutIntro.smart-intro-black-pulse h1{
   text-shadow:0 0 16px rgba(0,0,0,.42) !important;
@@ -10959,6 +10965,31 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 </style>
 
 
+<style id="smart-send-order-pulse-final">
+/* عند صعود الصفحة إلى بطاقة السلة وقبل خروج الصورة: «إرسال الطلب» ينبض بحجم أكبر 50%. */
+#page2 #smartCheckoutIntro.smart-send-order-pulse{
+  animation:smartSendOrderPulseFinal .72s ease-in-out infinite !important;
+  transform-origin:center !important;
+  position:relative;
+  z-index:20;
+}
+#page2 #smartCheckoutIntro.smart-send-order-pulse .smart-kicker,
+#page2 #smartCheckoutIntro.smart-send-order-pulse h1{
+  color:#16823b !important;
+}
+#page2 #smartCheckoutIntro.smart-send-order-pulse h1{
+  font-size:2.175rem !important; /* 1.45rem × 1.50 */
+  font-weight:1000 !important;
+  text-shadow:0 0 16px rgba(22,130,59,.28) !important;
+}
+@keyframes smartSendOrderPulseFinal{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(22,130,59,0));}
+  50%{transform:scale(1.08);filter:drop-shadow(0 0 14px rgba(22,130,59,.32));}
+}
+@media(max-width:520px){
+  #page2 #smartCheckoutIntro.smart-send-order-pulse h1{font-size:1.85rem !important;}
+}
+</style>
 <script id="smart-final-submit-single-click-v4">
 (function(){
   'use strict';
@@ -11016,36 +11047,35 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     }catch(err){}
     await wait(2000);
 
-    // 3 — نخفي رسالة المعالجة قبل ظهور السلة.
-    // قبل تحريك الصفحة إلى بطاقة السلة، نخفي زر «الرجوع إلى صفحة المنتجات»
-    // حتى لا يظهر أثناء حركة الصعود؛ وبعد استقرار السلة نعيده دون تغيير تصميمه.
-    const backShoppingBtn = document.querySelector('#page2 .smart-back-btn');
-    const backShoppingBtnWasVisible = !!backShoppingBtn && !backShoppingBtn.classList.contains('smart-back-hidden') && getComputedStyle(backShoppingBtn).display !== 'none';
-    if(backShoppingBtn) backShoppingBtn.classList.add('smart-back-hidden');
-
+    // 3 — نخفي رسالة المعالجة قبل ظهور السلة، ثم نضع بطاقة السلة وحدها في وسط الشاشة.
     try{
       const processingModal=document.getElementById('orderConfirmationModal');
       if(processingModal) processingModal.classList.remove('show');
     }catch(err){}
     await wait(220);
     await scrollCartClearly();
-
-    // لا نعيد زر «الرجوع إلى صفحة المنتجات» هنا.
-    // يجب أن يبقى مخفياً حتى تنتهي حركة خروج صورة المنتج بالكامل.
-    // سيُعاد إظهاره فقط بعد اكتمال playOrderDepartureAnimation.
-
     // تقليل زمن التوقف بعد استقرار السلة في منتصف الشاشة إلى النصف.
     await wait(90);
 
-    // 4 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
+    // 4 — قبل خروج الصورة: نستبدل «أكمل طلبك» مؤقتاً بـ «إرسال الطلب» ونشغّل النبض.
+    const smartIntro=document.getElementById('smartCheckoutIntro');
+    const smartIntroTitle=smartIntro ? smartIntro.querySelector('h1') : null;
+    if(smartIntro){
+      if(smartIntroTitle){
+        smartIntroTitle.dataset.previousText=smartIntroTitle.textContent || 'أكمل طلبك';
+        smartIntroTitle.textContent='إرسال الطلب';
+      }
+      smartIntro.classList.remove('smart-send-order-pulse');
+      void smartIntro.offsetWidth;
+      smartIntro.classList.add('smart-send-order-pulse');
+    }
+
+    // 5 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
     try{
       if(typeof window.playOrderDepartureAnimation==='function'){
         await window.playOrderDepartureAnimation({alreadyScrolled:true});
       }
     }catch(err){ console.warn('Departure sequence:',err); }
-
-    // لا يظهر «الرجوع إلى صفحة المنتجات» إلا بعد التأكد من انتهاء حركة خروج الصورة.
-    if(backShoppingBtn && backShoppingBtnWasVisible) backShoppingBtn.classList.remove('smart-back-hidden');
 
     // 4 — الإرسال لا يبدأ إلا بعد انتهاء الحركة.
     const form=document.getElementById('orderForm');
@@ -11258,8 +11288,8 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   margin:4px 0 12px!important;
 }
 #page2 .smart-checkout-title{text-align:right!important;flex:1!important}
-#page2 .smart-kicker{font-size:.62rem!important;color:#16823b!important}
-#page2 .smart-checkout-title h1{font-size:1.15rem!important;margin:2px 0!important;color:#16823b!important}
+#page2 .smart-kicker{font-size:.62rem!important;color:#666!important}
+#page2 .smart-checkout-title h1{font-size:1.15rem!important;margin:2px 0!important;color:#111!important}
 #page2 .smart-checkout-title p{font-size:.66rem!important;color:#555!important;opacity:.8!important}
 #page2 .smart-back-btn{padding:7px 10px!important;border-radius:10px!important;font-size:.65rem!important;white-space:nowrap!important}
 #page2 .smart-checkout-grid{display:block!important}
@@ -11674,14 +11704,8 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 </script>
 
 
-<style id="smart-shopping-back-visibility-v1">
-/* الرجوع إلى صفحة المنتجات: مخفية في البداية حتى تبدأ نبضة/اهتزاز الولاية،
-   ثم تُخفى مجدداً أثناء معالجة الطلب وخروج صورة المنتج. */
-#page2 .smart-back-btn.smart-back-hidden{display:none !important;}
-</style>
-
 <style id="single-color-shopping-back-button">
-/* زر الرجوع إلى صفحة المنتجات: كبير وواضح للعودة لاختيار منتج/لون آخر */
+/* زر متابعة التسوق: كبير وواضح للعودة لاختيار منتج/لون آخر */
 #page2 .smart-back-btn{
   min-width:180px !important;
   min-height:52px !important;
@@ -11699,6 +11723,36 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 #page2 .smart-back-btn i{color:#fff !important;font-size:1rem !important}
 #page2 .smart-back-btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,119,204,.32) !important}
 
+/* زر إتمام الطلب أسفل متابعة التسوق */
+#page2 .smart-checkout-head{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:10px !important;
+}
+#page2 .smart-complete-order-link{
+  min-width:180px !important;
+  min-height:52px !important;
+  padding:12px 22px !important;
+  border:2px solid #16823b !important;
+  border-radius:14px !important;
+  background:linear-gradient(135deg,#159447 0%,#21b65b 100%) !important;
+  color:#fff !important;
+  font-size:1rem !important;
+  font-weight:900 !important;
+  box-shadow:0 6px 18px rgba(22,130,59,.25) !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  cursor:pointer !important;
+  transition:transform .2s ease,box-shadow .2s ease !important;
+}
+#page2 .smart-complete-order-link i{color:#fff !important;font-size:1rem !important}
+#page2 .smart-complete-order-link:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(22,130,59,.32) !important}
+@media(max-width:520px){
+  #page2 .smart-complete-order-link{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
+}
 @media(max-width:520px){
   #page2 .smart-back-btn{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
 }
