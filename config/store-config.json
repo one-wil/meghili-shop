@@ -447,7 +447,12 @@
     "promoDiscountScope": "selected",
     "promoDiscountProducts": [
       1789581423689
-    ]
+    ],
+    "enableBuyXGetY": false,
+    "buyXGetYBuyQuantity": 2,
+    "buyXGetYFreeQuantity": 1,
+    "buyXGetYScope": "selected",
+    "buyXGetYProducts": []
   },
   "STORE_INFO": {
     "name": "Meghili-shop",
@@ -460,13 +465,11 @@
     ],
     "logo": "https://raw.githubusercontent.com/one-wil/lip-waw/main/images/store-logo-1789242847980-file-0000000012a481f4b3f05ecbb28e82cd.png",
     "facebookUrl": "",
-    "instagramUrl": ".",
-    "messengerUrl": ".",
-    "telegramUrl": "https://t.me/213551102155",
+    "instagramUrl": "",
+    "messengerUrl": "",
+    "telegramUrl": "",
     "whatsappNumber": "213671466489",
-    "whatsappUrl": "https://wa.me/213671466489",
-    "telegramNumber": "https://t.me/213551102155",
-    "tiktokUrl": "."
+    "whatsappUrl": "https://wa.me/213671466489"
   },
   "GOOGLE_SHEETS": {
     "url": "",
