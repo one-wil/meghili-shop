@@ -1112,6 +1112,14 @@
             }
         }
         
+        /* زوم خاص بنوافذ إدارة الألوان ودليل المقاسات:
+           body يعمل أصلًا على 70%، لذلك 1.07142857 × 70% = 75% فعليًا. */
+        #colorsSizesModal > .modal,
+        #sizeGuideModal > .modal {
+            /* الزوم الجديد يبقى كما هو: 56.25% */
+            zoom: 0.80357143;
+        }
+
         /* نوافذ منبثقة */
         #uploadImageModal {
             z-index: 10002 !important;
@@ -2013,6 +2021,139 @@
 }
 </style>
 
+
+<style id="professional-colors-size-modals">
+/* عرض احترافي لهاتين البطاقتين فقط */
+#colorsSizesModal > .modal,
+#sizeGuideModal > .modal {
+    /* لا تغيير في الزوم: يبقى 56.25% */
+    zoom: 0.80357143 !important;
+
+    /* استغلال مساحة الشاشة وتقليل التمرير */
+    height: 165dvh !important;
+    max-height: none !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    border-radius: 18px !important;
+}
+
+#colorsSizesModal > .modal .modal-header,
+#sizeGuideModal > .modal .modal-header {
+    flex: 0 0 auto !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 5 !important;
+}
+
+#colorsSizesModal > .modal .modal-body,
+#sizeGuideModal > .modal .modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(67,97,238,.45) transparent !important;
+}
+
+/* شريط تمرير رفيع وأنيق */
+#colorsSizesModal > .modal .modal-body::-webkit-scrollbar,
+#sizeGuideModal > .modal .modal-body::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+#colorsSizesModal > .modal .modal-body::-webkit-scrollbar-track,
+#sizeGuideModal > .modal .modal-body::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+#colorsSizesModal > .modal .modal-body::-webkit-scrollbar-thumb,
+#sizeGuideModal > .modal .modal-body::-webkit-scrollbar-thumb {
+    background: rgba(67,97,238,.45) !important;
+    border-radius: 20px !important;
+}
+
+@media (max-width: 768px) {
+    #colorsSizesModal > .modal,
+    #sizeGuideModal > .modal {
+        height: 165dvh !important;
+        max-height: none !important;
+        margin: 6px !important;
+        border-radius: 18px !important;
+    }
+
+    #colorsSizesModal > .modal .modal-body,
+    #sizeGuideModal > .modal .modal-body {
+        max-height: none !important;
+        padding-bottom: 24px !important;
+    }
+}
+</style>
+
+
+<style id="bottom-space-two-cm">
+/* فراغ 2 سم تحت الأزرار السفلية لهاتين البطاقتين فقط */
+#colorsSizesModal > .modal .modal-body,
+#sizeGuideModal > .modal .modal-body {
+    padding-bottom: 2cm !important;
+}
+</style>
+
+
+<style id="product-modal-same-height">
+/* نفس ارتفاع بطاقتي الألوان ودليل المقاسات لبطاقة تعديل المنتج فقط */
+/* لا يتم تعديل الزوم */
+#productModal > .modal {
+    height: calc(165dvh - 4cm) !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+#productModal > .modal .modal-header {
+    flex: 0 0 auto !important;
+}
+
+#productModal > .modal .modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(67,97,238,.45) transparent !important;
+    padding-bottom: calc(24px + 3cm) !important;
+}
+
+#productModal > .modal .modal-body::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+#productModal > .modal .modal-body::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+#productModal > .modal .modal-body::-webkit-scrollbar-thumb {
+    background: rgba(67,97,238,.45) !important;
+    border-radius: 20px !important;
+}
+
+@media (max-width: 768px) {
+    #productModal > .modal {
+        height: calc(165dvh - 4cm) !important;
+        max-height: none !important;
+        margin: 6px !important;
+    }
+}
+</style>
+
 <style id="fixed-bottom-nav-enhancement">
 @media (max-width: 768px) {
     /* القائمة ثابتة أسفل الشاشة ولا تتحرك مع تمرير الصفحة */
@@ -2411,6 +2552,21 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
   #checkout-analytics{display:none !important;}
 </style>
 
+<style id="whatsapp-fixed-213-style">
+.whatsapp-fixed-field{display:flex;align-items:stretch;direction:ltr;width:100%}
+.whatsapp-fixed-field .whatsapp-prefix{
+    display:flex;align-items:center;justify-content:center;min-width:72px;
+    padding:0 14px;border:1px solid var(--border,#ddd);border-right:0;
+    border-radius:8px 0 0 8px;background:#eef2f7;color:#1f2937;
+    font-weight:700;font-size:16px;
+}
+.whatsapp-fixed-field .whatsapp-digits{
+    flex:1;direction:ltr;text-align:left;border-radius:0 8px 8px 0 !important;
+}
+.whatsapp-fixed-field .whatsapp-digits::placeholder{
+    opacity:.55;letter-spacing:3px;font-weight:600;
+}
+</style>
 </head>
 
 <body>
@@ -3196,7 +3352,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 facebookUrl: "",
                 instagramUrl: "",
                 messengerUrl: "",
-                viberNumber: "",
+                telegramNumber: "",
                 whatsappNumber: "",
                 whatsappUrl: "",
                 tiktokUrl: ""
@@ -5076,17 +5232,34 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     </div>
                     
                     <div class="form-group">
-                        <label>رقم أو رقمين هاتف (مفصولة بفاصلة)</label>
-                        <input type="text" class="form-control" id="storePhones" 
-                               value="${CONFIG.STORE_INFO?.phoneNumbers?.join(', ') || ''}" 
-                               onchange="updateStoreField('phoneNumbers', this.value)">
+                        <label>رقم أو رقمين هاتف</label>
+                        <div class="phone-numbers-split" dir="ltr">
+                            <input type="tel" class="form-control phone-number-part" id="storePhone1"
+                                   inputmode="numeric" maxlength="10" pattern="[0-9]{10}"
+                                   value="${CONFIG.STORE_INFO?.phoneNumbers?.[0] || ''}"
+                                   oninput="updateStorePhoneParts()">
+                            <span class="phone-comma" aria-hidden="true">,</span>
+                            <input type="tel" class="form-control phone-number-part" id="storePhone2"
+                                   inputmode="numeric" maxlength="10" pattern="[0-9]{10}"
+                                   value="${CONFIG.STORE_INFO?.phoneNumbers?.[1] || ''}"
+                                   oninput="updateStorePhoneParts()">
+                        </div>
                     </div>
                     
                     <div class="form-group">
                         <label>رقم واتساب</label>
-                        <input type="tel" class="form-control" id="whatsappNumber" 
-                               value="${CONFIG.STORE_INFO?.whatsappNumber || ''}" 
-                               onchange="updateStoreField('whatsappNumber', this.value)">
+                        <div class="whatsapp-fixed-field">
+                            <span class="whatsapp-prefix" aria-hidden="true">213</span>
+                            <input class="form-control whatsapp-digits"
+                                   id="whatsappNumber"
+                                   type="tel"
+                                   inputmode="numeric"
+                                   maxlength="9"
+                                   pattern="[0-9]{9}"
+                                   placeholder="XXXXXXXXX"
+                                   value="${String(CONFIG.STORE_INFO?.whatsappNumber || '').replace(/\D/g, '').replace(/^213/, '').slice(0, 9)}"
+                                   oninput="updateStoreField('whatsappNumber', this.value)">
+                        </div>
                     </div>
                     
                     <div class="form-group">
@@ -5149,10 +5322,10 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     </div>
                     
                     <div class="form-group">
-                        <label>رقم فايبر</label>
-                        <input type="tel" class="form-control" id="viberNumber" 
-                               value="${CONFIG.STORE_INFO?.viberNumber || ''}" 
-                               onchange="updateStoreField('viberNumber', this.value)">
+                        <label>رابط Telegram</label>
+                        <input type="tel" class="form-control" id="telegramNumber" 
+                               value="${CONFIG.STORE_INFO?.telegramNumber || ''}" 
+                               onchange="updateStoreField('telegramNumber', this.value)">
                     </div>
                     
                     <div class="form-group">
@@ -5590,22 +5763,35 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             showNotification('تم حفظ إعدادات البكسل بنجاح', 'success');
         }
         
+        function updateStorePhoneParts() {
+            if (!CONFIG.STORE_INFO) CONFIG.STORE_INFO = {};
+
+            const phone1 = (document.getElementById('storePhone1')?.value || '').replace(/\D/g, '').slice(0, 10);
+            const phone2 = (document.getElementById('storePhone2')?.value || '').replace(/\D/g, '').slice(0, 10);
+
+            const p1 = document.getElementById('storePhone1');
+            const p2 = document.getElementById('storePhone2');
+            if (p1 && p1.value !== phone1) p1.value = phone1;
+            if (p2 && p2.value !== phone2) p2.value = phone2;
+
+            CONFIG.STORE_INFO.phoneNumbers = [phone1, phone2].filter(Boolean);
+        }
+
         function updateStoreField(field, value) {
             if (!CONFIG.STORE_INFO) CONFIG.STORE_INFO = {};
-            
+
             if (field === 'phoneNumbers') {
                 CONFIG.STORE_INFO[field] = value.split(',').map(p => p.trim()).filter(p => p);
+            } else if (field === 'whatsappNumber') {
+                const digits = String(value || '').replace(/\D/g, '').slice(0, 9);
+                CONFIG.STORE_INFO.whatsappNumber = '213' + digits;
+                CONFIG.STORE_INFO.whatsappUrl = `https://wa.me/213${digits}`;
+                const whatsappUrlInput = document.getElementById('whatsappUrl');
+                if (whatsappUrlInput) {
+                    whatsappUrlInput.value = CONFIG.STORE_INFO.whatsappUrl;
+                }
             } else {
                 CONFIG.STORE_INFO[field] = value;
-                
-                if (field === 'whatsappNumber' && value) {
-                    const cleanNumber = value.replace(/\D/g, '');
-                    CONFIG.STORE_INFO.whatsappUrl = `https://wa.me/${cleanNumber}`;
-                    const whatsappUrlInput = document.getElementById('whatsappUrl');
-                    if (whatsappUrlInput) {
-                        whatsappUrlInput.value = CONFIG.STORE_INFO.whatsappUrl;
-                    }
-                }
             }
         }
         
@@ -6384,8 +6570,13 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                                         <label style="font-size: 12px; color: var(--gray);">المقاس</label>
                                         <select class="form-control" id="newSize_${color}_${productId}">
                                             <option value="">اختر مقاسًا</option>
-                                            ${availableSizes.map(size => `<option value="${size}">${size}</option>`).join('')}
-                                            ${availableSizes.length === 0 ? `<option value="" disabled>لا توجد مقاسات متاحة</option>` : ''}
+                                            ${(() => {
+                                                const configuredSizes = new Set((colorData.ageRanges || []).map(range => String(range.size)));
+                                                const remainingSizes = availableSizes.filter(size => !configuredSizes.has(String(size)));
+                                                return remainingSizes.length
+                                                    ? remainingSizes.map(size => `<option value="${size}">${size}</option>`).join('')
+                                                    : `<option value="" disabled>تم اختيار جميع المقاسات</option>`;
+                                            })()}
                                         </select>
                                     </div>
                                     <div>
@@ -6606,7 +6797,14 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                             <label style="font-size: 12px; color: var(--gray);">المقاس</label>
                             <select class="form-control" id="newSizeGuideSize">
                                 <option value="">اختر المقاس</option>
-                                ${[...new Set([...(CONFIG.AVAILABLE_SIZES || []), ...Object.keys(CONFIG.SIZE_GUIDE || {})])].map(size => `<option value="${size}">${size}</option>`).join('')}
+                                ${(() => {
+                                    const allSizes = [...new Set([...(CONFIG.AVAILABLE_SIZES || []), ...Object.keys(CONFIG.SIZE_GUIDE || {})])];
+                                    const configuredSizes = new Set(Object.keys(CONFIG.SIZE_GUIDE || {}).map(String));
+                                    const remainingSizes = allSizes.filter(size => !configuredSizes.has(String(size)));
+                                    return remainingSizes.length
+                                        ? remainingSizes.map(size => `<option value="${size}">${size}</option>`).join('')
+                                        : `<option value="" disabled>تمت إضافة جميع المقاسات</option>`;
+                                })()}
                             </select>
                         </div>
                         <div>
@@ -6733,7 +6931,14 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                                 <label style="font-size: 12px; color: var(--gray);">المقاس</label>
                                 <select class="form-control" id="newProductSizeGuideSize_${productId}">
                                     <option value="">اختر المقاس</option>
-                                    ${product.availableSizes?.map(size => `<option value="${size}">${size}</option>`).join('') || ''}
+                                    ${(() => {
+                                        const productSizes = product.availableSizes || [];
+                                        const configuredSizes = new Set(Object.keys(product.sizeGuide.guide || {}).map(String));
+                                        const remainingSizes = productSizes.filter(size => !configuredSizes.has(String(size)));
+                                        return remainingSizes.length
+                                            ? remainingSizes.map(size => `<option value="${size}">${size}</option>`).join('')
+                                            : `<option value="" disabled>تمت إضافة جميع مقاسات المنتج</option>`;
+                                    })()}
                                 </select>
                             </div>
                             <div>
@@ -9819,6 +10024,40 @@ window.caClearSessionDateFilter=function(){
 <!-- CHECKOUT FROZEN: prevent opening the disabled tab -->
 <style id="checkout-frozen-hard-hide">
 .checkout-analytics-menu-item,#checkout-analytics{display:none !important;}
+
+
+        /* حقل أرقام الهاتف: قسمان ثابتان يفصل بينهما فاصلة */
+        .phone-numbers-split {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .phone-numbers-split .phone-number-part {
+            flex: 1 1 0;
+            min-width: 0;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .phone-numbers-split .phone-comma {
+            flex: 0 0 auto;
+            font-size: 24px;
+            font-weight: 700;
+            color: #334155;
+            line-height: 1;
+        }
+
+        @media (max-width: 600px) {
+            .phone-numbers-split {
+                gap: 8px;
+            }
+
+            .phone-numbers-split .phone-comma {
+                font-size: 22px;
+            }
+        }
 </style>
 
 <script id="checkout-frozen-guard">
@@ -9849,6 +10088,12 @@ window.caClearSessionDateFilter=function(){
   else hideCheckout();
 })();
 </script>
+
+
+
+
+
+
 
 </body>
 </html>
