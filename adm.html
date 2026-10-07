@@ -2003,6 +2003,148 @@
             text-align: right !important;
         }
 
+
+        /* بطاقة المدير - تصميم فاخر بالأسود والذهبي */
+        .about-manager-card {
+            position: relative;
+            max-width: 900px;
+            min-height: 360px;
+            margin: 0 auto;
+            padding: 48px 55px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 55px;
+            direction: ltr;
+            overflow: hidden;
+            border-radius: 34px;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 193, 7, .10), transparent 28%),
+                linear-gradient(145deg, #050505 0%, #111111 52%, #030303 100%);
+            border: 2px solid rgba(212, 168, 67, .88);
+            box-shadow: 0 0 0 1px rgba(255, 213, 100, .12) inset, 0 18px 50px rgba(0,0,0,.35), 0 0 28px rgba(212,168,67,.16);
+        }
+        .about-manager-card::before {
+            content: '';
+            position: absolute;
+            inset: 9px;
+            border: 1px solid rgba(255, 215, 110, .32);
+            border-radius: 27px;
+            pointer-events: none;
+        }
+        .about-manager-avatar {
+            position: relative;
+            flex: 0 0 180px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 35% 30%, #262626, #050505 70%);
+            border: 7px solid #d4a843;
+            box-shadow: 0 0 0 5px rgba(255,215,110,.10), 0 0 28px rgba(212,168,67,.30), inset 0 0 24px rgba(255,200,80,.10);
+        }
+        .about-manager-avatar span {
+            font-size: 104px;
+            line-height: 1;
+            font-family: Arial, sans-serif;
+            font-weight: 700;
+            color: #f8d477;
+            text-shadow: 0 2px 8px rgba(0,0,0,.7);
+        }
+        .about-manager-info {
+            position: relative;
+            flex: 1;
+            text-align: left;
+            direction: ltr;
+        }
+        .about-manager-title,
+        .about-manager-name,
+        .about-manager-surname {
+            color: #f6cf68;
+            text-shadow: 0 2px 10px rgba(0,0,0,.7);
+        }
+        .about-manager-title {
+            direction: rtl;
+            text-align: right;
+            font-size: clamp(38px, 5vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 22px;
+        }
+        .about-manager-name {
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        .about-manager-surname {
+            font-size: clamp(30px, 3.8vw, 50px);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-top: 12px;
+        }
+        @media (max-width: 700px) {
+            .about-manager-card {
+                min-height: 300px;
+                padding: 32px 24px;
+                gap: 24px;
+            }
+            .about-manager-avatar {
+                flex-basis: 120px;
+                width: 120px;
+                height: 120px;
+            }
+            .about-manager-avatar span { font-size: 70px; }
+            .about-manager-title { margin-bottom: 14px; }
+        }
+
+        
+        /* التصميم الذهبي الفاخر لبطاقة المدير في أعلى لوحة الإدارة */
+        .dashboard-header .user-profile {
+            direction: rtl !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            min-width: 190px !important;
+            padding: 8px 12px !important;
+            border: 1px solid rgba(212, 175, 55, .75) !important;
+            border-radius: 18px !important;
+            background: linear-gradient(145deg, #050505, #17130a) !important;
+            box-shadow: 0 5px 18px rgba(0,0,0,.28), inset 0 0 12px rgba(212,175,55,.08) !important;
+        }
+        .dashboard-header .user-avatar {
+            width: 52px !important;
+            height: 52px !important;
+            min-width: 52px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: radial-gradient(circle at 35% 30%, #ffe9a3 0%, #d4af37 38%, #8f6500 72%, #3b2900 100%) !important;
+            color: #090909 !important;
+            border: 2px solid #f6d675 !important;
+            box-shadow: 0 0 0 3px rgba(212,175,55,.14), 0 0 18px rgba(212,175,55,.32) !important;
+            font-size: 25px !important;
+            font-weight: 900 !important;
+        }
+        .dashboard-header #storeOwnerRole {
+            color: #f3cc62 !important;
+            font-weight: 800 !important;
+            font-size: 15px !important;
+            line-height: 1.2 !important;
+        }
+        .dashboard-header #storeOwnerName {
+            color: #fff1bd !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 3px !important;
+        }
+        .dashboard-header .user-profile > div:last-child {
+            text-align: right !important;
+        }
+
 </style>
 
 <style id="mobile-full-height-modals">
@@ -3177,21 +3319,14 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         <p>تعرف على الفريق الذي يقف وراء StoreMaster</p>
                     </div>
 
-                    <div class="action-card" style="max-width:900px;margin:0 auto;text-align:center;padding:40px 30px;">
-                        <div style="width:78px;height:78px;margin:0 auto 20px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--info));color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:var(--shadow-lg);">
-                            <i class="fas fa-code"></i>
+                    <div class="about-manager-card">
+                        <div class="about-manager-avatar">
+                            <span>B</span>
                         </div>
-                        <h3 style="font-size:26px;margin-bottom:16px;justify-content:center;">فريق StoreMaster</h3>
-                        <p style="font-size:17px;line-height:2;color:var(--gray);margin:0 auto 12px;max-width:760px;">
-                            نحن فريق تطوير مختص في إنشاء وتطوير المتاجر الإلكترونية والحلول الرقمية الموجهة لأصحاب المشاريع.
-                        </p>
-                        <p style="font-size:16px;line-height:2;color:var(--gray);margin:0 auto;max-width:760px;">
-                            نعمل على تصميم أدوات عملية وسهلة الاستخدام تساعد أصحاب المتاجر على إدارة منتجاتهم، وتنسيق عملياتهم، وتحسين تجربة عملائهم بكفاءة واحترافية.
-                        </p>
-                        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px;">
-                            <span style="padding:9px 15px;border-radius:20px;background:var(--light);color:var(--dark);font-size:14px;"><i class="fas fa-store"></i> المتاجر الإلكترونية</span>
-                            <span style="padding:9px 15px;border-radius:20px;background:var(--light);color:var(--dark);font-size:14px;"><i class="fas fa-laptop-code"></i> تطوير الحلول الرقمية</span>
-                            <span style="padding:9px 15px;border-radius:20px;background:var(--light);color:var(--dark);font-size:14px;"><i class="fas fa-mobile-alt"></i> تجربة مستخدم حديثة</span>
+                        <div class="about-manager-info">
+                            <div class="about-manager-title">المدير</div>
+                            <div class="about-manager-name">Bachir</div>
+                            <div class="about-manager-surname">maghzili</div>
                         </div>
                     </div>
                 </div>
