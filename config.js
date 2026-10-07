@@ -470,7 +470,7 @@ const STORE_CONFIG = {
     "telegramUrl": "",
     "whatsappNumber": "213671466489",
     "whatsappUrl": "https://wa.me/213671466489",
-    "telegramNumber": ",",
+    "telegramNumber": ".",
     "tiktokUrl": "."
   },
   "GOOGLE_SHEETS": {
