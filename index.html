@@ -6583,6 +6583,11 @@ body.order-departure-focus .order-departure-clone{
                 }
                 
                 let quantityDiscountMessage = '';
+                let buyXGetYMessage = '';
+                if (isBuyXGetYEligible(key)) {
+                    const b2g1 = getBuyXGetYConfig();
+                    buyXGetYMessage = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                }
                 if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
                     const discountPerItem = STORE_CONFIG.DISCOUNTS.discountPerItem || 0;
@@ -6631,6 +6636,7 @@ body.order-departure-focus .order-departure-clone{
                                 ${orderBadge ? `<span class="premium-order">${orderBadge}</span>` : ''}
                             </div>
                             <div class="premium-product-badges">
+                                ${buyXGetYMessage ? `<span class="premium-badge" style="background:#087a4b;color:#fff;"><i class="fas fa-gift"></i> ${buyXGetYMessage}</span>` : ''}
                                 ${(hasPromoDiscount && STORE_CONFIG.DISCOUNTS && STORE_CONFIG.DISCOUNTS.enablePromotionalDiscount) ? `
                                     <span class="premium-badge premium-badge-sale"><i class="fas fa-percentage"></i> خصم ${STORE_CONFIG.DISCOUNTS.promotionalDiscountPercent || 0}%</span>
                                 ` : ''}
@@ -6756,7 +6762,10 @@ body.order-departure-focus .order-departure-clone{
             const advancedOfferText = document.getElementById('advancedOfferText');
             if (advancedOffer) {
                 let offerText = '';
-                if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
+                if (isBuyXGetYEligible(productKey)) {
+                    const b2g1 = getBuyXGetYConfig();
+                    offerText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                } else if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     offerText = `خصم ${STORE_CONFIG.DISCOUNTS.discountPerItem || 0} دج عند بلوغ الكمية المحددة`;
                 } else if (hasPromoDiscount && STORE_CONFIG.DISCOUNTS) {
                     offerText = `خصم ترويجي ${STORE_CONFIG.DISCOUNTS.promotionalDiscountPercent || 0}%`;
@@ -7161,10 +7170,13 @@ body.order-departure-focus .order-departure-clone{
             const discountMessage = document.getElementById('discountMessage');
             const discountText = document.getElementById('discountText');
             
-            if ((hasPromoDiscount || hasQuantityDiscount) && STORE_CONFIG.DISCOUNTS) {
+            if ((hasPromoDiscount || hasQuantityDiscount || isBuyXGetYEligible(productKey)) && STORE_CONFIG.DISCOUNTS) {
                 let discountMessageText = '';
                 
-                if (hasQuantityDiscount) {
+                if (isBuyXGetYEligible(productKey)) {
+                    const b2g1 = getBuyXGetYConfig();
+                    discountMessageText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                } else if (hasQuantityDiscount) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
                     const discountPerItem = STORE_CONFIG.DISCOUNTS.discountPerItem || 0;
                     
@@ -7852,6 +7864,7 @@ body.order-departure-focus .order-departure-clone{
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
+                            ${(() => { const fq = getBuyXGetYFreeQuantityForItem(item.id); return fq > 0 ? `<div style="margin-top:4px;color:#087a4b;font-weight:800;font-size:.68rem;">🎁 ${fq} قطعة مجانًا</div>` : ''; })()}
                         </div>
                     </div>
                 `;
@@ -8170,6 +8183,67 @@ updateDeliveryCost();
         // ===== Discounts =====
             updateMobileCartBar();
 
+        // ===== Buy X Get Y Free (اشترِ X واحصل على Y مجانًا) =====
+        function isBuyXGetYEligible(productKey) {
+            const d = STORE_CONFIG.DISCOUNTS;
+            if (!d || !d.enableBuyXGetY) return false;
+            const scope = d.buyXGetYScope || 'selected';
+            if (scope === 'all') return true;
+            const id = parseInt(productKey);
+            return Array.isArray(d.buyXGetYProducts) && d.buyXGetYProducts.includes(id);
+        }
+
+        function getBuyXGetYConfig() {
+            const d = STORE_CONFIG.DISCOUNTS || {};
+            const buy = Math.max(1, parseInt(d.buyXGetYBuyQuantity) || 2);
+            const free = Math.max(1, parseInt(d.buyXGetYFreeQuantity) || 1);
+            return { buy, free, group: buy + free };
+        }
+
+        function calculateBuyXGetYFreeQuantity(totalQuantity) {
+            const cfg = getBuyXGetYConfig();
+            const q = Math.max(0, parseInt(totalQuantity) || 0);
+            return Math.floor(q / cfg.group) * cfg.free;
+        }
+
+        function getBuyXGetYFreeQuantityForItem(itemId) {
+            if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY) return 0;
+            const itemIndex = cartItems.findIndex(i => i.id === itemId);
+            if (itemIndex < 0) return 0;
+            const item = cartItems[itemIndex];
+            if (!isBuyXGetYEligible(item.key)) return 0;
+            const cfg = getBuyXGetYConfig();
+            const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(item.key) ? sum + (Number(i.quantity) || 0) : sum, 0);
+            let remainingFree = Math.floor(totalForProduct / cfg.group) * cfg.free;
+            for (let i = 0; i < itemIndex; i++) {
+                const prev = cartItems[i];
+                if (String(prev.key) === String(item.key)) remainingFree -= Math.min(Number(prev.quantity) || 0, Math.max(0, Math.floor(totalForProduct / cfg.group) * cfg.free));
+            }
+            return Math.max(0, Math.min(Number(item.quantity) || 0, remainingFree));
+        }
+
+        function getBuyXGetYFreeQuantityByProduct(productKey) {
+            if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY || !isBuyXGetYEligible(productKey)) return 0;
+            const cfg = getBuyXGetYConfig();
+            const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(productKey) ? sum + (Number(i.quantity) || 0) : sum, 0);
+            return Math.floor(totalForProduct / cfg.group) * cfg.free;
+        }
+
+        function calculateBuyXGetYDiscount() {
+            if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY) return 0;
+            let total = 0;
+            const seen = new Set();
+            cartItems.forEach(item => {
+                const key = String(item.key);
+                if (seen.has(key) || !isBuyXGetYEligible(item.key)) return;
+                seen.add(key);
+                const freeQty = getBuyXGetYFreeQuantityByProduct(item.key);
+                const price = Number(item.price) || 0;
+                total += freeQty * price;
+            });
+            return total;
+        }
+
         function calculateDiscountedPrice(originalPrice, quantity, productKey = null) {
             if (!STORE_CONFIG.DISCOUNTS) {
                 return {
@@ -8256,6 +8330,8 @@ updateDeliveryCost();
                 }
             }
             
+            totalDiscount += calculateBuyXGetYDiscount();
+
             if (STORE_CONFIG.DISCOUNTS.enablePromotionalDiscount) {
                 const promoScope = STORE_CONFIG.DISCOUNTS.promoDiscountScope || 'all';
                 const promoPercent = STORE_CONFIG.DISCOUNTS.promotionalDiscountPercent || 0;
@@ -8909,11 +8985,18 @@ updateDeliveryCost();
             const priceDetails = calculateTotalPrice();
             const orderItems = cartItems.map(item => {
                 const itemDiscountInfo = calculateDiscountedPrice(item.price, item.quantity, item.key);
+                const buyXGetYFree = getBuyXGetYFreeQuantityForItem(item.id);
+                const chargedQuantity = Math.max(0, item.quantity - buyXGetYFree);
+                const unitPriceAfterDiscount = Number(itemDiscountInfo.finalPrice) || Number(item.price) || 0;
+                const lineTotal = Math.max(0, chargedQuantity * unitPriceAfterDiscount);
                 return {
                     name: item.name,
                     quantity: item.quantity,
+                    chargedQuantity,
+                    freeQuantity: buyXGetYFree,
                     price: item.price,
                     finalPrice: itemDiscountInfo.finalPrice,
+                    lineTotal,
                     size: item.size,
                     color: item.color,
                     image: item.image

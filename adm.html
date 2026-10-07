@@ -3481,7 +3481,12 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 promotionalDiscountPercent: 20,
                 promotionalDiscountedPrice: 0,
                 promoDiscountScope: 'all',
-                promoDiscountProducts: []
+                promoDiscountProducts: [],
+                enableBuyXGetY: false,
+                buyXGetYBuyQuantity: 2,
+                buyXGetYFreeQuantity: 1,
+                buyXGetYScope: 'selected',
+                buyXGetYProducts: []
             },
             STORE_INFO: {
                 name: "متجر أطفال",
@@ -4028,6 +4033,12 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
 
             d.promoDiscountScope = d.promoDiscountScope === 'selected' ? 'selected' : 'all';
             d.promoDiscountProducts = Array.isArray(d.promoDiscountProducts) ? d.promoDiscountProducts : [];
+
+            d.enableBuyXGetY = !!d.enableBuyXGetY;
+            d.buyXGetYBuyQuantity = Math.max(1, Math.round(Number(d.buyXGetYBuyQuantity) || 2));
+            d.buyXGetYFreeQuantity = Math.max(1, Math.round(Number(d.buyXGetYFreeQuantity) || 1));
+            d.buyXGetYScope = d.buyXGetYScope === 'all' ? 'all' : 'selected';
+            d.buyXGetYProducts = Array.isArray(d.buyXGetYProducts) ? d.buyXGetYProducts : [];
 
             return d;
         }
@@ -5610,6 +5621,46 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         </div>
                     </div>
                     
+                    <div class="form-group" style="margin-top: 22px; border: 2px solid rgba(8,122,75,.18); border-radius: 14px; padding: 16px; background: linear-gradient(180deg,#f8fffb,#ffffff);">
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                            <input type="checkbox" id="enableBuyXGetY" ${CONFIG.DISCOUNTS?.enableBuyXGetY ? 'checked' : ''} onchange="toggleBuyXGetY()">
+                            <label for="enableBuyXGetY" style="margin:0;font-weight:800;color:#087a4b;">🎁 تفعيل عرض: اشترِ X واحصل على Y مجانًا</label>
+                        </div>
+                        <div id="buyXGetYSettings" style="${CONFIG.DISCOUNTS?.enableBuyXGetY ? '' : 'display:none;'}">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>عدد القطع المدفوعة (X)</label>
+                                    <input type="number" class="form-control" min="1" value="${CONFIG.DISCOUNTS?.buyXGetYBuyQuantity || 2}" onchange="updateDiscountField('buyXGetYBuyQuantity', this.value)">
+                                </div>
+                                <div class="form-group">
+                                    <label>عدد القطع المجانية (Y)</label>
+                                    <input type="number" class="form-control" min="1" value="${CONFIG.DISCOUNTS?.buyXGetYFreeQuantity || 1}" onchange="updateDiscountField('buyXGetYFreeQuantity', this.value)">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>تطبيق العرض على:</label>
+                                <div style="display:flex;gap:20px;margin-top:10px;">
+                                    <div><input type="radio" id="buyXGetYAll" name="buyXGetYScope" value="all" ${(!CONFIG.DISCOUNTS.buyXGetYScope || CONFIG.DISCOUNTS.buyXGetYScope === 'all') ? 'checked' : ''} onchange="updateDiscountField('buyXGetYScope','all')"><label for="buyXGetYAll" style="margin-right:5px;">جميع المنتجات</label></div>
+                                    <div><input type="radio" id="buyXGetYSelected" name="buyXGetYScope" value="selected" ${CONFIG.DISCOUNTS.buyXGetYScope === 'selected' ? 'checked' : ''} onchange="updateDiscountField('buyXGetYScope','selected')"><label for="buyXGetYSelected" style="margin-right:5px;">منتجات مختارة</label></div>
+                                </div>
+                            </div>
+                            ${CONFIG.DISCOUNTS.buyXGetYScope === 'selected' ? `
+                                <div class="form-group">
+                                    <label>اختر المنتجات المؤهلة:</label>
+                                    <div class="checkbox-group" style="max-height:200px;overflow-y:auto;padding:10px;background:var(--light);border-radius:var(--radius-sm);">
+                                        ${Object.entries(CONFIG.PRODUCTS || {}).map(([id, product]) => `
+                                            <div class="checkbox-item" style="margin-bottom:5px;">
+                                                <input type="checkbox" id="buyXGetY_product_${id}" ${CONFIG.DISCOUNTS.buyXGetYProducts?.includes(parseInt(id)) ? 'checked' : ''} onchange="updateBuyXGetYProduct(${id}, this.checked)">
+                                                <label for="buyXGetY_product_${id}">${product.name || ''}</label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            <div style="margin-top:10px;padding:10px;border-radius:10px;background:#eefaf3;color:#087a4b;font-size:13px;font-weight:700;">مثال: X=2 و Y=1 ⟵ عند شراء 3 قطع مؤهلة من المنتج نفسه تصبح قطعة واحدة مجانية، وعند شراء 6 تصبح قطعتان مجانيتان.</div>
+                        </div>
+                    </div>
+
                     <button class="btn btn-primary" onclick="saveDiscountSettings()">
                         <i class="fas fa-save"></i> حفظ إعدادات الخصم
                     </button>
@@ -5956,12 +6007,12 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 if (settingsDiv) {
                     settingsDiv.style.display = value ? 'block' : 'none';
                 }
-            } else if (field === 'discountScope' || field === 'promoDiscountScope') {
+            } else if (field === 'discountScope' || field === 'promoDiscountScope' || field === 'buyXGetYScope') {
                 CONFIG.DISCOUNTS[field] = value;
                 if (currentTab === 'settings') {
                     loadSettingsTab('design');
                 }
-            } else if (field === 'minQuantityForDiscount' || field === 'discountPerItem' || 
+            } else if (field === 'minQuantityForDiscount' || field === 'discountPerItem' || field === 'buyXGetYBuyQuantity' || field === 'buyXGetYFreeQuantity' ||
                       field === 'promotionalDiscountPercent' || field === 'promotionalDiscountedPrice') {
                 const numericValue = Number(value);
                 if (field === 'promotionalDiscountPercent') {
@@ -6006,6 +6057,21 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             }
         }
         
+        function toggleBuyXGetY() {
+            const enabled = document.getElementById('enableBuyXGetY').checked;
+            updateDiscountField('enableBuyXGetY', enabled);
+        }
+
+        function updateBuyXGetYProduct(id, isSelected) {
+            if (!CONFIG.DISCOUNTS.buyXGetYProducts) CONFIG.DISCOUNTS.buyXGetYProducts = [];
+            id = parseInt(id);
+            if (isSelected) {
+                if (!CONFIG.DISCOUNTS.buyXGetYProducts.includes(id)) CONFIG.DISCOUNTS.buyXGetYProducts.push(id);
+            } else {
+                CONFIG.DISCOUNTS.buyXGetYProducts = CONFIG.DISCOUNTS.buyXGetYProducts.filter(pid => pid !== id);
+            }
+        }
+
         function updatePromoDiscountProduct(id, isSelected) {
             if (!CONFIG.DISCOUNTS.promoDiscountProducts) {
                 CONFIG.DISCOUNTS.promoDiscountProducts = [];
@@ -8740,7 +8806,7 @@ setTimeout(function(){
     const allFields=[...preferredFields,...remaining];
     const fieldsHtml=allFields.map(f=>orderField(f.label,f.value,f.key==='itemsText'?'wide':'')).join('');
     const itemsHtml=items.map((x,i)=>{
-      const price=(x.finalPrice||x.price||0)*(x.quantity||1);
+      const price=Number.isFinite(Number(x.lineTotal)) ? Number(x.lineTotal) : (x.finalPrice||x.price||0)*(x.quantity||1);
       const itemFields=[
         orderField('المنتج',x.name||'Produit'),
         orderField('المقاس',x.size||'—'),
@@ -8991,7 +9057,7 @@ setTimeout(function(){
   window.goArchivePage=function(p){archivePage=Math.max(1,Math.min(Math.max(1,Math.ceil(archiveTotal/ARCHIVE_PAGE_SIZE)),Number(p)||1));loadArchive()};
   window.debouncedLoadArchive=function(){clearTimeout(archiveTimer);archiveTimer=setTimeout(()=>{archivePage=1;loadArchive()},350)};
   window.clearArchiveFilters=function(){['archiveSearch','archiveDateFrom','archiveDateTo'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});['archiveStatusFilter','archiveDeliveryFilter'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});archivePage=1;loadArchive()};
-  window.openArchiveOrder=function(id){const o=archiveCache.find(x=>String(x.orderId||x.id)===String(id));if(!o)return;const list=items(o.items);const html=`<div class="order-detail-grid"><div class="order-detail-box"><b>رقم الطلب</b>${esc(o.orderId||o.id)}</div><div class="order-detail-box"><b>التاريخ</b>${esc(o.timestamp||'—')}</div><div class="order-detail-box"><b>الزبون</b>${esc(o.customerName||'—')}</div><div class="order-detail-box"><b>الهاتف</b>${esc(o.customerPhone||'—')}</div><div class="order-detail-box"><b>الولاية</b>${esc(o.wilaya||'—')}</div><div class="order-detail-box"><b>البلدية</b>${esc(o.customerCommune||'—')}</div><div class="order-detail-box"><b>العنوان</b>${esc(o.customerAddress||'—')}</div><div class="order-detail-box"><b>الحالة</b>${esc(o.status||'—')}</div></div><h3 style="margin:18px 0 8px">المنتجات</h3><div class="order-items-list">${list.map(x=>`<div class="order-item-row"><div><b>${esc(x.name||'Produit')}</b><div style="font-size:11px;color:#cfd6e6">الكمية: ${esc(x.quantity||1)} ${x.size?' · المقاس: '+esc(x.size):''} ${x.color?' · اللون: '+esc(x.color):''}</div></div><b>${fmt((x.finalPrice||x.price||0)*(x.quantity||1))}</b></div>`).join('')||'<div class="orders-empty">لا توجد تفاصيل.</div>'}</div><div class="order-detail-footer"><div><div>المجموع الفرعي: <b>${fmt(o.subtotal)}</b></div><div>الخصم: <b>${fmt(o.discount)}</b></div><div>التوصيل: <b>${fmt(o.deliveryCost)}</b></div><div style="font-size:18px;margin-top:5px">الإجمالي: <b>${fmt(o.total)}</b></div></div></div>`;showOrderModal(html)};
+  window.openArchiveOrder=function(id){const o=archiveCache.find(x=>String(x.orderId||x.id)===String(id));if(!o)return;const list=items(o.items);const html=`<div class="order-detail-grid"><div class="order-detail-box"><b>رقم الطلب</b>${esc(o.orderId||o.id)}</div><div class="order-detail-box"><b>التاريخ</b>${esc(o.timestamp||'—')}</div><div class="order-detail-box"><b>الزبون</b>${esc(o.customerName||'—')}</div><div class="order-detail-box"><b>الهاتف</b>${esc(o.customerPhone||'—')}</div><div class="order-detail-box"><b>الولاية</b>${esc(o.wilaya||'—')}</div><div class="order-detail-box"><b>البلدية</b>${esc(o.customerCommune||'—')}</div><div class="order-detail-box"><b>العنوان</b>${esc(o.customerAddress||'—')}</div><div class="order-detail-box"><b>الحالة</b>${esc(o.status||'—')}</div></div><h3 style="margin:18px 0 8px">المنتجات</h3><div class="order-items-list">${list.map(x=>`<div class="order-item-row"><div><b>${esc(x.name||'Produit')}</b><div style="font-size:11px;color:#cfd6e6">الكمية: ${esc(x.quantity||1)} ${x.size?' · المقاس: '+esc(x.size):''} ${x.color?' · اللون: '+esc(x.color):''}</div></div><b>${fmt(Number.isFinite(Number(x.lineTotal)) ? Number(x.lineTotal) : (x.finalPrice||x.price||0)*(x.quantity||1))}</b></div>`).join('')||'<div class="orders-empty">لا توجد تفاصيل.</div>'}</div><div class="order-detail-footer"><div><div>المجموع الفرعي: <b>${fmt(o.subtotal)}</b></div><div>الخصم: <b>${fmt(o.discount)}</b></div><div>التوصيل: <b>${fmt(o.deliveryCost)}</b></div><div style="font-size:18px;margin-top:5px">الإجمالي: <b>${fmt(o.total)}</b></div></div></div>`;showOrderModal(html)};
   window.exportArchiveCsv=async function(){try{const d=await api('exportArchive',{filters:archiveFilters()});const blob=new Blob(['\ufeff'+(d.csv||'')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=d.filename||'Archive_Commandes.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showNotification?.(`تم استخراج ${d.count||0} طلب`, 'success')}catch(e){showNotification?.(e.message||'فشل استخراج الأرشيف','error')}};
   const oldSwitch=window.switchTab; window.switchTab=function(tabName){const r=oldSwitch.apply(this,arguments);if(tabName==='archive'&&window.__smLocalDataMode){setTimeout(()=>loadArchive(false),80);}else if(tabName==='archive'){setTimeout(()=>loadArchive(),80);}return r};
   window.__smApplyArchiveLocal=function(list){
