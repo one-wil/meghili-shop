@@ -1996,6 +1996,13 @@
         .order-page-btn{border:1px solid rgba(255,255,255,.16);background:#1c2330;color:#fff;border-radius:8px;padding:8px 14px;font-family:Cairo,sans-serif;font-weight:700;cursor:pointer}
         .order-page-btn:disabled{opacity:.4;cursor:not-allowed}
         .orders-page-info{font-weight:700}
+
+        /* محاذاة التعريفات العربية إلى اليمين */
+        .content-header p {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+
 </style>
 
 <style id="mobile-full-height-modals">
@@ -3042,9 +3049,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="tabs">
                         <button class="tab active" onclick="filterProducts('all')">
                             <i class="fas fa-list"></i> الكل
-                        </button>
-                        <button class="tab" onclick="filterProducts('active')">
-                            <i class="fas fa-check-circle"></i> نشط
                         </button>
                     </div>
                     
