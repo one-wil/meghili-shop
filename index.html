@@ -11951,18 +11951,20 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 }
 #page2 #smartCheckoutIntro.checkout-send-order-mode{
   position:fixed !important;
-  top:10px !important;
-  left:10px !important;
-  right:10px !important;
   z-index:99999 !important;
   display:block !important;
+  width:max-content !important;
+  max-width:calc(100vw - 24px) !important;
   margin:0 !important;
-  padding:8px 12px !important;
+  padding:6px 12px !important;
   text-align:center !important;
   pointer-events:none !important;
-  background:rgba(255,255,255,.96) !important;
+  background:rgba(255,255,255,.97) !important;
   border-radius:12px !important;
-  box-shadow:0 6px 22px rgba(0,0,0,.12) !important;
+  box-shadow:0 6px 22px rgba(0,0,0,.14) !important;
+}
+#page2 #smartCheckoutIntro.checkout-send-order-hidden{
+  display:none !important;
 }
 #page2 #smartCheckoutIntro.checkout-send-order-mode p{
   display:none !important;
@@ -12000,6 +12002,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     if(!head) return;
     const kicker=head.querySelector('.smart-kicker');
     const title=head.querySelector('h1');
+    const img=document.querySelector('#selectedProducts .selected-product > img');
     if(!title) return;
 
     if(!head.dataset.checkoutOriginalTitle){
@@ -12011,9 +12014,29 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 
     if(kicker) kicker.style.display='none';
     title.textContent='إرسال الطلب';
-    head.classList.remove('checkout-send-order-mode');
+    head.classList.remove('checkout-send-order-hidden','checkout-send-order-mode');
+
+    // ضع «إرسال الطلب» بجانب صورة المنتج، وليس في أعلى الصفحة.
+    if(img){
+      const r=img.getBoundingClientRect();
+      const width=Math.min(240,Math.max(150,window.innerWidth-24));
+      const left=Math.max(12,Math.min(window.innerWidth-width-12,r.left + (r.width-width)/2));
+      const top=Math.max(12,r.top - 48);
+      head.style.left=left+'px';
+      head.style.top=top+'px';
+      head.style.right='auto';
+      head.style.width=width+'px';
+    }
+
     void head.offsetWidth;
     head.classList.add('checkout-send-order-mode');
+
+    // النبض يستمر 1.5 ثانية فقط، ثم يتوقف ويختفي أثناء خروج الصورة.
+    clearTimeout(head._sendOrderPulseTimer);
+    head._sendOrderPulseTimer=setTimeout(function(){
+      head.classList.remove('checkout-send-order-mode');
+      head.classList.add('checkout-send-order-hidden');
+    },1500);
   }
 
   function stopCheckoutSendOrderPulse(){
@@ -12023,7 +12046,12 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     const title=head.querySelector('h1');
     if(!title) return;
 
-    head.classList.remove('checkout-send-order-mode');
+    clearTimeout(head._sendOrderPulseTimer);
+    head.classList.remove('checkout-send-order-mode','checkout-send-order-hidden');
+    head.style.removeProperty('left');
+    head.style.removeProperty('top');
+    head.style.removeProperty('right');
+    head.style.removeProperty('width');
     title.textContent=head.dataset.checkoutOriginalTitle || originalTitleText;
     if(kicker){
       kicker.innerHTML=head.dataset.checkoutOriginalKicker || '<i class="fas fa-bolt"></i> '+originalKickerText;
@@ -12033,6 +12061,26 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 
   window.startCheckoutSendOrderPulse=startCheckoutSendOrderPulse;
   window.stopCheckoutSendOrderPulse=stopCheckoutSendOrderPulse;
+
+  // عند ظهور نجاح الطلب تعود العبارة الأصلية.
+  function hookSuccess(){
+    if(typeof window.showOrderSuccessAndRedirect!=='function') return false;
+    if(window.showOrderSuccessAndRedirect.__sendOrderPulseHooked) return true;
+    const old=window.showOrderSuccessAndRedirect;
+    function wrapped(orderData){
+      stopCheckoutSendOrderPulse();
+      return old.apply(this,arguments);
+    }
+    wrapped.__sendOrderPulseHooked=true;
+    window.showOrderSuccessAndRedirect=wrapped;
+    return true;
+  }
+  if(!hookSuccess()){
+    document.addEventListener('DOMContentLoaded',function(){
+      setTimeout(hookSuccess,50);
+      setTimeout(hookSuccess,300);
+    });
+  }
 })();
 </script>
 </html>
