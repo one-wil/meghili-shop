@@ -172,61 +172,11 @@
       "createdAt": "2026-09-16T17:57:03.689Z",
       "image": "https://raw.githubusercontent.com/one-wil/vol-shop/main/images/product-1789581423689-1789581668031-Messenger-creation-810CA979-D104-4003-AC53-8D1BA722871C.jpeg",
       "updatedAt": "2026-09-16T18:08:38.128Z"
-    },
-    "1789652772129": {
-      "name": "فستان بنات",
-      "price": 50000,
-      "description": "",
-      "category": "",
-      "stock": 0,
-      "featured": false,
-      "availableColors": [
-        "أبيض",
-        "أسود"
-      ],
-      "availableSizes": [
-        "S",
-        "M"
-      ],
-      "ageRanges": [],
-      "colorImages": {
-        "أبيض": {
-          "images": [
-            "https://raw.githubusercontent.com/one-wil/vol-shop/main/images/product-1789652772129-أبيض-1789653498662-1000028225.jpg"
-          ],
-          "ageRanges": [
-            {
-              "ageFrom": "13",
-              "ageTo": "2",
-              "size": "S"
-            },
-            {
-              "ageFrom": "13",
-              "ageTo": "ب5",
-              "size": "M"
-            }
-          ]
-        },
-        "أسود": {
-          "images": [
-            "https://raw.githubusercontent.com/one-wil/vol-shop/main/images/product-1789652772129-أسود-1789653582687-1000028231.jpg"
-          ],
-          "ageRanges": []
-        }
-      },
-      "sizeGuide": {
-        "enabled": true,
-        "guide": {}
-      },
-      "createdAt": "2026-09-17T13:46:12.129Z",
-      "image": "https://raw.githubusercontent.com/one-wil/vol-shop/main/images/product-1789652772129-1789652819808-1000028231.jpg",
-      "updatedAt": "2026-09-17T13:59:57.655Z"
     }
   },
   "PRODUCT_ORDER": {
     "1789476986031": 2,
-    "1789581423689": 1,
-    "1789652772129": 3
+    "1789581423689": 1
   },
   "DELIVERY_PRICES": {
     "01 - أدرار": {
