@@ -5376,6 +5376,12 @@ body.order-departure-focus .order-departure-clone{
   visibility:visible !important;
 }
 </style>
+
+<style id="smart-order-follow-text-style">
+.smart-checkout-actions{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.smart-order-follow-text{color:#27ae60;font-weight:800;font-size:14px;line-height:1.5;white-space:nowrap;pointer-events:none;user-select:none;}
+.smart-order-follow-text i{margin-right:5px;}
+</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -5494,11 +5500,14 @@ body.order-departure-focus .order-departure-clone{
         <div id="page2" class="page smart-checkout-page">
             <form id="orderForm" class="order-form smart-order-form">
                 <div class="smart-checkout-head">
-                    <button type="button" class="smart-back-btn" onclick="switchPage('page1')">
-                        <i class="fas fa-arrow-right"></i><span>متابعة التسوق</span>
-                    </button>
+                    <div class="smart-checkout-actions">
+                        <button type="button" class="smart-back-btn" onclick="switchPage('page1')">
+                            <i class="fas fa-arrow-right"></i><span>متابعة التسوق</span>
+                        </button>
+                        <div class="smart-order-follow-text" aria-hidden="true">إتمام الطلب&nbsp;&nbsp; متابعة طلبك <i class="fas fa-arrow-left"></i></div>
+                    </div>
                     <div class="smart-checkout-title" id="smartCheckoutIntro">
-                        <span class="smart-kicker"><i class="fas fa-bolt"></i> إتمام الطلب</span>
+                        <span class="smart-kicker" style="display:none"><i class="fas fa-bolt"></i> إتمام الطلب</span>
                         <h1>أكمل طلبك</h1>
                         <p>اختر الولاية وطريقة التوصيل، ثم اكتب بياناتك فقط.</p>
                     </div>
