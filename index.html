@@ -11949,6 +11949,24 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 #page2 #smartCheckoutIntro.checkout-send-order-mode .smart-kicker{
   display:none !important;
 }
+#page2 #smartCheckoutIntro.checkout-send-order-mode{
+  position:fixed !important;
+  top:10px !important;
+  left:10px !important;
+  right:10px !important;
+  z-index:99999 !important;
+  display:block !important;
+  margin:0 !important;
+  padding:8px 12px !important;
+  text-align:center !important;
+  pointer-events:none !important;
+  background:rgba(255,255,255,.96) !important;
+  border-radius:12px !important;
+  box-shadow:0 6px 22px rgba(0,0,0,.12) !important;
+}
+#page2 #smartCheckoutIntro.checkout-send-order-mode p{
+  display:none !important;
+}
 #page2 #smartCheckoutIntro.checkout-send-order-mode h1{
   font-size:150% !important;
   color:#16823b !important;
@@ -11956,6 +11974,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   animation:checkoutSendOrderPulse 0.72s ease-in-out infinite !important;
   transform-origin:center center !important;
   will-change:transform,opacity,text-shadow !important;
+  margin:0 !important;
 }
 @keyframes checkoutSendOrderPulse{
   0%,100%{
