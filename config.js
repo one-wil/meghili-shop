@@ -466,7 +466,7 @@ const STORE_CONFIG = {
       1789581423689
     ],
     "enableBuyXGetY": true,
-    "buyXGetYBuyQuantity": 3,
+    "buyXGetYBuyQuantity": 2,
     "buyXGetYFreeQuantity": 1,
     "buyXGetYScope": "selected",
     "buyXGetYProducts": [
