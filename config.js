@@ -439,11 +439,6 @@ const STORE_CONFIG = {
     ]
   },
   "DISCOUNTS": {
-    "enableBuyXGetY": true,
-    "buyXGetYBuyQuantity": 2,
-    "buyXGetYFreeQuantity": 1,
-    "buyXGetYScope": "all",
-    "buyXGetYProducts": [],
     "enableQuantityDiscount": false,
     "minQuantityForDiscount": 2,
     "discountPerItem": 100,
@@ -457,7 +452,12 @@ const STORE_CONFIG = {
     "promoDiscountScope": "selected",
     "promoDiscountProducts": [
       1789581423689
-    ]
+    ],
+    "enableBuyXGetY": true,
+    "buyXGetYBuyQuantity": 2,
+    "buyXGetYFreeQuantity": 1,
+    "buyXGetYScope": "all",
+    "buyXGetYProducts": []
   },
   "STORE_INFO": {
     "name": "Meghili-shop",
