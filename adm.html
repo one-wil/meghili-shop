@@ -454,6 +454,25 @@
             font-size: 16px;
         }
         
+        /* عرض اشترِ X واحصل على Y: اتجاه عربي RTL */
+        .buy-x-get-y-card,
+        .buy-x-get-y-card * {
+            direction: rtl;
+            text-align: right;
+        }
+        .buy-x-get-y-card .form-row,
+        .buy-x-get-y-card .checkbox-group {
+            direction: rtl;
+        }
+        .buy-x-get-y-card input[type="number"] {
+            direction: ltr;
+            text-align: right;
+        }
+        .buy-x-get-y-card input[type="checkbox"],
+        .buy-x-get-y-card input[type="radio"] {
+            direction: rtl;
+        }
+
         /* بطاقات الإحصائيات */
         .stats-grid {
             display: grid;
@@ -5621,12 +5640,12 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         </div>
                     </div>
                     
-                    <div class="form-group" style="margin-top: 22px; border: 2px solid rgba(8,122,75,.18); border-radius: 14px; padding: 16px; background: linear-gradient(180deg,#f8fffb,#ffffff);">
-                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                    <div class="form-group buy-x-get-y-card" dir="rtl" style="margin-top: 22px; border: 2px solid rgba(8,122,75,.18); border-radius: 14px; padding: 16px; background: linear-gradient(180deg,#f8fffb,#ffffff); direction:rtl; text-align:right;">
+                        <div class="buy-x-get-y-toggle" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;direction:rtl;text-align:right;">
                             <input type="checkbox" id="enableBuyXGetY" ${CONFIG.DISCOUNTS?.enableBuyXGetY ? 'checked' : ''} onchange="toggleBuyXGetY()">
-                            <label for="enableBuyXGetY" style="margin:0;font-weight:800;color:#087a4b;">🎁 تفعيل عرض: اشترِ X واحصل على Y مجانًا</label>
+                            <label for="enableBuyXGetY" style="margin:0;font-weight:800;color:#087a4b;direction:rtl;text-align:right;">🎁 تفعيل عرض: اشترِ X واحصل على Y مجانًا</label>
                         </div>
-                        <div id="buyXGetYSettings" style="${CONFIG.DISCOUNTS?.enableBuyXGetY ? '' : 'display:none;'}">
+                        <div id="buyXGetYSettings" dir="rtl" style="${CONFIG.DISCOUNTS?.enableBuyXGetY ? '' : 'display:none;'};direction:rtl;text-align:right;">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>عدد القطع المدفوعة (X)</label>
@@ -6058,8 +6077,17 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function toggleBuyXGetY() {
-            const enabled = document.getElementById('enableBuyXGetY').checked;
+            const checkbox = document.getElementById('enableBuyXGetY');
+            const settingsDiv = document.getElementById('buyXGetYSettings');
+            const enabled = !!checkbox?.checked;
+
             updateDiscountField('enableBuyXGetY', enabled);
+
+            // عند التفعيل تفتح إعدادات العرض فورًا، وعند التعطيل تُغلق بالكامل.
+            if (settingsDiv) {
+                settingsDiv.style.display = enabled ? 'block' : 'none';
+                settingsDiv.setAttribute('aria-hidden', enabled ? 'false' : 'true');
+            }
         }
 
         function updateBuyXGetYProduct(id, isSelected) {
