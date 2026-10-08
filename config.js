@@ -86,11 +86,12 @@ const STORE_CONFIG = {
       "stock": 0,
       "featured": false,
       "availableColors": [
-        "Black-olive Geen",
         "Beige - Black",
+        "Black-olive Geen",
         "Gray-black"
       ],
       "availableSizes": [
+        "42-44",
         "S",
         "M",
         "L"
@@ -116,6 +117,11 @@ const STORE_CONFIG = {
               "ageFrom": "",
               "ageTo": "",
               "size": "L"
+            },
+            {
+              "ageFrom": "",
+              "ageTo": "",
+              "size": "42-44"
             }
           ]
         },
@@ -138,6 +144,11 @@ const STORE_CONFIG = {
               "ageFrom": "",
               "ageTo": "",
               "size": "L"
+            },
+            {
+              "ageFrom": "",
+              "ageTo": "",
+              "size": "42-44"
             }
           ]
         },
@@ -160,6 +171,11 @@ const STORE_CONFIG = {
               "ageFrom": "",
               "ageTo": "",
               "size": "L"
+            },
+            {
+              "ageFrom": "",
+              "ageTo": "",
+              "size": "42-44"
             }
           ]
         }
@@ -184,12 +200,18 @@ const STORE_CONFIG = {
             "heightTo": 0,
             "weightFrom": 0,
             "weightTo": 0
+          },
+          "42-44": {
+            "heightFrom": 0,
+            "heightTo": 0,
+            "weightFrom": 0,
+            "weightTo": 0
           }
         }
       },
       "createdAt": "2026-09-16T17:57:03.689Z",
       "image": "https://raw.githubusercontent.com/one-wil/vol-shop/main/images/product-1789581423689-1789581668031-Messenger-creation-810CA979-D104-4003-AC53-8D1BA722871C.jpeg",
-      "updatedAt": "2026-09-16T18:08:38.128Z"
+      "updatedAt": "2026-10-08T21:47:02.585Z"
     }
   },
   "PRODUCT_ORDER": {
