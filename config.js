@@ -58,8 +58,21 @@ const STORE_CONFIG = {
         }
       },
       "sizeGuide": {
-        "enabled": false,
-        "guide": {}
+        "enabled": true,
+        "guide": {
+          "S": {
+            "heightFrom": 0,
+            "heightTo": 0,
+            "weightFrom": 0,
+            "weightTo": 0
+          },
+          "M": {
+            "heightFrom": 0,
+            "heightTo": 0,
+            "weightFrom": 0,
+            "weightTo": 0
+          }
+        }
       },
       "createdAt": "2026-09-15T12:56:26.031Z",
       "image": "https://raw.githubusercontent.com/one-wil/dawn-dz/main/images/product-1789476986031-1789477052559-modal3.jpg",
@@ -446,7 +459,7 @@ const STORE_CONFIG = {
     "discountProducts": [
       1789581423689
     ],
-    "enablePromotionalDiscount": true,
+    "enablePromotionalDiscount": false,
     "promotionalDiscountPercent": 30,
     "promotionalDiscountedPrice": 0,
     "promoDiscountScope": "selected",
@@ -485,31 +498,25 @@ const STORE_CONFIG = {
   },
   "AVAILABLE_COLORS": [
     "أبيض",
-    "أسود",
     "أحمر",
-    "أزرق",
     "أخضر",
-    "وردي",
-    "رمادي",
+    "أزرق",
+    "أسود",
     "أصفر",
-    "vert motard",
-    "Vert pistache",
+    "رمادي",
+    "وردي",
+    "Beige - Black",
     "Beige clair",
+    "Black-olive Geen",
+    "Gray-black",
     "Marron",
     "Marron clair",
-    "Vert  Kaki",
     "Olive Green-black",
-    "Black-olive Geen",
-    "Beige - Black",
-    "Gray-black"
+    "Vert  Kaki",
+    "vert motard",
+    "Vert pistache"
   ],
   "AVAILABLE_SIZES": [
-    "S",
-    "M",
-    "L",
-    "XL",
-    "XXL",
-    "XXXL",
     "38",
     "39",
     "40",
@@ -523,9 +530,16 @@ const STORE_CONFIG = {
     "47",
     "48",
     "49",
+    "50",
     "38-40",
     "42-44",
-    "46-48"
+    "46-48",
+    "L",
+    "M",
+    "S",
+    "XL",
+    "XXL",
+    "XXXL"
   ],
   "SIZE_GUIDE": {
     "38": {
