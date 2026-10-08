@@ -5718,14 +5718,6 @@ body.order-departure-focus .order-departure-clone{
 #productModal #measurementsTableContainer tr:hover,
 #productModal #measurementsTableContainer tr:hover td{transform:none!important;box-shadow:none!important}
 </style>
-
-<style id="final-size-symbols-100">
-/* إظهار رمز المقاس فقط وتكبيره بنسبة 100% دون تغيير أبعاد الزر */
-#productModal #ageOptions .size-option-small{
-    font-size: 1.6rem !important;
-}
-</style>
-
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -5804,6 +5796,14 @@ body.order-departure-focus .order-departure-clone{
                         <i class="fab fa-tiktok"></i>
                     </a>
                 </div>
+                
+
+                <!-- شريط الثقة -->
+                <div class="store-trust-strip" aria-label="مزايا المتجر">
+                    <div class="store-trust-item"><i class="fas fa-shield-alt"></i><strong>طلب آمن</strong><span>بياناتك محفوظة</span></div>
+                    <div class="store-trust-item"><i class="fas fa-truck"></i><strong>توصيل مرن</strong><span>مكتب أو منزل</span></div>
+                    <div class="store-trust-item"><i class="fas fa-headset"></i><strong>دعم مباشر</strong><span>للاستفسار والمساعدة</span></div>
+                </div>
 
                 <!-- البحث عن المنتجات -->
                 <div class="product-tools">
@@ -5828,13 +5828,6 @@ body.order-departure-focus .order-departure-clone{
                     <div class="contact-numbers" id="phoneNumbersFirstPage">
                         <!-- Phone numbers will be loaded here -->
                     </div>
-                </div>
-
-                <!-- شريط الثقة -->
-                <div class="store-trust-strip" aria-label="مزايا المتجر">
-                    <div class="store-trust-item"><i class="fas fa-shield-alt"></i><strong>طلب آمن</strong><span>بياناتك محفوظة</span></div>
-                    <div class="store-trust-item"><i class="fas fa-truck"></i><strong>توصيل مرن</strong><span>مكتب أو منزل</span></div>
-                    <div class="store-trust-item"><i class="fas fa-headset"></i><strong>دعم مباشر</strong><span>للاستفسار والمساعدة</span></div>
                 </div>
             </section>
         </div>
@@ -7950,7 +7943,7 @@ body.order-departure-focus .order-departure-clone{
                 ageOption.className = 'size-option-small';
                 let ageText = '';
                 if (range.ageFrom === 'A' && range.ageTo === 'A') {
-                    ageText = `الكبار - ${range.size}`;
+                    ageText = `${range.size}`;
                 } else {
                     ageText = `${range.size}`;
                 }
@@ -12354,6 +12347,12 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 #productModal #measurementsTableBody tr td,
 #productModal #measurementsTableBody tr:hover td {
     transform: none !important;
+}
+</style>
+<style id="final-size-symbols-100">
+/* رمز المقاس فقط، أكبر بنسبة 100% دون تغيير أبعاد الزر */
+#productModal #ageOptions .size-option-small{
+    font-size: 1.6rem !important;
 }
 </style>
 </body>
