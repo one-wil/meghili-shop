@@ -7864,7 +7864,7 @@ body.order-departure-focus .order-departure-clone{
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
-                            ${(() => { const fq = getBuyXGetYFreeQuantityForItem(item.id); return fq > 0 ? `<div style="margin-top:4px;color:#087a4b;font-weight:800;font-size:.68rem;">🎁 ${fq} قطعة مجانًا</div>` : ''; })()}
+                            ${(() => { const fq = getBuyXGetYFreeQuantityForItem(item.id); return fq > 0 ? `<div style="margin-top:4px;color:#087a4b;font-weight:800;font-size:.68rem;">🎁 ${fq} قطعة إضافية مجانًا — الإجمالي المستلم: ${(Number(item.quantity)||0) + fq}</div>` : ''; })()}
                         </div>
                     </div>
                 `;
@@ -8203,7 +8203,7 @@ updateDeliveryCost();
         function calculateBuyXGetYFreeQuantity(totalQuantity) {
             const cfg = getBuyXGetYConfig();
             const q = Math.max(0, parseInt(totalQuantity) || 0);
-            return Math.floor(q / cfg.group) * cfg.free;
+            return Math.floor(q / cfg.buy) * cfg.free;
         }
 
         function getBuyXGetYFreeQuantityForItem(itemId) {
@@ -8214,7 +8214,7 @@ updateDeliveryCost();
             if (!isBuyXGetYEligible(item.key)) return 0;
             const cfg = getBuyXGetYConfig();
             const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(item.key) ? sum + (Number(i.quantity) || 0) : sum, 0);
-            let remainingFree = Math.floor(totalForProduct / cfg.group) * cfg.free;
+            let remainingFree = Math.floor(totalForProduct / cfg.buy) * cfg.free;
             for (let i = 0; i < itemIndex; i++) {
                 const prev = cartItems[i];
                 if (String(prev.key) === String(item.key)) remainingFree -= Math.min(Number(prev.quantity) || 0, Math.max(0, Math.floor(totalForProduct / cfg.group) * cfg.free));
@@ -8226,7 +8226,7 @@ updateDeliveryCost();
             if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY || !isBuyXGetYEligible(productKey)) return 0;
             const cfg = getBuyXGetYConfig();
             const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(productKey) ? sum + (Number(i.quantity) || 0) : sum, 0);
-            return Math.floor(totalForProduct / cfg.group) * cfg.free;
+            return Math.floor(totalForProduct / cfg.buy) * cfg.free;
         }
 
         function calculateBuyXGetYDiscount() {
@@ -8330,7 +8330,8 @@ updateDeliveryCost();
                 }
             }
             
-            totalDiscount += calculateBuyXGetYDiscount();
+            // عرض X+Y المجاني يضيف وحدات مجانية إلى الطلب ولا يخصم من سعر الوحدات المدفوعة.
+            // لذلك لا نطرح قيمة القطعة المجانية من الإجمالي؛ العميل يدفع X ويحصل على X+Y فعليًا.
 
             if (STORE_CONFIG.DISCOUNTS.enablePromotionalDiscount) {
                 const promoScope = STORE_CONFIG.DISCOUNTS.promoDiscountScope || 'all';
@@ -8986,12 +8987,13 @@ updateDeliveryCost();
             const orderItems = cartItems.map(item => {
                 const itemDiscountInfo = calculateDiscountedPrice(item.price, item.quantity, item.key);
                 const buyXGetYFree = getBuyXGetYFreeQuantityForItem(item.id);
-                const chargedQuantity = Math.max(0, item.quantity - buyXGetYFree);
+                const chargedQuantity = Math.max(0, Number(item.quantity) || 0);
                 const unitPriceAfterDiscount = Number(itemDiscountInfo.finalPrice) || Number(item.price) || 0;
                 const lineTotal = Math.max(0, chargedQuantity * unitPriceAfterDiscount);
+                const totalDeliveredQuantity = chargedQuantity + buyXGetYFree;
                 return {
                     name: item.name,
-                    quantity: item.quantity,
+                    quantity: totalDeliveredQuantity,
                     chargedQuantity,
                     freeQuantity: buyXGetYFree,
                     price: item.price,
