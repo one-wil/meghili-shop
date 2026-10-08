@@ -5718,6 +5718,14 @@ body.order-departure-focus .order-departure-clone{
 #productModal #measurementsTableContainer tr:hover,
 #productModal #measurementsTableContainer tr:hover td{transform:none!important;box-shadow:none!important}
 </style>
+
+<style id="final-size-symbols-100">
+/* إظهار رمز المقاس فقط وتكبيره بنسبة 100% دون تغيير أبعاد الزر */
+#productModal #ageOptions .size-option-small{
+    font-size: 1.6rem !important;
+}
+</style>
+
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -7944,7 +7952,7 @@ body.order-departure-focus .order-departure-clone{
                 if (range.ageFrom === 'A' && range.ageTo === 'A') {
                     ageText = `الكبار - ${range.size}`;
                 } else {
-                    ageText = `${range.ageTo} ← ${range.ageFrom} : ${range.size}`;
+                    ageText = `${range.size}`;
                 }
                 ageOption.textContent = ageText;
                 ageOption.dataset.age = `${range.ageFrom}-${range.ageTo}`;
@@ -12346,24 +12354,6 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 #productModal #measurementsTableBody tr td,
 #productModal #measurementsTableBody tr:hover td {
     transform: none !important;
-}
-</style>
-
-<style id="final-size-label-50">
-/* إزالة كلمة «المقاس» وتكبير رمز المقاس بنسبة 50% */
-#productModal #ageOptions .size-option-small{
-    font-size:15.75px !important;
-    font-weight:800 !important;
-}
-@media(max-width:800px){
-    #productModal #ageOptions .size-option-small{
-        font-size:15.75px !important;
-    }
-}
-@media(max-width:420px){
-    #productModal #ageOptions .size-option-small{
-        font-size:14.625px !important;
-    }
 }
 </style>
 </body>
