@@ -434,17 +434,13 @@ const STORE_CONFIG = {
     "desk": {
       "enabled": true,
       "minAmount": 0,
-      "wilayas": [
-        "03 - الأغواط"
-      ],
+      "wilayas": [],
       "minQuantity": 2
     },
     "home": {
-      "enabled": true,
+      "enabled": false,
       "minAmount": 0,
-      "wilayas": [
-        "43 - ميلة"
-      ],
+      "wilayas": [],
       "minQuantity": 2
     },
     "freeDeliveryProducts": [
