@@ -435,13 +435,13 @@ const STORE_CONFIG = {
       "enabled": true,
       "minAmount": 0,
       "wilayas": [],
-      "minQuantity": 2
+      "minQuantity": 1
     },
     "home": {
       "enabled": true,
       "minAmount": 0,
       "wilayas": [],
-      "minQuantity": 3
+      "minQuantity": 2
     },
     "freeDeliveryProducts": [
       1765137505304,
