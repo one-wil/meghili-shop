@@ -8243,6 +8243,13 @@ body.order-departure-focus .order-departure-clone{
                 
                 const itemDiscountInfo = calculateDiscountedPrice(item.price, item.quantity, item.key);
                 const hasDiscount = itemDiscountInfo.hasDiscount || itemDiscountInfo.hasPromoDiscount;
+
+                // إجمالي سعر هذا السطر = سعر الوحدة × عدد القطع المدفوعة.
+                // بهذا يصبح سعر بطاقة السلة مطابقًا للإجمالي الظاهر أعلى السلة.
+                const itemQuantity = Math.max(1, Number(item.quantity) || 1);
+                const originalLineTotal = Math.max(0, Number(item.price) || 0) * itemQuantity;
+                const discountedUnitPrice = Math.max(0, Number(itemDiscountInfo.finalPrice) || 0);
+                const discountedLineTotal = discountedUnitPrice * itemQuantity;
                 
                 // لا نعرض العمر إذا كان غير محدد أو قيمته مجرد شرطة.
                 const ageValue = String(item.age ?? '').trim();
@@ -8261,11 +8268,12 @@ body.order-departure-focus .order-departure-clone{
                         <div class="selected-product-price">
                             <div>
                                 ${hasDiscount ? `
-                                    <div style="display: flex; align-items: center; gap: 0.3rem;">
-                                        <span style="color: var(--dark); text-decoration: line-through; font-size: 0.8rem;">${item.price} دج</span>
-                                        <span style="color: var(--success); font-weight: 700;">${itemDiscountInfo.finalPrice} دج</span>
+                                    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
+                                        <span style="color:var(--dark);text-decoration:line-through;font-size:0.72rem;opacity:.7;">${originalLineTotal.toLocaleString('fr-FR')} دج</span>
+                                        <span style="color:var(--success);font-weight:800;">${discountedLineTotal.toLocaleString('fr-FR')} دج</span>
+                                    </div>
                                 ` : `
-                                    <span style="color: var(--success); font-weight: 700;">${item.price} دج</span>
+                                    <span style="color:var(--success);font-weight:800;">${originalLineTotal.toLocaleString('fr-FR')} دج</span>
                                 `}
                             </div>
                             <div class="selected-product-quantity">
