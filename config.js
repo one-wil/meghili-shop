@@ -434,7 +434,9 @@ const STORE_CONFIG = {
     "desk": {
       "enabled": true,
       "minAmount": 0,
-      "wilayas": [],
+      "wilayas": [
+        "01 - أدرار"
+      ],
       "minQuantity": 2
     },
     "home": {
