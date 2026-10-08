@@ -7658,6 +7658,25 @@ body.order-departure-focus .order-departure-clone{
                     <td><i class="fas fa-weight-hanging"></i> ${item.weightFrom} - ${item.weightTo} كلغ</td>
                 `;
                 measurementsTableBody.appendChild(tr);
+
+                // جدول القياسات يصبح أيضاً وسيلة لاختيار المقاس:
+                // التمرير فوق صف آخر (سطح المكتب) أو الضغط عليه (كل الأجهزة)
+                // ينقل الاختيار مباشرة إلى ذلك المقاس.
+                const switchToRowSize = () => {
+                    const wantedSize = String(tr.dataset.size || '').trim();
+                    const sizeOption = Array.from(document.querySelectorAll('#productModal #ageOptions .size-option-small'))
+                        .find(option => String(option.dataset.size || '').trim() === wantedSize);
+                    if (!sizeOption || sizeOption.classList.contains('selected')) return;
+
+                    window.__measurementRowSwitch = true;
+                    document.querySelectorAll('#productModal #ageOptions .size-option-small.selected')
+                        .forEach(option => option.classList.remove('selected'));
+                    sizeOption.click();
+                    window.__measurementRowSwitch = false;
+                };
+
+                tr.addEventListener('mouseenter', switchToRowSize);
+                tr.addEventListener('click', switchToRowSize);
             });
 
             const colorOptions = document.getElementById('colorOptions');
@@ -7982,7 +8001,7 @@ body.order-departure-focus .order-departure-clone{
                         const target = (discount && discount.style.display !== 'none') ? discount
                             : (freeDelivery && freeDelivery.style.display !== 'none') ? freeDelivery
                             : summary;
-                        if (selectedAges.length && target) smoothProductStepScroll(target, 28);
+                        if (selectedAges.length && target && !window.__measurementRowSwitch) smoothProductStepScroll(target, 28);
                     });
 
                     if (selectedColors.length && selectedAges.length) {
@@ -12252,6 +12271,21 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 
 @media(max-width:520px){
   #page2 .smart-back-btn{min-width:155px !important;min-height:48px !important;padding:10px 15px !important;font-size:.88rem !important}
+}
+</style>
+
+<style id="measurement-row-size-switch">
+#productModal #measurementsTableBody tr {
+  cursor: pointer !important;
+  transition: background .18s ease, box-shadow .18s ease, transform .18s ease !important;
+}
+#productModal #measurementsTableBody tr:hover:not(.measurement-size-selected) {
+  background: linear-gradient(90deg,#eef8ff,#dff2ff,#eef8ff) !important;
+  box-shadow: inset 5px 0 0 #0099ff, 0 2px 8px rgba(0,153,255,.16) !important;
+  transform: scale(1.008) !important;
+}
+#productModal #measurementsTableBody tr.measurement-size-selected {
+  cursor: default !important;
 }
 </style>
 </body>
