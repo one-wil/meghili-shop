@@ -434,6 +434,11 @@
     ]
   },
   "DISCOUNTS": {
+    "enableBuyXGetY": true,
+    "buyXGetYBuyQuantity": 2,
+    "buyXGetYFreeQuantity": 1,
+    "buyXGetYScope": "all",
+    "buyXGetYProducts": [],
     "enableQuantityDiscount": false,
     "minQuantityForDiscount": 2,
     "discountPerItem": 100,
@@ -441,19 +446,12 @@
     "discountProducts": [
       1789581423689
     ],
-    "enablePromotionalDiscount": false,
+    "enablePromotionalDiscount": true,
     "promotionalDiscountPercent": 30,
     "promotionalDiscountedPrice": 0,
     "promoDiscountScope": "selected",
     "promoDiscountProducts": [
       1789581423689
-    ],
-    "enableBuyXGetY": true,
-    "buyXGetYBuyQuantity": 2,
-    "buyXGetYFreeQuantity": 1,
-    "buyXGetYScope": "selected",
-    "buyXGetYProducts": [
-      1789476986031
     ]
   },
   "STORE_INFO": {
