@@ -5378,51 +5378,100 @@ body.order-departure-focus .order-departure-clone{
 </style>
 
 <style id="product-details-design-seven">
-/* ===== DESIGN 7 — صفحة تفاصيل المنتج فقط ===== */
+/* ===== التصميم 7: صفحة تفاصيل المنتج فقط ===== */
 #productModal .design-seven-modal-info{
-    width:100%; min-height:74px; display:grid;
-    grid-template-columns:minmax(0,1fr) auto; align-items:stretch;
-    direction:ltr; background:#fff; border:2px solid #1599df;
-    border-radius:15px; overflow:hidden;
+    width:100%;
+    min-height:74px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:stretch;
+    direction:ltr;
+    background:#fff;
+    border:2px solid #1599df;
+    border-radius:15px;
+    overflow:hidden;
     box-shadow:0 2px 10px rgba(0,102,204,.06);
 }
 #productModal .design-seven-modal-text{
-    min-width:0; padding:8px 10px; direction:rtl; text-align:right;
-    display:flex; flex-direction:column; justify-content:center;
+    min-width:0;
+    padding:8px 10px;
+    direction:rtl;
+    text-align:right;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
 }
 #productModal .design-seven-modal-text .modern-product-title{
-    margin:0; color:#092d50; font-size:.82rem; line-height:1.25;
-    font-weight:900; white-space:normal; overflow-wrap:anywhere;
+    margin:0;
+    color:#092d50;
+    font-size:.82rem;
+    line-height:1.25;
+    font-weight:900;
+    white-space:normal;
+    overflow-wrap:anywhere;
 }
 #productModal .design-seven-modal-text .modern-description{
-    margin:3px 0 0; color:#7b8792; font-size:.62rem; line-height:1.45;
-    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    margin:3px 0 0;
+    color:#7b8792;
+    font-size:.62rem;
+    line-height:1.45;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
 }
 #productModal .design-seven-modal-price{
-    min-width:122px; padding:7px 12px; display:flex;
-    align-items:center; justify-content:center; direction:rtl; text-align:center;
-    background:#e7f8ee; border-left:1px solid #cbd7df;
+    min-width:122px;
+    padding:7px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    direction:rtl;
+    text-align:center;
+    background:#e7f8ee;
+    border-left:1px solid #cbd7df;
 }
 #productModal .design-seven-modal-price .modern-price-row{
-    margin:0!important; width:auto!important; justify-content:center!important; align-items:center!important;
+    margin:0!important;
+    width:auto!important;
+    justify-content:center!important;
+    align-items:center!important;
 }
-#productModal .design-seven-modal-price .product-modal-discounted-price,
 #productModal .design-seven-modal-price .modern-price{
-    color:#087b48!important; font-size:1.05rem!important;
-    font-weight:900!important; line-height:1.15; white-space:nowrap;
+    color:#087b48!important;
+    font-size:1.05rem!important;
+    font-weight:900!important;
+    line-height:1.15;
+    white-space:nowrap;
 }
-#productModal .design-seven-modal-price .product-modal-original-price,
 #productModal .design-seven-modal-price .modern-old{
-    color:#000!important; font-size:.58rem!important; line-height:1.05;
+    color:#000!important;
+    font-size:.58rem!important;
+    line-height:1.05;
 }
-@media (max-width:480px){
-    #productModal .design-seven-modal-info{min-height:68px;border-radius:13px}
-    #productModal .design-seven-modal-text{padding:7px 8px}
-    #productModal .design-seven-modal-text .modern-product-title{font-size:.68rem}
-    #productModal .design-seven-modal-text .modern-description{font-size:.55rem;line-height:1.4;margin-top:2px}
-    #productModal .design-seven-modal-price{min-width:92px;padding:6px 8px}
-    #productModal .design-seven-modal-price .product-modal-discounted-price,
-    #productModal .design-seven-modal-price .modern-price{font-size:.82rem!important}
+@media(max-width:480px){
+    #productModal .design-seven-modal-info{
+        min-height:68px;
+        border-radius:13px;
+    }
+    #productModal .design-seven-modal-text{
+        padding:7px 8px;
+    }
+    #productModal .design-seven-modal-text .modern-product-title{
+        font-size:.68rem;
+    }
+    #productModal .design-seven-modal-text .modern-description{
+        font-size:.55rem;
+        line-height:1.4;
+        margin-top:2px;
+    }
+    #productModal .design-seven-modal-price{
+        min-width:92px;
+        padding:6px 8px;
+    }
+    #productModal .design-seven-modal-price .modern-price{
+        font-size:.82rem!important;
+    }
 }
 </style>
 </head>
@@ -6720,16 +6769,17 @@ body.order-departure-focus .order-departure-clone{
                         </div>
 
                         <div class="model-info premium-product-info">
-                            <div class="design-seven-info">
-                                <div class="design-seven-text">
+                            <div class="premium-product-heading">
+                                <div>
+                                    <span class="premium-kicker">COLLECTION</span>
                                     <h3 class="model-name">${product.name}</h3>
-                                    <p class="model-description premium-description">${product.description}</p>
                                 </div>
-                                <div class="premium-price design-seven-price">
+                                <div class="premium-price">
                                     ${hasDiscount ? `<span class="original-price">${product.price} دج</span>` : ''}
                                     <span class="discounted-price">${discountInfo.finalPrice} <small>دج</small></span>
                                 </div>
                             </div>
+                            <p class="model-description premium-description">${product.description}</p>
                             <div class="premium-specs">
                                 <span><i class="fas fa-ruler-combined"></i> ${sizesText}</span>
                                 <span><i class="fas fa-palette"></i> ${colorsText}</span>
@@ -12609,12 +12659,3 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 }
 .selected-product.order-departure-card::after{animation:none!important;}
 </style>
-
-
-    .design-seven-text{padding:7px 8px}
-    .design-seven-text .model-name{font-size:.68rem}
-    .design-seven-text .premium-description{font-size:.55rem;line-height:1.4;margin-top:2px}
-    .design-seven-price{min-width:92px;padding:6px 8px}
-    .design-seven-price .discounted-price{font-size:.82rem!important}
-    .design-seven-price .discounted-price small{font-size:.52rem!important}
-}
