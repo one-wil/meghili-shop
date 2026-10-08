@@ -6103,29 +6103,29 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function sortAvailableSizes() {
-            if (!Array.isArray(CONFIG.AVAILABLE_SIZES)) CONFIG.AVAILABLE_SIZES = [];
-            CONFIG.AVAILABLE_SIZES.sort((a, b) => {
+            CONFIG.AVAILABLE_SIZES = (CONFIG.AVAILABLE_SIZES || []).slice().sort((a, b) => {
                 const aNum = /^\d+(?:\.\d+)?$/.test(String(a).trim());
                 const bNum = /^\d+(?:\.\d+)?$/.test(String(b).trim());
                 if (aNum && bNum) return Number(a) - Number(b);
                 if (aNum) return -1;
                 if (bNum) return 1;
-                return String(a).localeCompare(String(b), 'ar', { numeric: true, sensitivity: 'base' });
+                return String(a).localeCompare(String(b), 'ar', {numeric: true, sensitivity: 'base'});
             });
         }
 
         function sortAvailableColors() {
-            if (!Array.isArray(CONFIG.AVAILABLE_COLORS)) CONFIG.AVAILABLE_COLORS = [];
-            CONFIG.AVAILABLE_COLORS.sort((a, b) =>
-                String(a).localeCompare(String(b), 'ar', { numeric: true, sensitivity: 'base' })
+            CONFIG.AVAILABLE_COLORS = (CONFIG.AVAILABLE_COLORS || []).slice().sort((a, b) =>
+                String(a).localeCompare(String(b), 'ar', {numeric: true, sensitivity: 'base'})
             );
         }
-
+        
         function addAvailableSize() {
             const input = document.getElementById('newSizeInput');
             const size = input.value.trim();
             
-            if (!size) return;
+            if (!size) {
+                return;
+            }
             
             if (!CONFIG.AVAILABLE_SIZES.includes(size)) {
                 CONFIG.AVAILABLE_SIZES.push(size);
@@ -6147,7 +6147,9 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             const input = document.getElementById('newColorInput');
             const color = input.value.trim();
             
-            if (!color) return;
+            if (!color) {
+                return;
+            }
             
             if (!CONFIG.AVAILABLE_COLORS.includes(color)) {
                 CONFIG.AVAILABLE_COLORS.push(color);
