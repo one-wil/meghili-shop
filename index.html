@@ -6608,37 +6608,39 @@ body.order-departure-focus .order-departure-clone{
                 card.setAttribute('data-product-key', key);
                 card.style.animationDelay = `${(index % 4) * 0.1 + 0.1}s`;
                 
-                // ===== تحديد نوع التوصيل المجاني لعرضه بشكل دقيق =====
+                // ===== رسالة التوصيل المجاني المخصصة: الحد + نوع التوصيل + الولايات المضمنة =====
                 let freeDeliveryText = '';
                 if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY) {
-                    const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
-                    const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
-                    
-                    const deskMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1));
-                    const homeMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1));
-                    const quantityText = (n) => {
-                        n = Number(n) || 1;
-                        if (n === 1) return 'قطعة واحدة';
-                        if (n === 2) return 'قطعتين';
-                        if (n >= 3 && n <= 10) return `${n} قطع`;
-                        return `${n} قطعة`;
-                    };
+                    const deskConfig = STORE_CONFIG.FREE_DELIVERY.desk || {};
+                    const homeConfig = STORE_CONFIG.FREE_DELIVERY.home || {};
+                    const deskEnabled = deskConfig.enabled || false;
+                    const homeEnabled = homeConfig.enabled || false;
+
+                    const deskMin = Math.max(1, Number(deskConfig.minQuantity || 1));
+                    const homeMin = Math.max(1, Number(homeConfig.minQuantity || 1));
+
+                    const quantityText = (n) => `${Number(n) || 1} قطع`;
+                    const deskLocation = getFreeDeliveryWilayaLabel(deskConfig);
+                    const homeLocation = getFreeDeliveryWilayaLabel(homeConfig);
 
                     if (deskEnabled && homeEnabled) {
-                        if (deskMin === homeMin) {
-                            freeDeliveryText = `مجاني للمكتب والمنزل ابتداء من ${quantityText(deskMin)}`;
+                        if (deskMin === homeMin && deskLocation === homeLocation) {
+                            freeDeliveryText =
+                                `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب والمنزل${deskLocation ? ` ${deskLocation}` : ''}`;
                         } else {
-                            freeDeliveryText = `مجاني للمكتب ابتداء من ${quantityText(deskMin)}، وللمنزل ابتداء من ${quantityText(homeMin)}`;
+                            freeDeliveryText =
+                                `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}، ` +
+                                `وابتداء من ${quantityText(homeMin)}: توصيل مجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
                         }
                     } else if (deskEnabled) {
-                        freeDeliveryText = `مجاني للمكتب ابتداء من ${quantityText(deskMin)}`;
+                        freeDeliveryText =
+                            `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}`;
                     } else if (homeEnabled) {
-                        freeDeliveryText = `مجاني للمنزل ابتداء من ${quantityText(homeMin)}`;
-                    } else {
-                        freeDeliveryText = '';
+                        freeDeliveryText =
+                            `ابتداء من ${quantityText(homeMin)}: توصيل مجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
                     }
                 }
-                
+
                 card.innerHTML = `
                     <article class="premium-product-card" onclick="showProductDetails('${key}')">
                         <div class="premium-product-media">
@@ -7227,26 +7229,36 @@ body.order-departure-focus .order-departure-clone{
             
             if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY && 
                 (STORE_CONFIG.FREE_DELIVERY.desk?.enabled || STORE_CONFIG.FREE_DELIVERY.home?.enabled)) {
-                // ===== تحديد نوع التوصيل المجاني بشكل دقيق =====
-                const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
-                const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
+                // ===== رسالة التوصيل المجاني داخل التفاصيل: الشرط + النوع + الولايات المضمنة =====
+                const deskConfig = STORE_CONFIG.FREE_DELIVERY.desk || {};
+                const homeConfig = STORE_CONFIG.FREE_DELIVERY.home || {};
+                const deskEnabled = deskConfig.enabled || false;
+                const homeEnabled = homeConfig.enabled || false;
+                const deskMin = Math.max(1, Number(deskConfig.minQuantity || 1));
+                const homeMin = Math.max(1, Number(homeConfig.minQuantity || 1));
+
+                const quantityText = (n) => `${Number(n) || 1} قطع`;
+                const deskLocation = getFreeDeliveryWilayaLabel(deskConfig);
+                const homeLocation = getFreeDeliveryWilayaLabel(homeConfig);
 
                 let deliveryTypeText = '';
                 if (deskEnabled && homeEnabled) {
-                    deliveryTypeText = 'عند شراء' + Math.max(
-                        Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1),
-                        Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1)
-                    ) + ' قطع أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل';
+                    if (deskMin === homeMin && deskLocation === homeLocation) {
+                        deliveryTypeText =
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل${deskLocation ? ` ${deskLocation}` : ''}`;
+                    } else {
+                        deliveryTypeText =
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}، ` +
+                            `وعند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                    }
                 } else if (deskEnabled) {
-                    deliveryTypeText = 'عند شراء' +
-                        Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1) +
-                        ' قطع أو أكثر تستفيد من التوصيل المجاني للمكتب';
+                    deliveryTypeText =
+                        `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}`;
                 } else if (homeEnabled) {
-                    deliveryTypeText = 'عند شراء' +
-                        Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1) +
-                        ' قطع أو أكثر تستفيد من التوصيل المجاني للمنزل';
+                    deliveryTypeText =
+                        `عند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
                 } else {
-                    deliveryTypeText = 'عند شراء' + 1 + ' قطع أو أكثر تستفيد من التوصيل المجاني';
+                    deliveryTypeText = 'التوصيل المجاني غير مفعّل حاليًا';
                 }
 
                 freeDeliveryText.textContent = deliveryTypeText;
@@ -8372,6 +8384,46 @@ updateDeliveryCost();
             }
             
             return totalDiscount;
+        }
+
+        // ===== تخصيص رسالة التوصيل المجاني حسب الولايات المضمنة في الإعدادات =====
+        function getFreeDeliveryWilayaLabel(deliveryConfig) {
+            if (!deliveryConfig || !Array.isArray(deliveryConfig.wilayas) || !deliveryConfig.wilayas.length) {
+                return '';
+            }
+
+            const select = document.getElementById('wilaya');
+            const options = select ? Array.from(select.options) : [];
+
+            const names = deliveryConfig.wilayas
+                .map(value => {
+                    const raw = String(value ?? '').trim();
+                    if (!raw) return '';
+
+                    const option = options.find(opt =>
+                        String(opt.value).trim() === raw ||
+                        String(opt.textContent).trim() === raw
+                    );
+
+                    let name = option ? option.textContent.trim() : raw;
+                    name = name.replace(/^\d{1,2}\s*[-–—]\s*/, '').trim();
+                    return name;
+                })
+                .filter(Boolean);
+
+            const uniqueNames = [...new Set(names)];
+            if (!uniqueNames.length) return '';
+
+            if (uniqueNames.length === 1) {
+                return `في ولاية ${uniqueNames[0]}`;
+            }
+
+            return `في الولايات: ${uniqueNames.join('، ')}`;
+        }
+
+        function getFreeDeliveryScopeText(deliveryConfig, deliveryTypeLabel) {
+            const location = getFreeDeliveryWilayaLabel(deliveryConfig);
+            return location ? `${deliveryTypeLabel} ${location}` : deliveryTypeLabel;
         }
 
         // ===== Free Delivery =====
