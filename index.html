@@ -5473,7 +5473,7 @@ body.order-departure-focus .order-departure-clone{
     cursor:zoom-out !important;
 }
 #productModal .modern-gallery-main img{
-    transform:scale(1.10) !important;
+    transform:scale(1.15) !important;
     transform-origin:center center !important;
     transition:transform .45s cubic-bezier(.2,.8,.2,1), opacity .2s ease !important;
 }
@@ -5521,7 +5521,7 @@ body.order-departure-focus .order-departure-clone{
         min-height:42vh !important;
     }
     #productModal .modern-gallery-main img{
-        transform:scale(1.08) !important;
+        transform:scale(1.13) !important;
     }
     #productModal .modern-gallery-main img.modern-image-shrunk{
         transform:scale(.74) !important;
@@ -5561,6 +5561,150 @@ body.order-departure-focus .order-departure-clone{
     }
 }
 </style>
+
+<style id="product-detail-meta-and-size-corridor-v1">
+/* تكبير بسيط ومدروس لشريط اسم المنتج + الوصف + الثمن */
+#productModal .product-detail-meta-top{
+    min-height:86px !important;
+}
+#productModal .product-detail-meta-top .design-seven-modal-text{
+    padding:11px 14px !important;
+}
+#productModal .product-detail-meta-top .modern-product-title{
+    font-size:clamp(1rem,2.7vw,1.34rem) !important;
+    line-height:1.25 !important;
+}
+#productModal .product-detail-meta-top .modern-description{
+    font-size:clamp(.72rem,1.95vw,.88rem) !important;
+    line-height:1.5 !important;
+}
+#productModal .product-detail-meta-top .design-seven-modal-price{
+    min-width:158px !important;
+    padding:9px 16px !important;
+}
+#productModal .product-detail-meta-top .product-modal-discounted-price{
+    font-size:clamp(1.25rem,4.3vw,1.95rem) !important;
+}
+
+/* ممر عمودي واضح يخرج من المقاس المختار ويتجه مباشرة إلى جدول القياسات */
+#productModal #ageOptions .size-option-small.selected{
+    --size-to-table-height:0px;
+    --size-to-table-x:50%;
+}
+#productModal #ageOptions .size-option-small.selected::before{
+    content:'' !important;
+    position:absolute !important;
+    left:50% !important;
+    top:calc(100% + 1px) !important;
+    width:5px !important;
+    height:var(--size-to-table-height,0px) !important;
+    transform:translateX(-50%) !important;
+    background:linear-gradient(to bottom,#d4af37,#f2c94c) !important;
+    border-radius:0 0 6px 6px !important;
+    box-shadow:0 0 8px rgba(212,175,55,.35) !important;
+    pointer-events:none !important;
+    z-index:60 !important;
+    opacity:1 !important;
+}
+#productModal #ageOptions .size-option-small.selected::after{
+    z-index:70 !important;
+}
+#productModal #measurementsTableContainer.size-table-target{
+    position:relative !important;
+}
+#productModal #measurementsTableContainer.size-table-target::before{
+    content:'' !important;
+    position:absolute !important;
+    top:-1px !important;
+    left:var(--table-entry-x,50%) !important;
+    width:9px !important;
+    height:7px !important;
+    transform:translateX(-50%) !important;
+    background:#f2c94c !important;
+    border-radius:0 0 7px 7px !important;
+    box-shadow:0 0 9px rgba(242,201,76,.42) !important;
+    z-index:20 !important;
+    pointer-events:none !important;
+}
+
+@media(max-width:760px){
+    #productModal .product-detail-meta-top{
+        min-height:77px !important;
+    }
+    #productModal .product-detail-meta-top .design-seven-modal-text{
+        padding:8px 10px !important;
+    }
+    #productModal .product-detail-meta-top .design-seven-modal-price{
+        min-width:116px !important;
+        padding:7px 9px !important;
+    }
+    #productModal .product-detail-meta-top .product-modal-discounted-price{
+        font-size:1.23rem !important;
+    }
+    #productModal .product-detail-meta-top .modern-product-title{
+        font-size:.94rem !important;
+    }
+    #productModal .product-detail-meta-top .modern-description{
+        font-size:.68rem !important;
+    }
+}
+</style>
+<script id="product-detail-size-corridor-v1-script">
+(function(){
+    function updateCorridor(btn){
+        const modal=document.getElementById('productModal');
+        const table=document.getElementById('measurementsTableContainer');
+        if(!modal || !btn || !table) return;
+
+        table.classList.add('size-table-target');
+        const br=btn.getBoundingClientRect();
+        const tr=table.getBoundingClientRect();
+        const gap=tr.top-br.bottom;
+        const height=Math.max(0, gap-1);
+
+        btn.style.setProperty('--size-to-table-height', height+'px');
+        const x=Math.max(12, Math.min(tr.width-12, br.left+br.width/2-tr.left));
+        table.style.setProperty('--table-entry-x', x+'px');
+    }
+
+    function bind(){
+        const age=document.getElementById('ageOptions');
+        if(!age || age.dataset.corridorBound) return;
+        age.dataset.corridorBound='1';
+        age.addEventListener('click',function(e){
+            const btn=e.target.closest('.size-option-small');
+            if(!btn) return;
+            setTimeout(function(){
+                const selected=age.querySelector('.size-option-small.selected');
+                if(selected) updateCorridor(selected);
+            },70);
+        });
+    }
+
+    function refresh(){
+        const modal=document.getElementById('productModal');
+        const age=document.getElementById('ageOptions');
+        const selected=age && age.querySelector('.size-option-small.selected');
+        if(selected) updateCorridor(selected);
+        bind();
+    }
+
+    function init(){
+        refresh();
+        window.addEventListener('resize',refresh,{passive:true});
+        const modal=document.getElementById('productModal');
+        if(modal){
+            new MutationObserver(function(){
+                requestAnimationFrame(refresh);
+            }).observe(modal,{childList:true,subtree:true});
+        }
+    }
+
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+    else init();
+})();
+</script>
+
 </head>
 <body>
     <!-- Flying Hearts Container -->
