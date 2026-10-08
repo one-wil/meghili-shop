@@ -434,14 +434,18 @@ const STORE_CONFIG = {
     "desk": {
       "enabled": true,
       "minAmount": 0,
-      "wilayas": [],
+      "wilayas": [
+        "03 - الأغواط"
+      ],
       "minQuantity": 2
     },
     "home": {
-      "enabled": false,
+      "enabled": true,
       "minAmount": 0,
-      "wilayas": [],
-      "minQuantity": 6
+      "wilayas": [
+        "43 - ميلة"
+      ],
+      "minQuantity": 2
     },
     "freeDeliveryProducts": [
       1765137505304,
@@ -466,7 +470,7 @@ const STORE_CONFIG = {
       1789581423689
     ],
     "enableBuyXGetY": true,
-    "buyXGetYBuyQuantity": 2,
+    "buyXGetYBuyQuantity": 3,
     "buyXGetYFreeQuantity": 1,
     "buyXGetYScope": "selected",
     "buyXGetYProducts": [
