@@ -478,7 +478,7 @@ const STORE_CONFIG = {
     "name": "Meghili-shop",
     "storeIcon": "-",
     "storeTitle": "-",
-    "tagline": "متجر الأحلام ",
+    "tagline": "متجر الجودة المفقودة ",
     "phoneNumbers": [
       "0666666666",
       "0551102155"
