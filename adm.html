@@ -454,6 +454,25 @@
             font-size: 16px;
         }
         
+        /* عرض اشترِ X واحصل على Y: اتجاه عربي RTL */
+        .buy-x-get-y-card,
+        .buy-x-get-y-card * {
+            direction: rtl;
+            text-align: right;
+        }
+        .buy-x-get-y-card .form-row,
+        .buy-x-get-y-card .checkbox-group {
+            direction: rtl;
+        }
+        .buy-x-get-y-card input[type="number"] {
+            direction: ltr;
+            text-align: right;
+        }
+        .buy-x-get-y-card input[type="checkbox"],
+        .buy-x-get-y-card input[type="radio"] {
+            direction: rtl;
+        }
+
         /* بطاقات الإحصائيات */
         .stats-grid {
             display: grid;
@@ -2084,6 +2103,164 @@
             line-height: 1.2;
             margin-top: 12px;
         }
+        /* بطاقة تعريف فريق StoreMaster */
+        .about-team-card {
+            max-width: 900px;
+            margin: 34px auto 0;
+            padding: 44px 34px 38px;
+            background: rgba(255,255,255,.94);
+            border: 1px solid rgba(67,97,238,.10);
+            border-radius: 30px;
+            box-shadow: 0 12px 35px rgba(31,41,55,.10);
+            text-align: center;
+            direction: rtl;
+        }
+        .about-team-logo {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 22px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4361ee, #06d6a0);
+            color: #fff;
+            font-size: 40px;
+            box-shadow: 0 12px 28px rgba(67,97,238,.22);
+        }
+        .about-team-card h3 {
+            margin: 0 0 18px;
+            font-size: clamp(26px, 4vw, 38px);
+            color: var(--dark);
+            font-weight: 800;
+        }
+        .about-team-card p {
+            max-width: 790px;
+            margin: 0 auto 14px;
+            color: var(--gray);
+            font-size: clamp(16px, 2.2vw, 20px);
+            line-height: 2;
+        }
+        .about-team-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 28px;
+        }
+        .about-team-feature {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 13px 20px;
+            border-radius: 28px;
+            background: #f8f9fb;
+            color: var(--dark);
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(0,0,0,.04);
+        }
+        .about-team-feature i {
+            color: var(--primary);
+            font-size: 17px;
+        }
+
+        /* لوحة الدعم */
+        .about-support-card {
+            max-width: 900px;
+            margin: 30px auto 20px;
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            direction: rtl;
+            border-radius: 26px;
+            background: linear-gradient(135deg, #1a1b2e 0%, #25284a 100%);
+            color: #fff;
+            box-shadow: 0 14px 34px rgba(26,27,46,.24);
+            border: 1px solid rgba(255,255,255,.10);
+        }
+        .about-support-icon {
+            flex: 0 0 68px;
+            width: 68px;
+            height: 68px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4361ee, #06d6a0);
+            font-size: 28px;
+            box-shadow: 0 8px 22px rgba(67,97,238,.25);
+        }
+        .about-support-content {
+            flex: 1;
+            text-align: right;
+        }
+        .about-support-title {
+            font-size: clamp(22px, 3vw, 30px);
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+        .about-support-subtitle {
+            color: rgba(255,255,255,.68);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .about-support-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .about-support-numbers a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.09);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            direction: ltr;
+            transition: var(--transition);
+        }
+        .about-support-numbers a:hover {
+            background: rgba(6,214,160,.20);
+            transform: translateY(-2px);
+        }
+        .about-support-numbers i { color: #06d6a0; }
+
+        .about-manager-arabic-name {
+            direction: rtl;
+            text-align: right;
+            font-size: clamp(24px, 3.2vw, 42px) !important;
+            line-height: 1.35 !important;
+            margin-top: 4px !important;
+        }
+
+        @media (max-width: 700px) {
+            .about-support-card {
+                padding: 22px 18px;
+                gap: 15px;
+            }
+            .about-support-icon {
+                flex-basis: 56px;
+                width: 56px;
+                height: 56px;
+                font-size: 23px;
+            }
+            .about-support-numbers {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .about-support-numbers a {
+                justify-content: center;
+            }
+            .about-team-card {
+                padding: 32px 20px;
+            }
+        }
+
         @media (max-width: 700px) {
             .about-manager-card {
                 min-height: 300px;
@@ -3319,14 +3496,43 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         <p>تعرف على الفريق الذي يقف وراء StoreMaster</p>
                     </div>
 
+                    <!-- بطاقة المدير في أسفل مقدمة القسم -->
                     <div class="about-manager-card">
                         <div class="about-manager-avatar">
                             <span>B</span>
                         </div>
                         <div class="about-manager-info">
-                            <div class="about-manager-title">المدير</div>
-                            <div class="about-manager-name">Bachir</div>
-                            <div class="about-manager-surname">maghzili</div>
+                            <div class="about-manager-title">فريق StoreMaster</div>
+                            <div class="about-manager-name about-manager-arabic-name">مدير الفريق : أحسن بن أكراب</div>
+                        </div>
+                    </div>
+
+                    <!-- التعريف بالفريق كما في الصفحة التعريفية -->
+                    <div class="about-team-card">
+                        <div class="about-team-logo">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>فريق StoreMaster</h3>
+                        <p>نحن فريق تطوير مختص في إنشاء وتطوير المتاجر الإلكترونية والحلول الرقمية الموجهة لأصحاب المشاريع.</p>
+                        <p>نعمل على تصميم أدوات عملية وسهلة الاستخدام تساعد أصحاب المتاجر على إدارة منتجاتهم، وتنسيق عملياتهم، وتحسين تجربة عملائهم بكفاءة واحترافية.</p>
+
+                        <div class="about-team-features">
+                            <div class="about-team-feature"><i class="fas fa-store"></i><span>المتاجر الإلكترونية</span></div>
+                            <div class="about-team-feature"><i class="fas fa-laptop-code"></i><span>تطوير الحلول الرقمية</span></div>
+                            <div class="about-team-feature"><i class="fas fa-mobile-alt"></i><span>تجربة مستخدم حديثة</span></div>
+                        </div>
+                    </div>
+
+                    <!-- لوحة التواصل مع الدعم -->
+                    <div class="about-support-card">
+                        <div class="about-support-icon"><i class="fas fa-headset"></i></div>
+                        <div class="about-support-content">
+                            <div class="about-support-title">contacter support</div>
+                            <div class="about-support-subtitle">للتواصل مع فريق الدعم</div>
+                            <div class="about-support-numbers">
+                                <a href="tel:0551102155"><i class="fas fa-phone-alt"></i> 0551102155</a>
+                                <a href="tel:0671466489"><i class="fas fa-phone-alt"></i> 0671466489</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -5621,12 +5827,12 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         </div>
                     </div>
                     
-                    <div class="form-group" style="margin-top: 22px; border: 2px solid rgba(8,122,75,.18); border-radius: 14px; padding: 16px; background: linear-gradient(180deg,#f8fffb,#ffffff);">
-                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                    <div class="form-group buy-x-get-y-card" dir="rtl" style="margin-top: 22px; border: 2px solid rgba(8,122,75,.18); border-radius: 14px; padding: 16px; background: linear-gradient(180deg,#f8fffb,#ffffff); direction:rtl; text-align:right;">
+                        <div class="buy-x-get-y-toggle" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;direction:rtl;text-align:right;">
                             <input type="checkbox" id="enableBuyXGetY" ${CONFIG.DISCOUNTS?.enableBuyXGetY ? 'checked' : ''} onchange="toggleBuyXGetY()">
-                            <label for="enableBuyXGetY" style="margin:0;font-weight:800;color:#087a4b;">🎁 تفعيل عرض: اشترِ X واحصل على Y مجانًا</label>
+                            <label for="enableBuyXGetY" style="margin:0;font-weight:800;color:#087a4b;direction:rtl;text-align:right;">🎁 تفعيل عرض: اشترِ X واحصل على Y مجانًا</label>
                         </div>
-                        <div id="buyXGetYSettings" style="${CONFIG.DISCOUNTS?.enableBuyXGetY ? '' : 'display:none;'}">
+                        <div id="buyXGetYSettings" dir="rtl" style="${CONFIG.DISCOUNTS?.enableBuyXGetY ? '' : 'display:none;'};direction:rtl;text-align:right;">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>عدد القطع المدفوعة (X)</label>
@@ -5669,6 +5875,8 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function loadSizesColorsSettings(container) {
+            sortAvailableSizes();
+            sortAvailableColors();
             container.innerHTML = `
                 <div class="action-card" style="margin-bottom: 20px;">
                     <h3><i class="fas fa-ruler"></i> إدارة المقاسات المتاحة</h3>
@@ -5676,14 +5884,20 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="form-group">
                         <label>المقاسات المتاحة حاليًا:</label>
                         <div id="availableSizesList" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; padding: 15px; background: var(--light); border-radius: var(--radius);">
-                            ${(CONFIG.AVAILABLE_SIZES || []).map(size => `
-                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid var(--border);">
+                            ${(CONFIG.AVAILABLE_SIZES || []).map(size => {
+                                const sizeInUse = Object.values(CONFIG.PRODUCTS || {}).some(product =>
+                                    Array.isArray(product?.availableSizes) && product.availableSizes.some(s => String(s) === String(size))
+                                );
+                                return `
+                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid ${sizeInUse ? '#f8961e' : 'var(--border)'};">
                                     <span>${size}</span>
-                                    <button class="btn btn-sm btn-danger" onclick="removeAvailableSize('${size}')" style="padding: 2px 8px;">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `).join('')}
+                                    ${sizeInUse
+                                        ? `<span title="هذا المقاس مستعمل في منتج ولا يمكن حذفه" style="font-size:12px;color:#f8961e;font-weight:700;">مستعمل</span>`
+                                        : `<button class="btn btn-sm btn-danger" onclick="removeAvailableSize('${size}')" style="padding: 2px 8px;">
+                                            <i class="fas fa-times"></i>
+                                        </button>`}
+                                </div>`;
+                            }).join('')}
                         </div>
                     </div>
                     
@@ -5704,14 +5918,20 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="form-group">
                         <label>الألوان المتاحة حاليًا:</label>
                         <div id="availableColorsList" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; padding: 15px; background: var(--light); border-radius: var(--radius);">
-                            ${(CONFIG.AVAILABLE_COLORS || []).map(color => `
-                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid var(--border);">
+                            ${(CONFIG.AVAILABLE_COLORS || []).map(color => {
+                                const colorInUse = Object.values(CONFIG.PRODUCTS || {}).some(product =>
+                                    Array.isArray(product?.availableColors) && product.availableColors.some(c => String(c) === String(color))
+                                );
+                                return `
+                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid ${colorInUse ? '#f8961e' : 'var(--border)'};">
                                     <span>${color}</span>
-                                    <button class="btn btn-sm btn-danger" onclick="removeAvailableColor('${color}')" style="padding: 2px 8px;">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `).join('')}
+                                    ${colorInUse
+                                        ? `<span title="هذا اللون مستعمل في منتج ولا يمكن حذفه" style="font-size:12px;color:#f8961e;font-weight:700;">مستعمل</span>`
+                                        : `<button class="btn btn-sm btn-danger" onclick="removeAvailableColor('${color}')" style="padding: 2px 8px;">
+                                            <i class="fas fa-times"></i>
+                                        </button>`}
+                                </div>`;
+                            }).join('')}
                         </div>
                     </div>
                     
@@ -5726,18 +5946,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     </div>
                 </div>
                 
-                <div class="action-card">
-                    <h3><i class="fas fa-ruler-combined"></i> دليل المقاسات</h3>
-                    
-                    <div class="form-group">
-                        <p style="color: var(--gray); margin-bottom: 15px;">
-                            يساعد دليل المقاسات العملاء على اختيار المقاس المناسب حسب الطول والوزن.
-                        </p>
-                        <button class="btn btn-primary" onclick="showSizeGuideModal()">
-                            <i class="fas fa-edit"></i> إدارة دليل المقاسات
-                        </button>
-                    </div>
-                </div>
+
             `;
         }
         
@@ -6058,8 +6267,17 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function toggleBuyXGetY() {
-            const enabled = document.getElementById('enableBuyXGetY').checked;
+            const checkbox = document.getElementById('enableBuyXGetY');
+            const settingsDiv = document.getElementById('buyXGetYSettings');
+            const enabled = !!checkbox?.checked;
+
             updateDiscountField('enableBuyXGetY', enabled);
+
+            // عند التفعيل تفتح إعدادات العرض فورًا، وعند التعطيل تُغلق بالكامل.
+            if (settingsDiv) {
+                settingsDiv.style.display = enabled ? 'block' : 'none';
+                settingsDiv.setAttribute('aria-hidden', enabled ? 'false' : 'true');
+            }
         }
 
         function updateBuyXGetYProduct(id, isSelected) {
@@ -6102,23 +6320,33 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             saveConfig();
         }
         
+
+        // ترتيب المقاسات: رقميًا تصاعديًا، ثم المقاسات النصية بترتيب طبيعي.
         function sortAvailableSizes() {
-            CONFIG.AVAILABLE_SIZES = (CONFIG.AVAILABLE_SIZES || []).slice().sort((a, b) => {
-                const aNum = /^\d+(?:\.\d+)?$/.test(String(a).trim());
-                const bNum = /^\d+(?:\.\d+)?$/.test(String(b).trim());
-                if (aNum && bNum) return Number(a) - Number(b);
+            if (!Array.isArray(CONFIG.AVAILABLE_SIZES)) CONFIG.AVAILABLE_SIZES = [];
+            CONFIG.AVAILABLE_SIZES.sort((a, b) => {
+                const sa = String(a).trim(), sb = String(b).trim();
+                const na = Number(sa), nb = Number(sb);
+                const aNum = sa !== '' && Number.isFinite(na);
+                const bNum = sb !== '' && Number.isFinite(nb);
+                if (aNum && bNum) return na - nb;
                 if (aNum) return -1;
                 if (bNum) return 1;
-                return String(a).localeCompare(String(b), 'ar', {numeric: true, sensitivity: 'base'});
+                return sa.localeCompare(sb, 'ar', {numeric: true, sensitivity: 'base'});
             });
         }
 
+        // ترتيب الألوان أبجديًا حسب العربية/النص.
         function sortAvailableColors() {
-            CONFIG.AVAILABLE_COLORS = (CONFIG.AVAILABLE_COLORS || []).slice().sort((a, b) =>
-                String(a).localeCompare(String(b), 'ar', {numeric: true, sensitivity: 'base'})
+            if (!Array.isArray(CONFIG.AVAILABLE_COLORS)) CONFIG.AVAILABLE_COLORS = [];
+            CONFIG.AVAILABLE_COLORS.sort((a, b) =>
+                String(a).trim().localeCompare(String(b).trim(), 'ar', {
+                    numeric: true,
+                    sensitivity: 'base'
+                })
             );
         }
-        
+
         function addAvailableSize() {
             const input = document.getElementById('newSizeInput');
             const size = input.value.trim();
@@ -6131,14 +6359,27 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 CONFIG.AVAILABLE_SIZES.push(size);
                 sortAvailableSizes();
                 input.value = '';
+                
                 saveConfig();
                 loadSettingsTab('sizes-colors');
             }
         }
         
         function removeAvailableSize(size) {
+            const usedBy = Object.entries(CONFIG.PRODUCTS || {}).filter(([id, product]) =>
+                Array.isArray(product?.availableSizes) && product.availableSizes.some(s => String(s) === String(size))
+            );
+            if (usedBy.length) {
+                const names = usedBy.slice(0, 5).map(([, p]) => p?.name || 'منتج بدون اسم').join('، ');
+                const more = usedBy.length > 5 ? ` و${usedBy.length - 5} منتج(ات) أخرى` : '';
+                if (typeof showNotification === 'function') {
+                    showNotification(`لا يمكن حذف المقاس «${size}» لأنه مستعمل حاليًا في: ${names}${more}`, 'warning');
+                } else {
+                    alert(`لا يمكن حذف المقاس «${size}» لأنه مستعمل حاليًا في منتج.`);
+                }
+                return;
+            }
             CONFIG.AVAILABLE_SIZES = CONFIG.AVAILABLE_SIZES.filter(s => s !== size);
-            
             saveConfig();
             loadSettingsTab('sizes-colors');
         }
@@ -6155,14 +6396,27 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 CONFIG.AVAILABLE_COLORS.push(color);
                 sortAvailableColors();
                 input.value = '';
+                
                 saveConfig();
                 loadSettingsTab('sizes-colors');
             }
         }
         
         function removeAvailableColor(color) {
+            const usedBy = Object.entries(CONFIG.PRODUCTS || {}).filter(([id, product]) =>
+                Array.isArray(product?.availableColors) && product.availableColors.some(c => String(c) === String(color))
+            );
+            if (usedBy.length) {
+                const names = usedBy.slice(0, 5).map(([, p]) => p?.name || 'منتج بدون اسم').join('، ');
+                const more = usedBy.length > 5 ? ` و${usedBy.length - 5} منتج(ات) أخرى` : '';
+                if (typeof showNotification === 'function') {
+                    showNotification(`لا يمكن حذف اللون «${color}» لأنه مستعمل حاليًا في: ${names}${more}`, 'warning');
+                } else {
+                    alert(`لا يمكن حذف اللون «${color}» لأنه مستعمل حاليًا في منتج.`);
+                }
+                return;
+            }
             CONFIG.AVAILABLE_COLORS = CONFIG.AVAILABLE_COLORS.filter(c => c !== color);
-            
             saveConfig();
             loadSettingsTab('sizes-colors');
         }
@@ -6858,6 +7112,13 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         function closeColorsSizesModal() {
             document.getElementById('colorsSizesModal').style.display = 'none';
         }
+
+        function closeSizeGuideModal() {
+            const modal = document.getElementById('sizeGuideModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
         
         async function deleteColorImage(productId, color, index) {
             if (!checkServerConnection()) {
@@ -6950,140 +7211,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 
                 showColorImagesModal(productId);
             }
-        }
-        
-        // =============================================================================
-        // 📏 دليل المقاسات
-        // =============================================================================
-        
-        function showSizeGuideModal() {
-            const modal = document.getElementById('sizeGuideModal');
-            const modalHeader = modal.querySelector('.modal-header h3');
-            modalHeader.innerHTML = `<i class="fas fa-ruler-combined"></i> دليل المقاسات العام`;
-            
-            const modalBody = modal.querySelector('.modal-body');
-            modalBody.innerHTML = `
-                <div class="form-group">
-                    <p style="color: var(--gray); margin-bottom: 20px;">
-                        دليل المقاسات العام للبالغين بناءً على الطول والوزن
-                    </p>
-                </div>
-                
-                <table class="size-guide-table">
-                    <thead>
-                        <tr>
-                            <th>المقاس</th>
-                            <th>الطول من (سم)</th>
-                            <th>الطول إلى (سم)</th>
-                            <th>الوزن من (كغ)</th>
-                            <th>الوزن إلى (كغ)</th>
-                            <th>الحالة</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sizeGuideTableBody">
-                        ${Object.entries(CONFIG.SIZE_GUIDE || {}).map(([size, data]) => `
-                            <tr>
-                                <td>${size}</td>
-                                <td>
-                                    <input type="number" class="form-control" value="${data.heightFrom}" 
-                                           onchange="updateSizeGuide('${size}', 'heightFrom', this.value)"
-                                           style="width: 80px; margin: 0 auto;">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" value="${data.heightTo}" 
-                                           onchange="updateSizeGuide('${size}', 'heightTo', this.value)"
-                                           style="width: 80px; margin: 0 auto;">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" value="${data.weightFrom}" 
-                                           onchange="updateSizeGuide('${size}', 'weightFrom', this.value)"
-                                           style="width: 80px; margin: 0 auto;">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" value="${data.weightTo}" 
-                                           onchange="updateSizeGuide('${size}', 'weightTo', this.value)"
-                                           style="width: 80px; margin: 0 auto;">
-                                </td>
-                                <td>
-                                    <input type="checkbox" ${data.enabled ? 'checked' : ''} 
-                                           onchange="updateSizeGuide('${size}', 'enabled', this.checked)">
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteSizeGuide('${size}')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                
-                <div style="margin-top: 20px; padding: 20px; background: var(--light); border-radius: var(--radius);">
-                    <h4><i class="fas fa-plus-circle"></i> إضافة مقاس جديد</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto; gap: 10px; margin-top: 15px;">
-                        <div>
-                            <label style="font-size: 12px; color: var(--gray);">المقاس</label>
-                            <select class="form-control" id="newSizeGuideSize">
-                                <option value="">اختر المقاس</option>
-                                ${(() => {
-                                    const allSizes = [...new Set([...(CONFIG.AVAILABLE_SIZES || []), ...Object.keys(CONFIG.SIZE_GUIDE || {})])];
-                                    const configuredSizes = new Set(Object.keys(CONFIG.SIZE_GUIDE || {}).map(String));
-                                    const remainingSizes = allSizes.filter(size => !configuredSizes.has(String(size)));
-                                    return remainingSizes.length
-                                        ? remainingSizes.map(size => `<option value="${size}">${size}</option>`).join('')
-                                        : `<option value="" disabled>تمت إضافة جميع المقاسات</option>`;
-                                })()}
-                            </select>
-                        </div>
-                        <div>
-                            <label style="font-size: 12px; color: var(--gray);">الطول من</label>
-                            <input type="number" class="form-control" id="newSizeGuideHeightFrom" placeholder="150">
-                        </div>
-                        <div>
-                            <label style="font-size: 12px; color: var(--gray);">الطول إلى</label>
-                            <input type="number" class="form-control" id="newSizeGuideHeightTo" placeholder="160">
-                        </div>
-                        <div>
-                            <label style="font-size: 12px; color: var(--gray);">الوزن من</label>
-                            <input type="number" class="form-control" id="newSizeGuideWeightFrom" placeholder="40">
-                        </div>
-                        <div>
-                            <label style="font-size: 12px; color: var(--gray);">الوزن إلى</label>
-                            <input type="number" class="form-control" id="newSizeGuideWeightTo" placeholder="55">
-                        </div>
-                        <div>
-                            <button class="btn btn-success" style="margin-top: 20px;" onclick="addSizeGuide()">
-                                <i class="fas fa-plus"></i> إضافة
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-secondary" onclick="closeSizeGuideModal()">
-                        <i class="fas fa-times"></i> إغلاق
-                    </button>
-                    <button class="btn btn-primary" onclick="saveSizeGuide()">
-                        <i class="fas fa-save"></i> حفظ دليل المقاسات
-                    </button>
-                </div>
-            `;
-            
-            modal.style.display = 'flex';
-            modal.style.zIndex = '9999';
-
-            // اختيار أول قياس متاح لم تتم إضافته بعد.
-            const globalSizeSelect = document.getElementById('newSizeGuideSize');
-            if (globalSizeSelect) {
-                const sizeList = [...new Set([...(CONFIG.AVAILABLE_SIZES || []), ...Object.keys(CONFIG.SIZE_GUIDE || {})])];
-                const nextSize = getNextUnconfiguredSize(sizeList, Object.keys(CONFIG.SIZE_GUIDE || {}));
-                if (nextSize) globalSizeSelect.value = nextSize;
-            }
-        }
-        
-        function closeSizeGuideModal() {
-            document.getElementById('sizeGuideModal').style.display = 'none';
         }
         
         function showProductSizeGuideModal(productId) {
@@ -7215,61 +7342,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 const nextSize = getNextUnconfiguredSize(sizeList, Object.keys(product.sizeGuide.guide || {}));
                 if (nextSize) productSizeSelect.value = nextSize;
             }
-        }
-        
-        function updateSizeGuide(size, field, value) {
-            if (!CONFIG.SIZE_GUIDE[size]) {
-                CONFIG.SIZE_GUIDE[size] = { heightFrom: 150, heightTo: 160, weightFrom: 40, weightTo: 55, enabled: true };
-            }
-            
-            if (field === 'enabled') {
-                CONFIG.SIZE_GUIDE[size][field] = value;
-            } else {
-                CONFIG.SIZE_GUIDE[size][field] = parseInt(value) || 0;
-            }
-        }
-        
-        function addSizeGuide() {
-            const size = document.getElementById('newSizeGuideSize').value.trim();
-            const heightFrom = parseInt(document.getElementById('newSizeGuideHeightFrom').value) || 0;
-            const heightTo = parseInt(document.getElementById('newSizeGuideHeightTo').value) || 0;
-            const weightFrom = parseInt(document.getElementById('newSizeGuideWeightFrom').value) || 0;
-            const weightTo = parseInt(document.getElementById('newSizeGuideWeightTo').value) || 0;
-
-            if (!size) {
-                return;
-            }
-
-            if (CONFIG.SIZE_GUIDE[size]) {
-                return;
-            }
-
-            CONFIG.SIZE_GUIDE[size] = {
-                heightFrom: heightFrom,
-                heightTo: heightTo,
-                weightFrom: weightFrom,
-                weightTo: weightTo,
-                enabled: true
-            };
-
-            document.getElementById('newSizeGuideHeightFrom').value = '';
-            document.getElementById('newSizeGuideHeightTo').value = '';
-            document.getElementById('newSizeGuideWeightFrom').value = '';
-            document.getElementById('newSizeGuideWeightTo').value = '';
-
-            saveConfig();
-            showSizeGuideModal();
-        }
-
-        function deleteSizeGuide(size) {
-            delete CONFIG.SIZE_GUIDE[size];
-            saveConfig();
-            showSizeGuideModal();
-        }
-        
-        function saveSizeGuide() {
-            saveConfig();
-            closeSizeGuideModal();
         }
         
         function toggleProductSizeGuide(productId, enabled) {
