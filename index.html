@@ -6586,7 +6586,7 @@ body.order-departure-focus .order-departure-clone{
                 let buyXGetYMessage = '';
                 if (isBuyXGetYEligible(key)) {
                     const b2g1 = getBuyXGetYConfig();
-                    buyXGetYMessage = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                    buyXGetYMessage = buildBuyXGetYMessage();
                 }
                 if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
@@ -6780,7 +6780,7 @@ body.order-departure-focus .order-departure-clone{
                 let offerText = '';
                 if (isBuyXGetYEligible(productKey)) {
                     const b2g1 = getBuyXGetYConfig();
-                    offerText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                    offerText = buildBuyXGetYMessage();
                 } else if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     offerText = `خصم ${STORE_CONFIG.DISCOUNTS.discountPerItem || 0} دج عند بلوغ الكمية المحددة`;
                 } else if (hasPromoDiscount && STORE_CONFIG.DISCOUNTS) {
@@ -7191,7 +7191,7 @@ body.order-departure-focus .order-departure-clone{
                 
                 if (isBuyXGetYEligible(productKey)) {
                     const b2g1 = getBuyXGetYConfig();
-                    discountMessageText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                    discountMessageText = buildBuyXGetYMessage();
                 } else if (hasQuantityDiscount) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
                     const discountPerItem = STORE_CONFIG.DISCOUNTS.discountPerItem || 0;
@@ -8228,6 +8228,44 @@ updateDeliveryCost();
             const buy = Math.max(1, parseInt(d.buyXGetYBuyQuantity) || 2);
             const free = Math.max(1, parseInt(d.buyXGetYFreeQuantity) || 1);
             return { buy, free, group: buy + free };
+        }
+
+        function getArabicBuyQuantityText(n) {
+            n = Number(n) || 1;
+            if (n === 1) return 'قطعة واحدة';
+            if (n === 2) return 'قطعتين';
+            if (n === 3) return '3 قطع';
+            if (n === 4) return '4 قطع';
+            if (n === 5) return '5 قطع';
+            if (n === 6) return '6 قطع';
+            if (n === 7) return '7 قطع';
+            if (n === 8) return '8 قطع';
+            if (n === 9) return '9 قطع';
+            if (n === 10) return '10 قطع';
+            return `${n} قطعة`;
+        }
+
+        function getArabicOrdinalText(n) {
+            const ordinals = {
+                1: 'الأولى', 2: 'الثانية', 3: 'الثالثة', 4: 'الرابعة',
+                5: 'الخامسة', 6: 'السادسة', 7: 'السابعة', 8: 'الثامنة',
+                9: 'التاسعة', 10: 'العاشرة'
+            };
+            return ordinals[n] || `${n}`;
+        }
+
+        function buildBuyXGetYMessage() {
+            const cfg = getBuyXGetYConfig();
+            const buyText = getArabicBuyQuantityText(cfg.buy);
+
+            if (cfg.free === 1) {
+                const freeOrdinal = getArabicOrdinalText(cfg.buy + 1);
+                return `🎁 عند شراء ${buyText} من هذا المنتج، تحصل على القطعة ${freeOrdinal} مجانًا`;
+            }
+
+            const firstFree = getArabicOrdinalText(cfg.buy + 1);
+            const lastFree = getArabicOrdinalText(cfg.buy + cfg.free);
+            return `🎁 عند شراء ${buyText} من هذا المنتج، تحصل على القطع من ${firstFree} إلى ${lastFree} مجانًا`;
         }
 
         function calculateBuyXGetYFreeQuantity(totalQuantity) {
