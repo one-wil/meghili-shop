@@ -6894,6 +6894,13 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         function closeColorsSizesModal() {
             document.getElementById('colorsSizesModal').style.display = 'none';
         }
+
+        function closeSizeGuideModal() {
+            const modal = document.getElementById('sizeGuideModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
         
         async function deleteColorImage(productId, color, index) {
             if (!checkServerConnection()) {
