@@ -5695,14 +5695,20 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="form-group">
                         <label>المقاسات المتاحة حاليًا:</label>
                         <div id="availableSizesList" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; padding: 15px; background: var(--light); border-radius: var(--radius);">
-                            ${(CONFIG.AVAILABLE_SIZES || []).map(size => `
-                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid var(--border);">
+                            ${(CONFIG.AVAILABLE_SIZES || []).map(size => {
+                                const sizeInUse = Object.values(CONFIG.PRODUCTS || {}).some(product =>
+                                    Array.isArray(product?.availableSizes) && product.availableSizes.some(s => String(s) === String(size))
+                                );
+                                return `
+                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid ${sizeInUse ? '#f8961e' : 'var(--border)'};">
                                     <span>${size}</span>
-                                    <button class="btn btn-sm btn-danger" onclick="removeAvailableSize('${size}')" style="padding: 2px 8px;">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `).join('')}
+                                    ${sizeInUse
+                                        ? `<span title="هذا المقاس مستعمل في منتج ولا يمكن حذفه" style="font-size:12px;color:#f8961e;font-weight:700;">مستعمل</span>`
+                                        : `<button class="btn btn-sm btn-danger" onclick="removeAvailableSize('${size}')" style="padding: 2px 8px;">
+                                            <i class="fas fa-times"></i>
+                                        </button>`}
+                                </div>`;
+                            }).join('')}
                         </div>
                     </div>
                     
@@ -5723,14 +5729,20 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="form-group">
                         <label>الألوان المتاحة حاليًا:</label>
                         <div id="availableColorsList" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; padding: 15px; background: var(--light); border-radius: var(--radius);">
-                            ${(CONFIG.AVAILABLE_COLORS || []).map(color => `
-                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid var(--border);">
+                            ${(CONFIG.AVAILABLE_COLORS || []).map(color => {
+                                const colorInUse = Object.values(CONFIG.PRODUCTS || {}).some(product =>
+                                    Array.isArray(product?.availableColors) && product.availableColors.some(c => String(c) === String(color))
+                                );
+                                return `
+                                <div style="display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: white; border-radius: 6px; border: 2px solid ${colorInUse ? '#f8961e' : 'var(--border)'};">
                                     <span>${color}</span>
-                                    <button class="btn btn-sm btn-danger" onclick="removeAvailableColor('${color}')" style="padding: 2px 8px;">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `).join('')}
+                                    ${colorInUse
+                                        ? `<span title="هذا اللون مستعمل في منتج ولا يمكن حذفه" style="font-size:12px;color:#f8961e;font-weight:700;">مستعمل</span>`
+                                        : `<button class="btn btn-sm btn-danger" onclick="removeAvailableColor('${color}')" style="padding: 2px 8px;">
+                                            <i class="fas fa-times"></i>
+                                        </button>`}
+                                </div>`;
+                            }).join('')}
                         </div>
                     </div>
                     
@@ -6148,8 +6160,20 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function removeAvailableSize(size) {
+            const usedBy = Object.entries(CONFIG.PRODUCTS || {}).filter(([id, product]) =>
+                Array.isArray(product?.availableSizes) && product.availableSizes.some(s => String(s) === String(size))
+            );
+            if (usedBy.length) {
+                const names = usedBy.slice(0, 5).map(([, p]) => p?.name || 'منتج بدون اسم').join('، ');
+                const more = usedBy.length > 5 ? ` و${usedBy.length - 5} منتج(ات) أخرى` : '';
+                if (typeof showNotification === 'function') {
+                    showNotification(`لا يمكن حذف المقاس «${size}» لأنه مستعمل حاليًا في: ${names}${more}`, 'warning');
+                } else {
+                    alert(`لا يمكن حذف المقاس «${size}» لأنه مستعمل حاليًا في منتج.`);
+                }
+                return;
+            }
             CONFIG.AVAILABLE_SIZES = CONFIG.AVAILABLE_SIZES.filter(s => s !== size);
-            
             saveConfig();
             loadSettingsTab('sizes-colors');
         }
@@ -6172,8 +6196,20 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function removeAvailableColor(color) {
+            const usedBy = Object.entries(CONFIG.PRODUCTS || {}).filter(([id, product]) =>
+                Array.isArray(product?.availableColors) && product.availableColors.some(c => String(c) === String(color))
+            );
+            if (usedBy.length) {
+                const names = usedBy.slice(0, 5).map(([, p]) => p?.name || 'منتج بدون اسم').join('، ');
+                const more = usedBy.length > 5 ? ` و${usedBy.length - 5} منتج(ات) أخرى` : '';
+                if (typeof showNotification === 'function') {
+                    showNotification(`لا يمكن حذف اللون «${color}» لأنه مستعمل حاليًا في: ${names}${more}`, 'warning');
+                } else {
+                    alert(`لا يمكن حذف اللون «${color}» لأنه مستعمل حاليًا في منتج.`);
+                }
+                return;
+            }
             CONFIG.AVAILABLE_COLORS = CONFIG.AVAILABLE_COLORS.filter(c => c !== color);
-            
             saveConfig();
             loadSettingsTab('sizes-colors');
         }
