@@ -61,16 +61,16 @@ const STORE_CONFIG = {
         "enabled": true,
         "guide": {
           "S": {
-            "heightFrom": 0,
-            "heightTo": 0,
-            "weightFrom": 0,
-            "weightTo": 0
+            "heightFrom": 150,
+            "heightTo": 160,
+            "weightFrom": 40,
+            "weightTo": 55
           },
           "M": {
-            "heightFrom": 0,
-            "heightTo": 0,
-            "weightFrom": 0,
-            "weightTo": 0
+            "heightFrom": 160,
+            "heightTo": 170,
+            "weightFrom": 50,
+            "weightTo": 65
           }
         }
       },
@@ -534,9 +534,9 @@ const STORE_CONFIG = {
     "38-40",
     "42-44",
     "46-48",
-    "L",
-    "M",
     "S",
+    "M",
+    "L",
     "XL",
     "XXL",
     "XXXL"
