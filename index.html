@@ -6614,14 +6614,28 @@ body.order-departure-focus .order-departure-clone{
                     const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
                     const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
                     
+                    const deskMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1));
+                    const homeMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1));
+                    const quantityText = (n) => {
+                        n = Number(n) || 1;
+                        if (n === 1) return 'قطعة واحدة';
+                        if (n === 2) return 'قطعتين';
+                        if (n >= 3 && n <= 10) return `${n} قطع`;
+                        return `${n} قطعة`;
+                    };
+
                     if (deskEnabled && homeEnabled) {
-                        freeDeliveryText = 'توصيل مجاني للمكتب والمنزل';
+                        if (deskMin === homeMin) {
+                            freeDeliveryText = `مجاني للمكتب والمنزل عند شراء ${quantityText(deskMin)} أو أكثر`;
+                        } else {
+                            freeDeliveryText = `مجاني للمكتب من ${quantityText(deskMin)}، وللمنزل من ${quantityText(homeMin)}`;
+                        }
                     } else if (deskEnabled) {
-                        freeDeliveryText = 'توصيل مجاني للمكتب';
+                        freeDeliveryText = `مجاني للمكتب عند شراء ${quantityText(deskMin)} أو أكثر`;
                     } else if (homeEnabled) {
-                        freeDeliveryText = 'توصيل مجاني للمنزل';
+                        freeDeliveryText = `مجاني للمنزل عند شراء ${quantityText(homeMin)} أو أكثر`;
                     } else {
-                        freeDeliveryText = 'توصيل مجاني';
+                        freeDeliveryText = '';
                     }
                 }
                 
@@ -6668,7 +6682,7 @@ body.order-departure-focus .order-departure-clone{
                                 <div class="premium-offer"><i class="fas fa-gift"></i><span>${quantityDiscountMessage}</span></div>
                             ` : ''}
                             <div class="premium-card-cta">
-                                <span>إشتر  الآن  🛒</span>
+                                <span>أطلب الآن 🛒</span>
                                 <span class="premium-arrow"><i class="fas fa-arrow-left"></i></span>
                             </div>
                         </div>
@@ -7213,24 +7227,41 @@ body.order-departure-focus .order-departure-clone{
             
             if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY && 
                 (STORE_CONFIG.FREE_DELIVERY.desk?.enabled || STORE_CONFIG.FREE_DELIVERY.home?.enabled)) {
-                const minQuantity = STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 
-                                  STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 3;
-                
-                // ===== تحديد نوع التوصيل المجاني بشكل دقيق =====
+                // ===== رسالة التوصيل المجاني: كل نوع توصيل يأخذ شرطه الخاص =====
+                // مهم: لا نستخدم حد المكتب للمنزل أو العكس.
                 const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
                 const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
-                
+                const deskMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1));
+                const homeMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1));
+
+                const quantityText = (n) => {
+                    n = Number(n) || 1;
+                    if (n === 1) return 'قطعة واحدة';
+                    if (n === 2) return 'قطعتين';
+                    if (n >= 3 && n <= 10) return `${n} قطع`;
+                    return `${n} قطعة`;
+                };
+
                 let deliveryTypeText = '';
                 if (deskEnabled && homeEnabled) {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل';
+                    if (deskMin === homeMin) {
+                        deliveryTypeText =
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل`;
+                    } else {
+                        deliveryTypeText =
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب، ` +
+                            `وعند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل`;
+                    }
                 } else if (deskEnabled) {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني للمكتب';
+                    deliveryTypeText =
+                        `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب`;
                 } else if (homeEnabled) {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني للمنزل';
+                    deliveryTypeText =
+                        `عند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل`;
                 } else {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني';
+                    deliveryTypeText = 'التوصيل المجاني غير مفعّل حاليًا';
                 }
-                
+
                 freeDeliveryText.textContent = deliveryTypeText;
                 freeDeliveryMessage.dataset.fallback = 'false';
                 freeDeliveryMessage.style.display = 'flex';
@@ -7701,7 +7732,6 @@ body.order-departure-focus .order-departure-clone{
                 cartItems.push({
                     id: itemId,
                     key: productKey,
-                    productId: productKey,
                     name: product.name,
                     price: parseInt(product.price),
                     quantity: quantity,
@@ -8209,25 +8239,16 @@ updateDeliveryCost();
 
         function getBuyXGetYFreeQuantityForItem(itemId) {
             if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY) return 0;
-            const itemIndex = cartItems.findIndex(i => String(i.id) === String(itemId));
+            const itemIndex = cartItems.findIndex(i => i.id === itemId);
             if (itemIndex < 0) return 0;
             const item = cartItems[itemIndex];
-            const productKey = String(item.productId ?? item.key);
-            if (!isBuyXGetYEligible(productKey)) return 0;
+            if (!isBuyXGetYEligible(item.key)) return 0;
             const cfg = getBuyXGetYConfig();
-
-            // مهم: العرض يُحسب على إجمالي كمية المنتج، وليس على كل مقاس/لون منفرد.
-            // مثال: مقاس S = 1 + مقاس M = 1 => الإجمالي 2، وبالتالي مجانية واحدة فقط.
-            const sameProductItems = cartItems.filter(i => String(i.productId ?? i.key) === productKey);
-            const totalForProduct = sameProductItems.reduce((sum, i) => sum + (Number(i.quantity) || 0), 0);
+            const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(item.key) ? sum + (Number(i.quantity) || 0) : sum, 0);
             let remainingFree = Math.floor(totalForProduct / cfg.buy) * cfg.free;
-
-            // توزيع المجانيات على أسطر المنتج مرة واحدة فقط.
-            for (let i = 0; i < itemIndex && remainingFree > 0; i++) {
+            for (let i = 0; i < itemIndex; i++) {
                 const prev = cartItems[i];
-                if (String(prev.productId ?? prev.key) === productKey) {
-                    remainingFree -= Math.min(Number(prev.quantity) || 0, remainingFree);
-                }
+                if (String(prev.key) === String(item.key)) remainingFree -= Math.min(Number(prev.quantity) || 0, Math.max(0, Math.floor(totalForProduct / cfg.group) * cfg.free));
             }
             return Math.max(0, Math.min(Number(item.quantity) || 0, remainingFree));
         }
@@ -8235,7 +8256,7 @@ updateDeliveryCost();
         function getBuyXGetYFreeQuantityByProduct(productKey) {
             if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY || !isBuyXGetYEligible(productKey)) return 0;
             const cfg = getBuyXGetYConfig();
-            const totalForProduct = cartItems.reduce((sum, i) => String(i.productId ?? i.key) === String(productKey) ? sum + (Number(i.quantity) || 0) : sum, 0);
+            const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(productKey) ? sum + (Number(i.quantity) || 0) : sum, 0);
             return Math.floor(totalForProduct / cfg.buy) * cfg.free;
         }
 
