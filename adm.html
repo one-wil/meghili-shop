@@ -6329,26 +6329,78 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
 
-        // ترتيب المقاسات: رقميًا تصاعديًا، ثم المقاسات النصية بترتيب طبيعي.
+        // ترتيب موحد للمقاسات: المستعملة وغير المستعملة تخضعان لنفس الترتيب تمامًا.
+        // الأرقام تصاعديًا، ثم المديات حسب بدايتها، ثم المقاسات الحرفية بالترتيب القياسي.
         function sortAvailableSizes() {
             if (!Array.isArray(CONFIG.AVAILABLE_SIZES)) CONFIG.AVAILABLE_SIZES = [];
+
+            const letterOrder = {
+                'XXXS': 0,
+                'XXS': 1,
+                'XS': 2,
+                'S': 3,
+                'M': 4,
+                'L': 5,
+                'XL': 6,
+                'XXL': 7,
+                'XXXL': 8,
+                'XXXXL': 9,
+                'XXXXXL': 10
+            };
+
+            const normalize = value => String(value ?? '').trim().toUpperCase();
+            const numberValue = value => {
+                const v = String(value ?? '').trim().replace(',', '.');
+                if (!v || !/^\d+(?:\.\d+)?$/.test(v)) return NaN;
+                return Number(v);
+            };
+            const rangeStart = value => {
+                const m = normalize(value).match(/^(\d+(?:[.,]\d+)?)\s*[-–—]\s*(\d+(?:[.,]\d+)?)/);
+                return m ? Number(m[1].replace(',', '.')) : NaN;
+            };
+
             CONFIG.AVAILABLE_SIZES.sort((a, b) => {
-                const sa = String(a).trim(), sb = String(b).trim();
-                const na = Number(sa), nb = Number(sb);
-                const aNum = sa !== '' && Number.isFinite(na);
-                const bNum = sb !== '' && Number.isFinite(nb);
+                const sa = String(a ?? '').trim();
+                const sb = String(b ?? '').trim();
+                const ua = normalize(a);
+                const ub = normalize(b);
+
+                const na = numberValue(sa);
+                const nb = numberValue(sb);
+                const aNum = Number.isFinite(na);
+                const bNum = Number.isFinite(nb);
+
+                // 1) المقاسات الرقمية.
                 if (aNum && bNum) return na - nb;
                 if (aNum) return -1;
                 if (bNum) return 1;
-                return sa.localeCompare(sb, 'ar', {numeric: true, sensitivity: 'base'});
+
+                // 2) المديات مثل 38-40، 42-44، 46-48.
+                const ra = rangeStart(sa);
+                const rb = rangeStart(sb);
+                const aRange = Number.isFinite(ra);
+                const bRange = Number.isFinite(rb);
+                if (aRange && bRange) return ra - rb;
+                if (aRange) return -1;
+                if (bRange) return 1;
+
+                // 3) المقاسات الحرفية: S ثم M ثم L ثم XL ثم XXL...
+                const aLetter = Object.prototype.hasOwnProperty.call(letterOrder, ua);
+                const bLetter = Object.prototype.hasOwnProperty.call(letterOrder, ub);
+                if (aLetter && bLetter) return letterOrder[ua] - letterOrder[ub];
+                if (aLetter) return -1;
+                if (bLetter) return 1;
+
+                // 4) أي قيمة نصية أخرى.
+                return ua.localeCompare(ub, 'ar', { numeric: true, sensitivity: 'base' });
             });
         }
 
-        // ترتيب الألوان أبجديًا حسب العربية/النص.
+        // ترتيب موحد للألوان: المستعملة وغير المستعملة تخضعان لنفس الترتيب الأبجدي.
         function sortAvailableColors() {
             if (!Array.isArray(CONFIG.AVAILABLE_COLORS)) CONFIG.AVAILABLE_COLORS = [];
             CONFIG.AVAILABLE_COLORS.sort((a, b) =>
-                String(a).trim().localeCompare(String(b).trim(), 'ar', {
+                String(a ?? '').trim().localeCompare(String(b ?? '').trim(), 'ar', {
                     numeric: true,
                     sensitivity: 'base'
                 })
@@ -6366,9 +6418,8 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             if (!CONFIG.AVAILABLE_SIZES.includes(size)) {
                 CONFIG.AVAILABLE_SIZES.push(size);
                 sortAvailableSizes();
-                input.value = '';
-                
                 saveConfig();
+                input.value = '';
                 loadSettingsTab('sizes-colors');
             }
         }
@@ -6403,9 +6454,8 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             if (!CONFIG.AVAILABLE_COLORS.includes(color)) {
                 CONFIG.AVAILABLE_COLORS.push(color);
                 sortAvailableColors();
-                input.value = '';
-                
                 saveConfig();
+                input.value = '';
                 loadSettingsTab('sizes-colors');
             }
         }
