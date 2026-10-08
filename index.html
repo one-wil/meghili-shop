@@ -5706,6 +5706,20 @@ body.order-departure-focus .order-departure-clone{
 })();
 </script>
 
+
+<style id="delivery-attention-animation-fix">
+/* إصلاح حركة أزرار نوع التوصيل: غير المختار يهتز ويتوهج حتى يتم الاختيار */
+#page2 #smartDeliveryPanel .smart-delivery-option.delivery-attention:not(.selected){
+    animation:index32DeliveryAttention .78s ease-in-out infinite !important;
+    animation-play-state:running !important;
+    transform-origin:center center !important;
+    will-change:transform,box-shadow !important;
+}
+#page2 #smartDeliveryPanel .smart-delivery-option.delivery-attention.selected{
+    animation:none !important;
+    transform:none !important;
+}
+</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -8013,7 +8027,7 @@ body.order-departure-focus .order-departure-clone{
                 sizeButtons.forEach(btn => {
                     if (!btn.classList.contains('selected')) {
                         btn.classList.add('blinking-size');
-                        btn.style.setProperty('animation', 'index31SizeVibrationStrongV2 .72s ease-in-out infinite', 'important');
+                        btn.style.setProperty('animation', 'index32SizeOnlyVibration .72s ease-in-out infinite', 'important');
                         btn.style.setProperty('animation-play-state', 'running', 'important');
                         btn.style.setProperty('transform-origin', 'center center', 'important');
                         btn.style.setProperty('will-change', 'transform, box-shadow', 'important');
