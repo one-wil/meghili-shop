@@ -5376,350 +5376,6 @@ body.order-departure-focus .order-departure-clone{
   visibility:visible !important;
 }
 </style>
-
-<style id="product-details-design-seven">
-/* ===== التصميم 7: بيانات المنتج أعلى الصورة — صفحة تفاصيل المنتج فقط ===== */
-#productModal .product-modal-body.modern-product-details{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:14px !important;
-    align-items:stretch !important;
-    padding:14px !important;
-    overflow:auto !important;
-}
-#productModal .product-detail-meta-top{
-    order:1 !important;
-    width:100% !important;
-    min-height:78px;
-    display:grid;
-    grid-template-columns:minmax(0,1fr) auto;
-    align-items:stretch;
-    direction:ltr;
-    background:#fff;
-    border:2px solid #1599df;
-    border-radius:15px;
-    overflow:hidden;
-    box-shadow:0 2px 10px rgba(0,102,204,.06);
-}
-#productModal .product-detail-meta-top .design-seven-modal-text{
-    min-width:0;
-    padding:9px 12px;
-    direction:rtl;
-    text-align:right;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
-#productModal .product-detail-meta-top .modern-product-title{
-    margin:0;
-    color:#092d50;
-    font-size:clamp(.9rem,2.5vw,1.25rem) !important;
-    line-height:1.25;
-    font-weight:900;
-    white-space:normal;
-    overflow-wrap:anywhere;
-}
-#productModal .product-detail-meta-top .modern-description{
-    margin:4px 0 0;
-    color:#7b8792;
-    font-size:clamp(.68rem,1.8vw,.82rem) !important;
-    line-height:1.45;
-    display:-webkit-box;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
-}
-#productModal .product-detail-meta-top .design-seven-modal-price{
-    min-width:145px;
-    padding:8px 14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    direction:rtl;
-    text-align:center;
-    background:#e7f8ee;
-    border-left:1px solid #cbd7df;
-}
-#productModal .product-detail-meta-top .modern-price-row{
-    margin:0 !important;
-    width:auto !important;
-    justify-content:center !important;
-    align-items:center !important;
-}
-#productModal .product-detail-meta-top .product-modal-discounted-price{
-    color:#087b48 !important;
-    font-size:clamp(1.15rem,4vw,1.8rem) !important;
-    font-weight:900 !important;
-    line-height:1.15;
-    white-space:nowrap;
-}
-#productModal .product-detail-meta-top .product-modal-original-price{
-    color:#000 !important;
-    font-size:.7rem !important;
-    white-space:nowrap;
-}
-#productModal .product-detail-meta-top .modern-gallery,
-#productModal .product-detail-meta-top .modern-info{
-    width:100%;
-}
-
-/* الصورة تأتي مباشرة بعد بيانات المنتج وتبدأ بحجم كبير */
-#productModal .modern-gallery{
-    order:2 !important;
-    width:100% !important;
-}
-#productModal .modern-gallery-main{
-    min-height:460px !important;
-    cursor:zoom-out !important;
-}
-#productModal .modern-gallery-main img{
-    transform:scale(1.12) !important;
-    transform-origin:right center !important;
-    transition:transform .45s cubic-bezier(.2,.8,.2,1), opacity .2s ease !important;
-}
-#productModal .modern-gallery-main img.modern-image-shrunk{
-    transform:scale(.78) !important;
-}
-#productModal .modern-gallery-caption{
-    font-size:.68rem !important;
-}
-
-/* خيارات اللون والمقاس بعد الصورة */
-#productModal .modern-info{
-    order:3 !important;
-    width:100% !important;
-    display:flex !important;
-    flex-direction:column !important;
-    gap:12px !important;
-}
-@media(max-width:760px){
-    #productModal .product-modal-body.modern-product-details{
-        gap:9px !important;
-        padding:7px !important;
-    }
-    #productModal .product-detail-meta-top{
-        min-height:70px;
-        border-radius:13px;
-    }
-    #productModal .product-detail-meta-top .design-seven-modal-text{
-        padding:7px 9px;
-    }
-    #productModal .product-detail-meta-top .design-seven-modal-price{
-        min-width:108px;
-        padding:6px 8px;
-    }
-    #productModal .product-detail-meta-top .product-modal-discounted-price{
-        font-size:1.12rem !important;
-    }
-    #productModal .product-detail-meta-top .modern-product-title{
-        font-size:.88rem !important;
-    }
-    #productModal .product-detail-meta-top .modern-description{
-        font-size:.64rem !important;
-    }
-    #productModal .modern-gallery-main{
-        min-height:42vh !important;
-    }
-    #productModal .modern-gallery-main img{
-        transform:scale(1.10) !important;
-        transform-origin:right center !important;
-    }
-    #productModal .modern-gallery-main img.modern-image-shrunk{
-        transform:scale(.74) !important;
-    }
-}
-@media(max-width:390px){
-    #productModal .product-detail-meta-top .design-seven-modal-price{
-        min-width:96px;
-    }
-    #productModal .product-detail-meta-top .product-modal-discounted-price{
-        font-size:1rem !important;
-    }
-}
-</style>
-
-<style id="size-buttons-readable">
-/* ===== تكبير واضح لأزرار المقاسات فقط ===== */
-#productModal .modern-choice-options .size-option-small,
-#productModal .modern-choice-options button.size-option-small{
-    min-width:60px !important;
-    min-height:44px !important;
-    padding:8px 12px !important;
-    font-size:1.875rem !important;
-    line-height:1.15 !important;
-    font-weight:900 !important;
-    letter-spacing:0 !important;
-}
-@media (max-width:760px){
-    #productModal .modern-choice-options .size-option-small,
-    #productModal .modern-choice-options button.size-option-small{
-        min-width:60px !important;
-        min-height:44px !important;
-        padding:8px 12px !important;
-        font-size:1.875rem !important;
-        line-height:1.15 !important;
-        font-weight:900 !important;
-    }
-}
-</style>
-
-<style id="product-detail-meta-and-size-corridor-v1">
-/* تكبير بسيط ومدروس لشريط اسم المنتج + الوصف + الثمن */
-#productModal .product-detail-meta-top{
-    min-height:86px !important;
-}
-#productModal .product-detail-meta-top .design-seven-modal-text{
-    padding:11px 14px !important;
-}
-#productModal .product-detail-meta-top .modern-product-title{
-    font-size:clamp(1rem,2.7vw,1.34rem) !important;
-    line-height:1.25 !important;
-}
-#productModal .product-detail-meta-top .modern-description{
-    font-size:clamp(.72rem,1.95vw,.88rem) !important;
-    line-height:1.5 !important;
-}
-#productModal .product-detail-meta-top .design-seven-modal-price{
-    min-width:158px !important;
-    padding:9px 16px !important;
-}
-#productModal .product-detail-meta-top .product-modal-discounted-price{
-    font-size:clamp(1.25rem,4.3vw,1.95rem) !important;
-}
-
-/* ممر عمودي واضح يخرج من المقاس المختار ويتجه مباشرة إلى جدول القياسات */
-#productModal #ageOptions .size-option-small.selected{
-    --size-to-table-height:0px;
-    --size-to-table-x:50%;
-}
-#productModal #ageOptions .size-option-small.selected::before{
-    content:'' !important;
-    position:absolute !important;
-    left:50% !important;
-    top:calc(100% + 1px) !important;
-    width:5px !important;
-    height:var(--size-to-table-height,0px) !important;
-    transform:translateX(-50%) !important;
-    background:linear-gradient(to bottom,#d4af37,#f2c94c) !important;
-    border-radius:0 0 6px 6px !important;
-    box-shadow:0 0 8px rgba(212,175,55,.35) !important;
-    pointer-events:none !important;
-    z-index:60 !important;
-    opacity:1 !important;
-}
-#productModal #ageOptions .size-option-small.selected::after{
-    z-index:70 !important;
-}
-#productModal #measurementsTableContainer.size-table-target{
-    position:relative !important;
-}
-#productModal #measurementsTableContainer.size-table-target::before{
-    content:'' !important;
-    position:absolute !important;
-    top:-1px !important;
-    left:var(--table-entry-x,50%) !important;
-    width:9px !important;
-    height:7px !important;
-    transform:translateX(-50%) !important;
-    background:#f2c94c !important;
-    border-radius:0 0 7px 7px !important;
-    box-shadow:0 0 9px rgba(242,201,76,.42) !important;
-    z-index:20 !important;
-    pointer-events:none !important;
-}
-
-@media(max-width:760px){
-    #productModal .product-detail-meta-top{
-        min-height:77px !important;
-    }
-    #productModal .product-detail-meta-top .design-seven-modal-text{
-        padding:8px 10px !important;
-    }
-    #productModal .product-detail-meta-top .design-seven-modal-price{
-        min-width:116px !important;
-        padding:7px 9px !important;
-    }
-    #productModal .product-detail-meta-top .product-modal-discounted-price{
-        font-size:1.23rem !important;
-    }
-    #productModal .product-detail-meta-top .modern-product-title{
-        font-size:.94rem !important;
-    }
-    #productModal .product-detail-meta-top .modern-description{
-        font-size:.68rem !important;
-    }
-}
-</style>
-<script id="product-detail-size-corridor-v1-script">
-(function(){
-    function updateCorridor(btn){
-        const modal=document.getElementById('productModal');
-        const table=document.getElementById('measurementsTableContainer');
-        if(!modal || !btn || !table) return;
-
-        table.classList.add('size-table-target');
-        const br=btn.getBoundingClientRect();
-        const tr=table.getBoundingClientRect();
-        const gap=tr.top-br.bottom;
-        const height=Math.max(0, gap-1);
-
-        btn.style.setProperty('--size-to-table-height', height+'px');
-        const x=Math.max(12, Math.min(tr.width-12, br.left+br.width/2-tr.left));
-        table.style.setProperty('--table-entry-x', x+'px');
-    }
-
-    function bind(){
-        const age=document.getElementById('ageOptions');
-        if(!age || age.dataset.corridorBound) return;
-        age.dataset.corridorBound='1';
-        age.addEventListener('click',function(e){
-            const btn=e.target.closest('.size-option-small');
-            if(!btn) return;
-            setTimeout(function(){
-                const selected=age.querySelector('.size-option-small.selected');
-                if(selected) updateCorridor(selected);
-            },70);
-        });
-    }
-
-    function refresh(){
-        const modal=document.getElementById('productModal');
-        const age=document.getElementById('ageOptions');
-        const selected=age && age.querySelector('.size-option-small.selected');
-        if(selected) updateCorridor(selected);
-        bind();
-    }
-
-    function init(){
-        refresh();
-        window.addEventListener('resize',refresh,{passive:true});
-        const modal=document.getElementById('productModal');
-        if(modal){
-            new MutationObserver(function(){
-                requestAnimationFrame(refresh);
-            }).observe(modal,{childList:true,subtree:true});
-        }
-    }
-
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
-    else init();
-})();
-</script>
-
-
-<style id="delivery-attention-animation-fix">
-/* إصلاح حركة أزرار نوع التوصيل: غير المختار يهتز ويتوهج حتى يتم الاختيار */
-#page2 #smartDeliveryPanel .smart-delivery-option.delivery-attention:not(.selected){
-    animation:index32DeliveryAttention .78s ease-in-out infinite !important;
-    animation-play-state:running !important;
-    transform-origin:center center !important;
-    will-change:transform,box-shadow !important;
-}
-#page2 #smartDeliveryPanel .smart-delivery-option.delivery-attention.selected{
-    animation:none !important;
-    transform:none !important;
-}
-</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -5943,16 +5599,6 @@ body.order-departure-focus .order-departure-clone{
             </button>
             
             <div class="product-modal-body modern-product-details">
-                <div class="design-seven-modal-info product-detail-meta-top">
-                    <div class="design-seven-modal-text">
-                        <h2 class="modern-product-title" id="modernProductTitle"></h2>
-                        <p class="modern-description" id="modernProductDescription"></p>
-                    </div>
-                    <div class="design-seven-modal-price">
-                        <div class="modern-price-row modern-price-top" id="productModalPriceContainer"></div>
-                    </div>
-                </div>
-
                 <section class="modern-gallery">
                     <div class="modern-gallery-main" id="modernGalleryMain" onclick="toggleProductZoom()">
                         <span class="modern-gallery-badge"><i class="fas fa-images"></i> صور المنتج</span>
@@ -5965,6 +5611,11 @@ body.order-departure-focus .order-departure-clone{
                 </section>
 
                 <section class="modern-info">
+                    <div class="modern-product-head">
+                        <div class="modern-price-row modern-price-top" id="productModalPriceContainer"></div>
+                        <h2 class="modern-product-title" id="modernProductTitle"></h2>
+                        <p class="modern-description" id="modernProductDescription"></p>
+                    </div>
                     <div class="modern-choice-card">
                         <div class="modern-choice-label"><span>الخطوة 1</span> اختر اللون <span id="modernSelectedColor">لم يتم الاختيار</span></div>
                         <div class="modern-choice-options" id="colorOptions"></div>
@@ -6935,7 +6586,7 @@ body.order-departure-focus .order-departure-clone{
                 let buyXGetYMessage = '';
                 if (isBuyXGetYEligible(key)) {
                     const b2g1 = getBuyXGetYConfig();
-                    buyXGetYMessage = buildBuyXGetYMessage();
+                    buyXGetYMessage = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
                 }
                 if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
@@ -6957,39 +6608,37 @@ body.order-departure-focus .order-departure-clone{
                 card.setAttribute('data-product-key', key);
                 card.style.animationDelay = `${(index % 4) * 0.1 + 0.1}s`;
                 
-                // ===== رسالة التوصيل المجاني المخصصة: الحد + نوع التوصيل + الولايات المضمنة =====
+                // ===== تحديد نوع التوصيل المجاني لعرضه بشكل دقيق =====
                 let freeDeliveryText = '';
                 if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY) {
-                    const deskConfig = STORE_CONFIG.FREE_DELIVERY.desk || {};
-                    const homeConfig = STORE_CONFIG.FREE_DELIVERY.home || {};
-                    const deskEnabled = deskConfig.enabled || false;
-                    const homeEnabled = homeConfig.enabled || false;
-
-                    const deskMin = Math.max(1, Number(deskConfig.minQuantity || 1));
-                    const homeMin = Math.max(1, Number(homeConfig.minQuantity || 1));
-
-                    const quantityText = (n) => `${Number(n) || 1} قطع`;
-                    const deskLocation = getFreeDeliveryWilayaLabel(deskConfig);
-                    const homeLocation = getFreeDeliveryWilayaLabel(homeConfig);
+                    const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
+                    const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
+                    
+                    const deskMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1));
+                    const homeMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1));
+                    const quantityText = (n) => {
+                        n = Number(n) || 1;
+                        if (n === 1) return 'قطعة واحدة';
+                        if (n === 2) return 'قطعتين';
+                        if (n >= 3 && n <= 10) return `${n} قطع`;
+                        return `${n} قطعة`;
+                    };
 
                     if (deskEnabled && homeEnabled) {
-                        if (deskMin === homeMin && deskLocation === homeLocation) {
-                            freeDeliveryText =
-                                `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب والمنزل${deskLocation ? ` ${deskLocation}` : ''}`;
+                        if (deskMin === homeMin) {
+                            freeDeliveryText = `مجاني للمكتب والمنزل عند شراء ${quantityText(deskMin)} أو أكثر`;
                         } else {
-                            freeDeliveryText =
-                                `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}، ` +
-                                `وابتداء من ${quantityText(homeMin)}: توصيل مجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                            freeDeliveryText = `مجاني للمكتب من ${quantityText(deskMin)}، وللمنزل من ${quantityText(homeMin)}`;
                         }
                     } else if (deskEnabled) {
-                        freeDeliveryText =
-                            `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}`;
+                        freeDeliveryText = `مجاني للمكتب عند شراء ${quantityText(deskMin)} أو أكثر`;
                     } else if (homeEnabled) {
-                        freeDeliveryText =
-                            `ابتداء من ${quantityText(homeMin)}: توصيل مجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                        freeDeliveryText = `مجاني للمنزل عند شراء ${quantityText(homeMin)} أو أكثر`;
+                    } else {
+                        freeDeliveryText = '';
                     }
                 }
-
+                
                 card.innerHTML = `
                     <article class="premium-product-card" onclick="showProductDetails('${key}')">
                         <div class="premium-product-media">
@@ -7129,7 +6778,7 @@ body.order-departure-focus .order-departure-clone{
                 let offerText = '';
                 if (isBuyXGetYEligible(productKey)) {
                     const b2g1 = getBuyXGetYConfig();
-                    offerText = buildBuyXGetYMessage();
+                    offerText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
                 } else if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     offerText = `خصم ${STORE_CONFIG.DISCOUNTS.discountPerItem || 0} دج عند بلوغ الكمية المحددة`;
                 } else if (hasPromoDiscount && STORE_CONFIG.DISCOUNTS) {
@@ -7223,7 +6872,7 @@ body.order-departure-focus .order-departure-clone{
                     btn.disabled = !ready;
                     btn.style.opacity = ready ? '1' : '.55';
                     btn.innerHTML = ready
-                        ? '<i class="fas fa-cart-plus"></i> أطلب الآن'
+                        ? '<i class="fas fa-cart-plus"></i> أضف إلى السلة'
                         : '<i class="fas fa-hand-pointer"></i> اختر اللون والمقاس';
                 }
             }
@@ -7540,7 +7189,7 @@ body.order-departure-focus .order-departure-clone{
                 
                 if (isBuyXGetYEligible(productKey)) {
                     const b2g1 = getBuyXGetYConfig();
-                    discountMessageText = buildBuyXGetYMessage();
+                    discountMessageText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
                 } else if (hasQuantityDiscount) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
                     const discountPerItem = STORE_CONFIG.DISCOUNTS.discountPerItem || 0;
@@ -7578,34 +7227,37 @@ body.order-departure-focus .order-departure-clone{
             
             if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY && 
                 (STORE_CONFIG.FREE_DELIVERY.desk?.enabled || STORE_CONFIG.FREE_DELIVERY.home?.enabled)) {
-                // ===== رسالة التوصيل المجاني داخل التفاصيل: الشرط + النوع + الولايات المضمنة =====
-                const deskConfig = STORE_CONFIG.FREE_DELIVERY.desk || {};
-                const homeConfig = STORE_CONFIG.FREE_DELIVERY.home || {};
-                const deskEnabled = deskConfig.enabled || false;
-                const homeEnabled = homeConfig.enabled || false;
-                const deskMin = Math.max(1, Number(deskConfig.minQuantity || 1));
-                const homeMin = Math.max(1, Number(homeConfig.minQuantity || 1));
+                // ===== رسالة التوصيل المجاني: كل نوع توصيل يأخذ شرطه الخاص =====
+                // مهم: لا نستخدم حد المكتب للمنزل أو العكس.
+                const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
+                const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
+                const deskMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1));
+                const homeMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1));
 
-                const quantityText = (n) => `${Number(n) || 1} قطع`;
-                const deskLocation = getFreeDeliveryWilayaLabel(deskConfig);
-                const homeLocation = getFreeDeliveryWilayaLabel(homeConfig);
+                const quantityText = (n) => {
+                    n = Number(n) || 1;
+                    if (n === 1) return 'قطعة واحدة';
+                    if (n === 2) return 'قطعتين';
+                    if (n >= 3 && n <= 10) return `${n} قطع`;
+                    return `${n} قطعة`;
+                };
 
                 let deliveryTypeText = '';
                 if (deskEnabled && homeEnabled) {
-                    if (deskMin === homeMin && deskLocation === homeLocation) {
+                    if (deskMin === homeMin) {
                         deliveryTypeText =
-                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل${deskLocation ? ` ${deskLocation}` : ''}`;
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل`;
                     } else {
                         deliveryTypeText =
-                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}، ` +
-                            `وعند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب، ` +
+                            `وعند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل`;
                     }
                 } else if (deskEnabled) {
                     deliveryTypeText =
-                        `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}`;
+                        `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب`;
                 } else if (homeEnabled) {
                     deliveryTypeText =
-                        `عند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                        `عند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل`;
                 } else {
                     deliveryTypeText = 'التوصيل المجاني غير مفعّل حاليًا';
                 }
@@ -7837,32 +7489,16 @@ body.order-departure-focus .order-departure-clone{
                 b.onclick=()=>{ main.src=src; document.querySelectorAll('.modern-thumb').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
                 thumbs.appendChild(b);
             });
-            main.classList.remove('modern-image-shrunk');
-            main.classList.add('modern-zoomed');
             main.src=images[0];
             main.alt=product.name||'';
             const cap=document.getElementById('modernGalleryCaption'); if(cap) cap.textContent=images.length>1 ? `${images.length} صور متاحة — اضغط للتكبير` : 'اضغط على الصورة للتكبير';
         }
 
         function toggleProductZoom(){
-            const img = document.getElementById('productModalImage');
-            const main = document.getElementById('modernGalleryMain');
-            if (!img) return;
-
-            const shrunk = img.classList.toggle('modern-image-shrunk');
-            img.classList.toggle('modern-zoomed', !shrunk);
-
-            if (main) {
-                main.classList.toggle('image-is-shrunk', shrunk);
-                main.style.cursor = shrunk ? 'zoom-in' : 'zoom-out';
-            }
-
-            const cap = document.getElementById('modernGalleryCaption');
-            if (cap) {
-                cap.textContent = shrunk
-                    ? 'اضغط على الصورة لإعادتها إلى الحجم الكبير'
-                    : 'اضغط على الصورة لتصغيرها';
-            }
+            const img=document.getElementById('productModalImage'); if(!img) return;
+            img.classList.toggle('modern-zoomed');
+            img.style.transform=img.classList.contains('modern-zoomed')?'scale(1.55)':'scale(1)';
+            img.style.cursor=img.classList.contains('modern-zoomed')?'zoom-out':'zoom-in';
         }
 
         function updateProductImageByColor(productKey, color) {
@@ -8027,7 +7663,7 @@ body.order-departure-focus .order-departure-clone{
                 sizeButtons.forEach(btn => {
                     if (!btn.classList.contains('selected')) {
                         btn.classList.add('blinking-size');
-                        btn.style.setProperty('animation', 'index32SizeOnlyVibration .72s ease-in-out infinite', 'important');
+                        btn.style.setProperty('animation', 'index31SizeVibrationStrongV2 .72s ease-in-out infinite', 'important');
                         btn.style.setProperty('animation-play-state', 'running', 'important');
                         btn.style.setProperty('transform-origin', 'center center', 'important');
                         btn.style.setProperty('will-change', 'transform, box-shadow', 'important');
@@ -8595,44 +8231,6 @@ updateDeliveryCost();
             return { buy, free, group: buy + free };
         }
 
-        function getArabicBuyQuantityText(n) {
-            n = Number(n) || 1;
-            if (n === 1) return 'قطعة واحدة';
-            if (n === 2) return 'قطعتين';
-            if (n === 3) return '3 قطع';
-            if (n === 4) return '4 قطع';
-            if (n === 5) return '5 قطع';
-            if (n === 6) return '6 قطع';
-            if (n === 7) return '7 قطع';
-            if (n === 8) return '8 قطع';
-            if (n === 9) return '9 قطع';
-            if (n === 10) return '10 قطع';
-            return `${n} قطعة`;
-        }
-
-        function getArabicOrdinalText(n) {
-            const ordinals = {
-                1: 'الأولى', 2: 'الثانية', 3: 'الثالثة', 4: 'الرابعة',
-                5: 'الخامسة', 6: 'السادسة', 7: 'السابعة', 8: 'الثامنة',
-                9: 'التاسعة', 10: 'العاشرة'
-            };
-            return ordinals[n] || `${n}`;
-        }
-
-        function buildBuyXGetYMessage() {
-            const cfg = getBuyXGetYConfig();
-            const buyText = getArabicBuyQuantityText(cfg.buy);
-
-            if (cfg.free === 1) {
-                const freeOrdinal = getArabicOrdinalText(cfg.buy + 1);
-                return `🎁 عند شراء ${buyText} من هذا المنتج، تحصل على القطعة ${freeOrdinal} مجانًا`;
-            }
-
-            const firstFree = getArabicOrdinalText(cfg.buy + 1);
-            const lastFree = getArabicOrdinalText(cfg.buy + cfg.free);
-            return `🎁 عند شراء ${buyText} من هذا المنتج، تحصل على القطع من ${firstFree} إلى ${lastFree} مجانًا`;
-        }
-
         function calculateBuyXGetYFreeQuantity(totalQuantity) {
             const cfg = getBuyXGetYConfig();
             const q = Math.max(0, parseInt(totalQuantity) || 0);
@@ -8787,46 +8385,6 @@ updateDeliveryCost();
             }
             
             return totalDiscount;
-        }
-
-        // ===== تخصيص رسالة التوصيل المجاني حسب الولايات المضمنة في الإعدادات =====
-        function getFreeDeliveryWilayaLabel(deliveryConfig) {
-            if (!deliveryConfig || !Array.isArray(deliveryConfig.wilayas) || !deliveryConfig.wilayas.length) {
-                return '';
-            }
-
-            const select = document.getElementById('wilaya');
-            const options = select ? Array.from(select.options) : [];
-
-            const names = deliveryConfig.wilayas
-                .map(value => {
-                    const raw = String(value ?? '').trim();
-                    if (!raw) return '';
-
-                    const option = options.find(opt =>
-                        String(opt.value).trim() === raw ||
-                        String(opt.textContent).trim() === raw
-                    );
-
-                    let name = option ? option.textContent.trim() : raw;
-                    name = name.replace(/^\d{1,2}\s*[-–—]\s*/, '').trim();
-                    return name;
-                })
-                .filter(Boolean);
-
-            const uniqueNames = [...new Set(names)];
-            if (!uniqueNames.length) return '';
-
-            if (uniqueNames.length === 1) {
-                return `في ولاية ${uniqueNames[0]}`;
-            }
-
-            return `في الولايات: ${uniqueNames.join('، ')}`;
-        }
-
-        function getFreeDeliveryScopeText(deliveryConfig, deliveryTypeLabel) {
-            const location = getFreeDeliveryWilayaLabel(deliveryConfig);
-            return location ? `${deliveryTypeLabel} ${location}` : deliveryTypeLabel;
         }
 
         // ===== Free Delivery =====
@@ -11865,9 +11423,9 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 #page2 .smart-selected-products .selected-product-price{font-size:.64rem!important}
 /* Reduce attention-grabbing effects inside checkout; keep final CTA pulse. */
 #page2 .smart-section-no,
-#page2 .smart-wilaya-pulse,
-#page2 .smart-delivery-pulse{animation:none!important}
-#page2 .smart-delivery-option.smart-delivery-pulse{animation:none!important;transform:none!important;box-shadow:none!important}
+#page2 .smart-wilaya-pulse{animation:none!important}
+/* لا نلغي نبض أزرار نوع التوصيل */
+#page2 .smart-delivery-option.smart-delivery-pulse{animation:index32DeliveryAttention .78s ease-in-out infinite!important;transform-origin:center!important;will-change:transform,box-shadow!important}
 #page2 .smart-confirm-btn.smart-confirm-pulse:not(:disabled){animation:smartConfirmPulseSimple 1.15s ease-in-out infinite!important}
 @keyframes smartConfirmPulseSimple{0%,100%{transform:scale(1);box-shadow:0 5px 14px rgba(0,0,0,.12)}50%{transform:scale(1.018);box-shadow:0 0 0 4px rgba(0,0,0,.08),0 8px 20px rgba(0,0,0,.16)}}
 @media(max-width:520px){
@@ -12522,7 +12080,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     color:#29485b !important;
     cursor:pointer !important;
     transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease !important;
-    font-size:10.5px !important;
+    font-size:7px !important;
     line-height:1.15 !important;
     font-weight:700 !important;
     display:flex !important;
@@ -12580,7 +12138,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
         height:51px !important;
         min-height:51px !important;
         padding:2px !important;
-        font-size:10.5px !important;
+        font-size:7px !important;
     }
 }
 
@@ -12588,7 +12146,7 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     #productModal #ageOptions .size-option-small{
         height:46px !important;
         min-height:46px !important;
-        font-size:9.75px !important;
+        font-size:6.5px !important;
     }
     #productModal #ageOptions .size-option-small.selected::after{
         width:15px !important;
@@ -12920,82 +12478,3 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 }
 .selected-product.order-departure-card::after{animation:none!important;}
 </style>
-
-<style id="product-detail-size-to-table-final">
-/* جدول القياسات يخرج بصرياً من المقاس الذي اختاره الزبون */
-#productModal #measurementsTableContainer{
-    --table-origin-x:50%;
-    transform-origin:var(--table-origin-x) top !important;
-    position:relative !important;
-}
-#productModal #measurementsTableContainer.table-emerging-from-size{
-    animation:tableEmergesFromSelectedSize .55s cubic-bezier(.18,.9,.24,1) both !important;
-}
-#productModal #measurementsTableContainer.table-emerging-from-size::before{
-    content:'';
-    position:absolute;
-    top:-14px;
-    left:var(--table-origin-x);
-    width:4px;
-    height:15px;
-    border-radius:4px;
-    background:#d4af37;
-    transform:translateX(-50%);
-    box-shadow:0 0 8px rgba(212,175,55,.45);
-    z-index:5;
-}
-@keyframes tableEmergesFromSelectedSize{
-    0%{
-        opacity:0;
-        transform:translateY(-34px) scaleX(.18) scaleY(.12);
-        filter:blur(2px);
-    }
-    45%{
-        opacity:1;
-        transform:translateY(-7px) scaleX(.72) scaleY(.72);
-        filter:blur(0);
-    }
-    75%{
-        transform:translateY(2px) scaleX(1.025) scaleY(1.025);
-    }
-    100%{
-        opacity:1;
-        transform:translateY(0) scaleX(1) scaleY(1);
-    }
-}
-</style>
-<script id="product-detail-size-to-table-final-script">
-(function(){
-    function animateTableFromSize(btn){
-        const table = document.getElementById('measurementsTableContainer');
-        if(!table || !btn) return;
-
-        const tr = btn.getBoundingClientRect();
-        const tb = table.getBoundingClientRect();
-        if(tb.width > 0){
-            const x = Math.max(12, Math.min(tb.width - 12, tr.left + tr.width/2 - tb.left));
-            table.style.setProperty('--table-origin-x', x + 'px');
-        }
-
-        table.classList.remove('table-emerging-from-size');
-        void table.offsetWidth;
-        table.classList.add('table-emerging-from-size');
-        setTimeout(function(){
-            table.classList.remove('table-emerging-from-size');
-        }, 650);
-    }
-
-    document.addEventListener('click', function(e){
-        const btn = e.target.closest('#productModal #ageOptions .size-option-small');
-        if(!btn) return;
-
-        setTimeout(function(){
-            if(btn.classList.contains('selected')){
-                requestAnimationFrame(function(){
-                    animateTableFromSize(btn);
-                });
-            }
-        }, 35);
-    }, true);
-})();
-</script>
