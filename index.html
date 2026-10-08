@@ -6626,14 +6626,14 @@ body.order-departure-focus .order-departure-clone{
 
                     if (deskEnabled && homeEnabled) {
                         if (deskMin === homeMin) {
-                            freeDeliveryText = `مجاني للمكتب والمنزل عند شراء ${quantityText(deskMin)} أو أكثر`;
+                            freeDeliveryText = `مجاني للمكتب والمنزل ابتداء من ${quantityText(deskMin)}`;
                         } else {
-                            freeDeliveryText = `مجاني للمكتب من ${quantityText(deskMin)}، وللمنزل من ${quantityText(homeMin)}`;
+                            freeDeliveryText = `مجاني للمكتب ابتداء من ${quantityText(deskMin)}، وللمنزل ابتداء من ${quantityText(homeMin)}`;
                         }
                     } else if (deskEnabled) {
-                        freeDeliveryText = `مجاني للمكتب عند شراء ${quantityText(deskMin)} أو أكثر`;
+                        freeDeliveryText = `مجاني للمكتب ابتداء من ${quantityText(deskMin)}`;
                     } else if (homeEnabled) {
-                        freeDeliveryText = `مجاني للمنزل عند شراء ${quantityText(homeMin)} أو أكثر`;
+                        freeDeliveryText = `مجاني للمنزل ابتداء من ${quantityText(homeMin)}`;
                     } else {
                         freeDeliveryText = '';
                     }
@@ -7227,39 +7227,26 @@ body.order-departure-focus .order-departure-clone{
             
             if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY && 
                 (STORE_CONFIG.FREE_DELIVERY.desk?.enabled || STORE_CONFIG.FREE_DELIVERY.home?.enabled)) {
-                // ===== رسالة التوصيل المجاني: كل نوع توصيل يأخذ شرطه الخاص =====
-                // مهم: لا نستخدم حد المكتب للمنزل أو العكس.
+                // ===== تحديد نوع التوصيل المجاني بشكل دقيق =====
                 const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
                 const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
-                const deskMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1));
-                const homeMin = Math.max(1, Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1));
-
-                const quantityText = (n) => {
-                    n = Number(n) || 1;
-                    if (n === 1) return 'قطعة واحدة';
-                    if (n === 2) return 'قطعتين';
-                    if (n >= 3 && n <= 10) return `${n} قطع`;
-                    return `${n} قطعة`;
-                };
 
                 let deliveryTypeText = '';
                 if (deskEnabled && homeEnabled) {
-                    if (deskMin === homeMin) {
-                        deliveryTypeText =
-                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل`;
-                    } else {
-                        deliveryTypeText =
-                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب، ` +
-                            `وعند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل`;
-                    }
+                    deliveryTypeText = 'عند شراء' + Math.max(
+                        Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1),
+                        Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1)
+                    ) + ' قطع أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل';
                 } else if (deskEnabled) {
-                    deliveryTypeText =
-                        `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب`;
+                    deliveryTypeText = 'عند شراء' +
+                        Number(STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 1) +
+                        ' قطع أو أكثر تستفيد من التوصيل المجاني للمكتب';
                 } else if (homeEnabled) {
-                    deliveryTypeText =
-                        `عند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل`;
+                    deliveryTypeText = 'عند شراء' +
+                        Number(STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 1) +
+                        ' قطع أو أكثر تستفيد من التوصيل المجاني للمنزل';
                 } else {
-                    deliveryTypeText = 'التوصيل المجاني غير مفعّل حاليًا';
+                    deliveryTypeText = 'عند شراء' + 1 + ' قطع أو أكثر تستفيد من التوصيل المجاني';
                 }
 
                 freeDeliveryText.textContent = deliveryTypeText;
