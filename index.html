@@ -5718,6 +5718,124 @@ body.order-departure-focus .order-departure-clone{
 #productModal #measurementsTableContainer tr:hover,
 #productModal #measurementsTableContainer tr:hover td{transform:none!important;box-shadow:none!important}
 </style>
+
+<style id="premium-modal-v2-final">
+/* ===== Premium Product Modal v2 — visual adoption ===== */
+#productModal .product-modal-content{
+    width:min(1180px,96vw)!important;
+    max-height:94vh!important;
+    border-radius:30px!important;
+    background:linear-gradient(145deg,#ffffff 0%,#f7fbff 100%)!important;
+    border:1px solid rgba(207,222,235,.95)!important;
+    box-shadow:0 30px 100px rgba(18,54,88,.28),0 8px 30px rgba(0,153,255,.10)!important;
+    overflow:hidden!important;
+}
+#productModal .product-modal-body{
+    display:grid!important;
+    grid-template-columns:minmax(0,1.03fr) minmax(390px,.97fr)!important;
+    grid-template-areas:"gallery info"!important;
+    gap:20px!important;
+    padding:20px!important;
+    max-height:calc(94vh - 4px)!important;
+    overflow:auto!important;
+    direction:ltr!important;
+    scrollbar-width:thin;
+}
+#productModal .modern-gallery{grid-area:gallery!important;direction:rtl!important;min-height:610px!important;padding:12px!important;border-radius:25px!important;border:1px solid #dfeaf3!important;background:linear-gradient(145deg,#eef7ff 0%,#ffffff 48%,#f4f9fd 100%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 12px 35px rgba(27,83,120,.08)!important;gap:10px!important}
+#productModal .modern-gallery-main{min-height:475px!important;border-radius:21px!important;background:radial-gradient(circle at 50% 45%,#fff 0%,#f5f9fc 70%,#edf5fa 100%)!important;box-shadow:0 10px 28px rgba(25,79,112,.10)!important;border:1px solid #e3edf4!important}
+#productModal .modern-gallery-main img{max-height:555px!important;width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 16px 18px rgba(30,62,92,.10));}
+#productModal .modern-gallery-main:hover img{transform:scale(1.035)!important}
+#productModal .modern-gallery-badge{top:14px!important;right:14px!important;background:rgba(255,255,255,.94)!important;color:#176fb9!important;border:1px solid #dceaf4!important;box-shadow:0 7px 20px rgba(31,91,130,.10)!important;padding:8px 12px!important;font-size:.72rem!important}
+#productModal .modern-gallery-zoom{left:14px!important;top:14px!important;width:43px!important;height:43px!important;background:#fff!important;color:#176fb9!important;box-shadow:0 8px 22px rgba(20,78,118,.14)!important;border:1px solid #dceaf4!important}
+#productModal .modern-thumbs{gap:9px!important;padding:3px 2px 5px!important}
+#productModal .modern-thumb{width:72px!important;height:72px!important;flex-basis:72px!important;border-radius:15px!important;border:2px solid transparent!important;background:#fff!important;box-shadow:0 4px 12px rgba(25,79,112,.06)!important}
+#productModal .modern-thumb.active{border-color:#0788ef!important;box-shadow:0 0 0 3px rgba(0,153,255,.12),0 8px 18px rgba(0,153,255,.16)!important}
+#productModal .modern-gallery-caption{font-size:.65rem!important;color:#7d92a2!important}
+
+#productModal .modern-info{grid-area:info!important;direction:rtl!important;gap:11px!important;min-width:0!important;padding:2px!important}
+#productModal .product-detail-meta-top{
+    order:1!important;display:grid!important;grid-template-columns:1fr auto!important;grid-template-areas:"text price" "text kicker"!important;align-items:center!important;gap:8px 12px!important;padding:14px 16px!important;border:1px solid #dfeaf2!important;border-radius:20px!important;background:linear-gradient(145deg,#ffffff,#f8fbfe)!important;box-shadow:0 8px 24px rgba(28,72,103,.055)!important;min-height:112px!important;overflow:visible!important;
+}
+#productModal .product-detail-meta-top .design-seven-modal-text{grid-area:text!important;padding:0!important;min-width:0!important}
+#productModal .premium-product-kicker{grid-area:kicker!important;justify-self:end;display:flex!important;align-items:center!important;gap:6px!important;color:#754ad7!important;font-size:.67rem!important;font-weight:900!important;background:linear-gradient(90deg,#f3e9ff,#e9ddff)!important;border:1px solid #dcc8ff!important;padding:6px 10px!important;border-radius:999px!important;white-space:nowrap!important}
+#productModal .premium-crown{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;background:#fff;color:#7d4be0;font-size:.65rem;box-shadow:0 2px 7px rgba(125,75,224,.14)}
+#productModal .product-detail-meta-top .design-seven-modal-price{grid-area:price!important;min-width:135px!important;padding:4px 0!important;justify-self:end!important;text-align:left!important}
+#productModal .product-detail-meta-top .modern-price-row{justify-content:flex-end!important;gap:7px!important}
+#productModal .product-detail-meta-top .product-modal-discounted-price{font-size:1.65rem!important;font-weight:950!important;color:#087de0!important;line-height:1!important;text-shadow:0 2px 5px rgba(0,126,224,.10)!important}
+#productModal .product-detail-meta-top .product-modal-original-price{font-size:.78rem!important;color:#8b9aa5!important}
+#productModal .modern-product-title{font-size:1.55rem!important;font-weight:950!important;color:#122f45!important;margin:0 0 4px!important;line-height:1.25!important}
+#productModal .modern-description{font-size:.76rem!important;color:#718797!important;line-height:1.65!important;margin:0!important}
+
+#productModal .premium-modal-trust{order:2!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:7px!important;padding:3px 0!important}
+#productModal .premium-modal-trust>div{min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:2px!important;padding:8px 4px!important;border:1px solid #e1eaf1!important;border-radius:15px!important;background:linear-gradient(145deg,#fff,#f7fbff)!important;box-shadow:0 5px 14px rgba(27,76,108,.045)!important}
+#productModal .premium-modal-trust .trust-icon{width:38px!important;height:38px!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#e7f4ff!important;color:#087fdb!important;font-size:.9rem!important;margin-bottom:2px!important}
+#productModal .premium-modal-trust .trust-icon.gold{background:#fff4d7!important;color:#e49a00!important}
+#productModal .premium-modal-trust b{font-size:.65rem!important;color:#213e53!important;line-height:1.2!important}
+#productModal .premium-modal-trust small{font-size:.51rem!important;color:#8093a1!important;line-height:1.2!important}
+
+#productModal .modern-info>.modern-choice-card{order:10!important;border:1px solid #dfeaf2!important;border-radius:18px!important;padding:12px!important;background:linear-gradient(145deg,#fff,#f9fcff)!important;box-shadow:0 7px 20px rgba(29,76,107,.055)!important}
+#productModal .modern-info>#sizeOptionsContainer{order:20!important}
+#productModal .modern-info>#measurementsTableContainer{order:30!important}
+#productModal .modern-info>#discountMessage{order:40!important}
+#productModal .modern-info>#freeDeliveryMessage{order:50!important}
+#productModal .modern-info>.modern-summary{order:60!important}
+#productModal .modern-info>.quantity-selector{order:70!important}
+#productModal .modern-info>.modern-actions{order:90!important}
+#productModal .modern-choice-label{font-size:.78rem!important;color:#18384e!important;margin-bottom:9px!important}
+#productModal .modern-choice-label>span:first-child{color:#1688e7!important;background:#e9f5ff!important;border-radius:999px!important;padding:4px 8px!important;font-size:.59rem!important}
+#productModal .modern-choice-label>span:last-child{font-size:.61rem!important;color:#93a2ae!important}
+#productModal .modern-choice-options{gap:8px!important}
+#productModal #colorOptions .color-option-small,#productModal #ageOptions .size-option-small{min-width:58px!important;min-height:42px!important;border-radius:12px!important}
+
+#productModal #measurementsTableContainer{order:30!important;border-radius:17px!important;border:1px solid #dce8f1!important;box-shadow:0 8px 22px rgba(24,76,110,.07)!important;background:linear-gradient(145deg,#fff,#f7fbff)!important;animation:none!important}
+#productModal #measurementsTableContainer.visible{animation:none!important}
+#productModal .measurements-table-title{background:linear-gradient(135deg,#087dde,#16a3f5)!important;border-bottom:2px solid #bce8ff!important;font-size:.78rem!important;padding:9px 12px!important}
+#productModal .measurements-table th{background:#edf7ff!important;color:#31556e!important;border-bottom:1px solid #dceaf3!important;font-size:.68rem!important;padding:8px 5px!important}
+#productModal .measurements-table td{font-size:.7rem!important;padding:7px 5px!important}
+#productModal .measurements-table-footer{font-size:.58rem!important}
+
+#productModal .modern-summary{grid-template-columns:repeat(3,1fr)!important;gap:7px!important}
+#productModal .modern-summary-item{border:1px solid #e0eaf1!important;background:#f7fbfe!important;border-radius:13px!important;padding:8px 5px!important}
+#productModal .modern-summary-item small{font-size:.55rem!important;color:#8095a4!important}
+#productModal .modern-summary-item strong{font-size:.78rem!important;color:#19415d!important}
+#productModal .quantity-selector{display:flex!important;align-items:center!important;justify-content:center!important;gap:17px!important;margin:0!important;padding:7px!important;border:1px solid #e0eaf1!important;border-radius:16px!important;background:#fff!important;box-shadow:0 5px 16px rgba(28,74,105,.045)!important}
+#productModal .quantity-btn{width:45px!important;height:45px!important;border-radius:14px!important;border:1px solid #d6e5ef!important;background:#fff!important;color:#087dde!important;font-size:1.3rem!important;font-weight:900!important}
+#productModal .quantity-display{font-size:1.2rem!important;color:#193f58!important;min-width:40px!important}
+#productModal .modern-actions{order:90!important;padding:0!important;background:none!important;position:static!important}
+#productModal .modern-actions .btn-group{display:block!important}
+#productModal #addToCartFromModal{display:none!important;width:100%!important;min-height:62px!important;border-radius:18px!important;border:2px solid #ffd43b!important;background:linear-gradient(135deg,#ffdf3f,#ffd21c)!important;color:#075cc5!important;font-size:1.12rem!important;font-weight:950!important;box-shadow:0 9px 25px rgba(255,203,20,.30),inset 0 1px 0 rgba(255,255,255,.75)!important}
+#productModal #addToCartFromModal.visible{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;animation:premiumCartButtonIn .55s cubic-bezier(.2,.8,.2,1) both!important}
+#productModal #addToCartFromModal i{font-size:1.25rem!important}
+@keyframes premiumCartButtonIn{0%{opacity:0;transform:translateY(8px) scale(.96)}100%{opacity:1;transform:none}}
+
+#productModal .product-modal-close{z-index:200!important;width:46px!important;height:46px!important;border-radius:50%!important;background:rgba(255,255,255,.96)!important;color:#193d56!important;border:1px solid #dbe8f0!important;box-shadow:0 8px 20px rgba(18,62,91,.14)!important}
+
+@media(max-width:900px){
+ #productModal .product-modal-body{grid-template-columns:1fr!important;grid-template-areas:"gallery" "info"!important;gap:12px!important;padding:12px!important}
+ #productModal .modern-gallery{min-height:480px!important}
+ #productModal .modern-gallery-main{min-height:355px!important}
+}
+@media(max-width:600px){
+ #productModal .product-modal-content{width:100vw!important;max-height:100vh!important;border-radius:0!important}
+ #productModal .product-modal-body{max-height:100vh!important;padding:8px!important}
+ #productModal .modern-gallery{min-height:390px!important;border-radius:18px!important;padding:7px!important}
+ #productModal .modern-gallery-main{min-height:285px!important;border-radius:15px!important}
+ #productModal .modern-gallery-main img{max-height:320px!important}
+ #productModal .modern-thumb{width:58px!important;height:58px!important;flex-basis:58px!important;border-radius:12px!important}
+ #productModal .product-detail-meta-top{grid-template-columns:1fr!important;grid-template-areas:"kicker" "text" "price"!important;padding:11px!important;min-height:0!important}
+ #productModal .premium-product-kicker{justify-self:start!important}
+ #productModal .product-detail-meta-top .design-seven-modal-price{justify-self:start!important;text-align:right!important;min-width:0!important}
+ #productModal .product-detail-meta-top .modern-price-row{justify-content:flex-start!important}
+ #productModal .product-detail-meta-top .product-modal-discounted-price{font-size:1.48rem!important}
+ #productModal .modern-product-title{font-size:1.2rem!important}
+ #productModal .modern-description{font-size:.68rem!important}
+ #productModal .premium-modal-trust{grid-template-columns:repeat(2,1fr)!important}
+ #productModal .premium-modal-trust>div{padding:7px 3px!important}
+ #productModal .premium-modal-trust .trust-icon{width:34px!important;height:34px!important}
+ #productModal #addToCartFromModal{min-height:58px!important;font-size:1rem!important}
+}
+</style>
+
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -5796,6 +5914,14 @@ body.order-departure-focus .order-departure-clone{
                         <i class="fab fa-tiktok"></i>
                     </a>
                 </div>
+                
+
+                <!-- شريط الثقة -->
+                <div class="store-trust-strip" aria-label="مزايا المتجر">
+                    <div class="store-trust-item"><i class="fas fa-shield-alt"></i><strong>طلب آمن</strong><span>بياناتك محفوظة</span></div>
+                    <div class="store-trust-item"><i class="fas fa-truck"></i><strong>توصيل مرن</strong><span>مكتب أو منزل</span></div>
+                    <div class="store-trust-item"><i class="fas fa-headset"></i><strong>دعم مباشر</strong><span>للاستفسار والمساعدة</span></div>
+                </div>
 
                 <!-- البحث عن المنتجات -->
                 <div class="product-tools">
@@ -5820,13 +5946,6 @@ body.order-departure-focus .order-departure-clone{
                     <div class="contact-numbers" id="phoneNumbersFirstPage">
                         <!-- Phone numbers will be loaded here -->
                     </div>
-                </div>
-
-                <!-- شريط الثقة -->
-                <div class="store-trust-strip" aria-label="مزايا المتجر">
-                    <div class="store-trust-item"><i class="fas fa-shield-alt"></i><strong>طلب آمن</strong><span>بياناتك محفوظة</span></div>
-                    <div class="store-trust-item"><i class="fas fa-truck"></i><strong>توصيل مرن</strong><span>مكتب أو منزل</span></div>
-                    <div class="store-trust-item"><i class="fas fa-headset"></i><strong>دعم مباشر</strong><span>للاستفسار والمساعدة</span></div>
                 </div>
             </section>
         </div>
@@ -5940,16 +6059,6 @@ body.order-departure-focus .order-departure-clone{
             </button>
             
             <div class="product-modal-body modern-product-details">
-                <div class="design-seven-modal-info product-detail-meta-top">
-                    <div class="design-seven-modal-text">
-                        <h2 class="modern-product-title" id="modernProductTitle"></h2>
-                        <p class="modern-description" id="modernProductDescription"></p>
-                    </div>
-                    <div class="design-seven-modal-price">
-                        <div class="modern-price-row modern-price-top" id="productModalPriceContainer"></div>
-                    </div>
-                </div>
-
                 <section class="modern-gallery">
                     <div class="modern-gallery-main" id="modernGalleryMain" onclick="toggleProductZoom()">
                         <span class="modern-gallery-badge"><i class="fas fa-images"></i> صور المنتج</span>
@@ -5962,6 +6071,24 @@ body.order-departure-focus .order-departure-clone{
                 </section>
 
                 <section class="modern-info">
+                    <div class="design-seven-modal-info product-detail-meta-top">
+                        <div class="premium-product-kicker"><span class="premium-crown"><i class="fas fa-crown"></i></span><span>اختيار مميز</span></div>
+                        <div class="design-seven-modal-text">
+                            <h2 class="modern-product-title" id="modernProductTitle"></h2>
+                            <p class="modern-description" id="modernProductDescription"></p>
+                        </div>
+                        <div class="design-seven-modal-price">
+                            <div class="modern-price-row modern-price-top" id="productModalPriceContainer"></div>
+                        </div>
+                    </div>
+
+                    <div class="premium-modal-trust" aria-label="مزايا المتجر">
+                        <div><span class="trust-icon blue"><i class="fas fa-shield-halved"></i></span><b>طلب آمن</b><small>بياناتك محفوظة</small></div>
+                        <div><span class="trust-icon blue"><i class="fas fa-truck-fast"></i></span><b>توصيل مرن</b><small>مكتب أو منزل</small></div>
+                        <div><span class="trust-icon blue"><i class="fas fa-headset"></i></span><b>دعم مباشر</b><small>للاستفسار والمساعدة</small></div>
+                        <div><span class="trust-icon gold"><i class="fas fa-medal"></i></span><b>جودة مضمونة</b><small>منتجات مختارة</small></div>
+                    </div>
+
                     <div class="modern-choice-card">
                         <div class="modern-choice-label"><span>الخطوة 1</span> اختر اللون <span id="modernSelectedColor">لم يتم الاختيار</span></div>
                         <div class="modern-choice-options" id="colorOptions"></div>
