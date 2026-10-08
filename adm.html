@@ -8780,7 +8780,7 @@ setTimeout(function(){
     const body=document.getElementById('ordersTableBody');if(!body)return;
     const displayList=filterHiddenOrders(list);
     if(!displayList.length){const mode=document.getElementById('ordersVisibilityFilter')?.value||'visible';const msg=mode==='hidden'?'لا توجد طلبات مخفية.':'لا توجد طلبات مطابقة للبحث.';body.innerHTML=`<tr><td colspan="9" class="orders-empty"><i class="fas fa-inbox" style="font-size:28px;opacity:.35"></i><br>${msg}</td></tr>`;return}
-    body.innerHTML=displayList.map(o=>{const oid=escOrder(o.orderId||o.id);const pending=String(o.status||'')==='En attente';const hidden=isOrderHidden(o);const action=`<button class="order-action-btn" title="عرض التفاصيل" onclick="event.stopPropagation();openOrderDetails('${oid}')"><i class="fas fa-eye"></i></button>`;return `<tr onclick="openOrderDetails('${oid}')"><td class="order-id">${escOrder(o.orderId||o.id||'—')}</td><td class="order-customer">${escOrder(o.customerName||'—')}</td><td dir="ltr">${escOrder(o.customerPhone||'—')}</td><td>${escOrder(o.wilaya||'—')}</td><td class="order-products" title="${escOrder(productsText(o))}">${escOrder(productsText(o))}</td><td><b>${formatMoney(o.total)}</b></td><td><span class="order-status ${statusClass(o.status)}">${escOrder(orderStatusLabel(o.status))}</span></td><td>${escOrder(o.timestamp||o.date||'—')}</td><td>${action}</td></tr>`}).join('');
+    body.innerHTML=displayList.map(o=>{const oid=escOrder(o.orderId||o.id);const pending=String(o.status||'')==='En attente';const hidden=isOrderHidden(o);const action=`<button class="order-action-btn" title="عرض التفاصيل" onclick="event.stopPropagation();openOrderDetails('${oid}')"><i class="fas fa-eye"></i></button>`;return `<tr data-order-id="${oid}" onclick="openOrderDetails('${oid}')"><td class="order-id">${escOrder(o.orderId||o.id||'—')}</td><td class="order-customer">${escOrder(o.customerName||'—')}</td><td dir="ltr">${escOrder(o.customerPhone||'—')}</td><td>${escOrder(o.wilaya||'—')}</td><td class="order-products" title="${escOrder(productsText(o))}">${escOrder(productsText(o))}</td><td><b>${formatMoney(o.total)}</b></td><td><span class="order-status ${statusClass(o.status)}">${escOrder(orderStatusLabel(o.status))}</span></td><td>${escOrder(o.timestamp||o.date||'—')}</td><td>${action}</td></tr>`}).join('');
   }
   // ============================================================
   // ⚡ Smart Cache للطلبات باستخدام IndexedDB
@@ -9038,6 +9038,17 @@ setTimeout(function(){
     }
   };
 
+  function refreshOrderRowInTable(order){
+    const id=String(order?.orderId||order?.id||'');
+    if(!id)return;
+    const rows=document.querySelectorAll('#ordersTableBody tr[data-order-id]');
+    let row=null;
+    rows.forEach(r=>{if(String(r.dataset.orderId||'')===id)row=r;});
+    if(!row)return;
+    const cells=row.children;
+    if(cells[6]) cells[6].innerHTML=`<span class="order-status ${statusClass(order.status)}">${escOrder(orderStatusLabel(order.status))}</span>`;
+  }
+
   window.updateOrderStatus=async function(orderId){
     const select=document.getElementById('orderDetailStatus');
     const btn=document.getElementById('saveOrderStatusBtn');
@@ -9076,6 +9087,9 @@ setTimeout(function(){
         try{ localStorage.setItem(window.__smDataHubKeys?.orders || 'storemaster_orders_v1', JSON.stringify(local)); }catch(_){}
       }
       await smartPutOrder(updated);
+
+      // تحديث واجهة جدول الطلبيات فوراً من الكاش، دون إعادة تحميل الطلبات من السيرفر.
+      refreshOrderRowInTable(updated);
 
       if(select) select.dataset.originalStatus=String(status);
       btn.dataset.saving='0';
