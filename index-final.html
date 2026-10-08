@@ -2479,7 +2479,7 @@
         .facebook { background-color: #3b5998; }
         .instagram { background-color: #E1306C; }
         .messenger { background-color: #0084FF; }
-        .viber { background-color: #7360F2; }
+        .telegram { background-color: #229ED9; }
         .tiktok { background-color: var(--tiktok-color); }
 
         .contact-info {
@@ -5447,8 +5447,8 @@ body.order-departure-focus .order-departure-clone{
                     <a href="#" class="social-icon messenger" id="messengerBtn" target="_blank" style="display: none;">
                         <i class="fab fa-facebook-messenger"></i>
                     </a>
-                    <a href="#" class="social-icon viber" id="viberBtn" target="_blank" style="display: none;">
-                        <i class="fab fa-viber"></i>
+                    <a href="#" class="social-icon telegram" id="telegramBtn" target="_blank" style="display: none;">
+                        <i class="fab fa-telegram-plane"></i>
                     </a>
                     <a href="#" class="social-icon tiktok" id="tiktokBtn" target="_blank" style="display: none;">
                         <i class="fab fa-tiktok"></i>
@@ -5495,7 +5495,7 @@ body.order-departure-focus .order-departure-clone{
             <form id="orderForm" class="order-form smart-order-form">
                 <div class="smart-checkout-head">
                     <button type="button" class="smart-back-btn" onclick="switchPage('page1')">
-                        <i class="fas fa-arrow-right"></i><span>متابعة التسوق</span>
+                        <i class="fas fa-arrow-right"></i><span>الرجوع إلى صفحة المنتجات</span>
                     </button>
                     <div class="smart-checkout-title" id="smartCheckoutIntro">
                         <span class="smart-kicker"><i class="fas fa-bolt"></i> إتمام الطلب</span>
@@ -5722,8 +5722,8 @@ body.order-departure-focus .order-departure-clone{
                     <a href="#" id="messengerFooter" target="_blank">
                         <i class="fab fa-facebook-messenger"></i>
                     </a>
-                    <a href="#" id="viberFooter" target="_blank">
-                        <i class="fab fa-viber"></i>
+                    <a href="#" id="telegramFooter" target="_blank">
+                        <i class="fab fa-telegram-plane"></i>
                     </a>
                     <a href="#" id="tiktokFooter" target="_blank">
                         <i class="fab fa-tiktok"></i>
@@ -6583,6 +6583,11 @@ body.order-departure-focus .order-departure-clone{
                 }
                 
                 let quantityDiscountMessage = '';
+                let buyXGetYMessage = '';
+                if (isBuyXGetYEligible(key)) {
+                    const b2g1 = getBuyXGetYConfig();
+                    buyXGetYMessage = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                }
                 if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
                     const discountPerItem = STORE_CONFIG.DISCOUNTS.discountPerItem || 0;
@@ -6603,23 +6608,39 @@ body.order-departure-focus .order-departure-clone{
                 card.setAttribute('data-product-key', key);
                 card.style.animationDelay = `${(index % 4) * 0.1 + 0.1}s`;
                 
-                // ===== تحديد نوع التوصيل المجاني لعرضه بشكل دقيق =====
+                // ===== رسالة التوصيل المجاني المخصصة: الحد + نوع التوصيل + الولايات المضمنة =====
                 let freeDeliveryText = '';
                 if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY) {
-                    const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
-                    const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
-                    
+                    const deskConfig = STORE_CONFIG.FREE_DELIVERY.desk || {};
+                    const homeConfig = STORE_CONFIG.FREE_DELIVERY.home || {};
+                    const deskEnabled = deskConfig.enabled || false;
+                    const homeEnabled = homeConfig.enabled || false;
+
+                    const deskMin = Math.max(1, Number(deskConfig.minQuantity || 1));
+                    const homeMin = Math.max(1, Number(homeConfig.minQuantity || 1));
+
+                    const quantityText = (n) => `${Number(n) || 1} قطع`;
+                    const deskLocation = getFreeDeliveryWilayaLabel(deskConfig);
+                    const homeLocation = getFreeDeliveryWilayaLabel(homeConfig);
+
                     if (deskEnabled && homeEnabled) {
-                        freeDeliveryText = 'توصيل مجاني للمكتب والمنزل';
+                        if (deskMin === homeMin && deskLocation === homeLocation) {
+                            freeDeliveryText =
+                                `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب والمنزل${deskLocation ? ` ${deskLocation}` : ''}`;
+                        } else {
+                            freeDeliveryText =
+                                `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}، ` +
+                                `وابتداء من ${quantityText(homeMin)}: توصيل مجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                        }
                     } else if (deskEnabled) {
-                        freeDeliveryText = 'توصيل مجاني للمكتب';
+                        freeDeliveryText =
+                            `ابتداء من ${quantityText(deskMin)}: توصيل مجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}`;
                     } else if (homeEnabled) {
-                        freeDeliveryText = 'توصيل مجاني للمنزل';
-                    } else {
-                        freeDeliveryText = 'توصيل مجاني';
+                        freeDeliveryText =
+                            `ابتداء من ${quantityText(homeMin)}: توصيل مجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
                     }
                 }
-                
+
                 card.innerHTML = `
                     <article class="premium-product-card" onclick="showProductDetails('${key}')">
                         <div class="premium-product-media">
@@ -6631,6 +6652,7 @@ body.order-departure-focus .order-departure-clone{
                                 ${orderBadge ? `<span class="premium-order">${orderBadge}</span>` : ''}
                             </div>
                             <div class="premium-product-badges">
+                                ${buyXGetYMessage ? `<span class="premium-badge" style="background:#087a4b;color:#fff;"><i class="fas fa-gift"></i> ${buyXGetYMessage}</span>` : ''}
                                 ${(hasPromoDiscount && STORE_CONFIG.DISCOUNTS && STORE_CONFIG.DISCOUNTS.enablePromotionalDiscount) ? `
                                     <span class="premium-badge premium-badge-sale"><i class="fas fa-percentage"></i> خصم ${STORE_CONFIG.DISCOUNTS.promotionalDiscountPercent || 0}%</span>
                                 ` : ''}
@@ -6662,7 +6684,7 @@ body.order-departure-focus .order-departure-clone{
                                 <div class="premium-offer"><i class="fas fa-gift"></i><span>${quantityDiscountMessage}</span></div>
                             ` : ''}
                             <div class="premium-card-cta">
-                                <span>إشتر  الآن  🛒</span>
+                                <span>أطلب الآن 🛒</span>
                                 <span class="premium-arrow"><i class="fas fa-arrow-left"></i></span>
                             </div>
                         </div>
@@ -6756,7 +6778,10 @@ body.order-departure-focus .order-departure-clone{
             const advancedOfferText = document.getElementById('advancedOfferText');
             if (advancedOffer) {
                 let offerText = '';
-                if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
+                if (isBuyXGetYEligible(productKey)) {
+                    const b2g1 = getBuyXGetYConfig();
+                    offerText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                } else if (hasQuantityDiscount && STORE_CONFIG.DISCOUNTS) {
                     offerText = `خصم ${STORE_CONFIG.DISCOUNTS.discountPerItem || 0} دج عند بلوغ الكمية المحددة`;
                 } else if (hasPromoDiscount && STORE_CONFIG.DISCOUNTS) {
                     offerText = `خصم ترويجي ${STORE_CONFIG.DISCOUNTS.promotionalDiscountPercent || 0}%`;
@@ -7161,10 +7186,13 @@ body.order-departure-focus .order-departure-clone{
             const discountMessage = document.getElementById('discountMessage');
             const discountText = document.getElementById('discountText');
             
-            if ((hasPromoDiscount || hasQuantityDiscount) && STORE_CONFIG.DISCOUNTS) {
+            if ((hasPromoDiscount || hasQuantityDiscount || isBuyXGetYEligible(productKey)) && STORE_CONFIG.DISCOUNTS) {
                 let discountMessageText = '';
                 
-                if (hasQuantityDiscount) {
+                if (isBuyXGetYEligible(productKey)) {
+                    const b2g1 = getBuyXGetYConfig();
+                    discountMessageText = `🎁 اشترِ ${b2g1.buy} واحصل على ${b2g1.free} مجانًا`;
+                } else if (hasQuantityDiscount) {
                     const minQuantity = STORE_CONFIG.DISCOUNTS.minQuantityForDiscount || 1;
                     const discountPerItem = STORE_CONFIG.DISCOUNTS.discountPerItem || 0;
                     
@@ -7201,24 +7229,38 @@ body.order-departure-focus .order-departure-clone{
             
             if (isFreeDeliveryProduct && STORE_CONFIG.FREE_DELIVERY && 
                 (STORE_CONFIG.FREE_DELIVERY.desk?.enabled || STORE_CONFIG.FREE_DELIVERY.home?.enabled)) {
-                const minQuantity = STORE_CONFIG.FREE_DELIVERY.desk?.minQuantity || 
-                                  STORE_CONFIG.FREE_DELIVERY.home?.minQuantity || 3;
-                
-                // ===== تحديد نوع التوصيل المجاني بشكل دقيق =====
-                const deskEnabled = STORE_CONFIG.FREE_DELIVERY.desk?.enabled || false;
-                const homeEnabled = STORE_CONFIG.FREE_DELIVERY.home?.enabled || false;
-                
+                // ===== رسالة التوصيل المجاني داخل التفاصيل: الشرط + النوع + الولايات المضمنة =====
+                const deskConfig = STORE_CONFIG.FREE_DELIVERY.desk || {};
+                const homeConfig = STORE_CONFIG.FREE_DELIVERY.home || {};
+                const deskEnabled = deskConfig.enabled || false;
+                const homeEnabled = homeConfig.enabled || false;
+                const deskMin = Math.max(1, Number(deskConfig.minQuantity || 1));
+                const homeMin = Math.max(1, Number(homeConfig.minQuantity || 1));
+
+                const quantityText = (n) => `${Number(n) || 1} قطع`;
+                const deskLocation = getFreeDeliveryWilayaLabel(deskConfig);
+                const homeLocation = getFreeDeliveryWilayaLabel(homeConfig);
+
                 let deliveryTypeText = '';
                 if (deskEnabled && homeEnabled) {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل';
+                    if (deskMin === homeMin && deskLocation === homeLocation) {
+                        deliveryTypeText =
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب والمنزل${deskLocation ? ` ${deskLocation}` : ''}`;
+                    } else {
+                        deliveryTypeText =
+                            `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}، ` +
+                            `وعند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
+                    }
                 } else if (deskEnabled) {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني للمكتب';
+                    deliveryTypeText =
+                        `عند شراء ${quantityText(deskMin)} أو أكثر تستفيد من التوصيل المجاني للمكتب${deskLocation ? ` ${deskLocation}` : ''}`;
                 } else if (homeEnabled) {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني للمنزل';
+                    deliveryTypeText =
+                        `عند شراء ${quantityText(homeMin)} أو أكثر تستفيد من التوصيل المجاني للمنزل${homeLocation ? ` ${homeLocation}` : ''}`;
                 } else {
-                    deliveryTypeText = 'عند شراء' + minQuantity + ' قطعة أو أكثر تستفيد من التوصيل المجاني';
+                    deliveryTypeText = 'التوصيل المجاني غير مفعّل حاليًا';
                 }
-                
+
                 freeDeliveryText.textContent = deliveryTypeText;
                 freeDeliveryMessage.dataset.fallback = 'false';
                 freeDeliveryMessage.style.display = 'flex';
@@ -7852,6 +7894,7 @@ body.order-departure-focus .order-departure-clone{
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
+                            ${(() => { const fq = getBuyXGetYFreeQuantityForItem(item.id); return fq > 0 ? `<div style="margin-top:4px;color:#087a4b;font-weight:800;font-size:.68rem;">🎁 ${fq} قطعة إضافية مجانًا — الإجمالي المستلم: ${(Number(item.quantity)||0) + fq}</div>` : ''; })()}
                         </div>
                     </div>
                 `;
@@ -8170,6 +8213,67 @@ updateDeliveryCost();
         // ===== Discounts =====
             updateMobileCartBar();
 
+        // ===== Buy X Get Y Free (اشترِ X واحصل على Y مجانًا) =====
+        function isBuyXGetYEligible(productKey) {
+            const d = STORE_CONFIG.DISCOUNTS;
+            if (!d || !d.enableBuyXGetY) return false;
+            const scope = d.buyXGetYScope || 'selected';
+            if (scope === 'all') return true;
+            const id = parseInt(productKey);
+            return Array.isArray(d.buyXGetYProducts) && d.buyXGetYProducts.includes(id);
+        }
+
+        function getBuyXGetYConfig() {
+            const d = STORE_CONFIG.DISCOUNTS || {};
+            const buy = Math.max(1, parseInt(d.buyXGetYBuyQuantity) || 2);
+            const free = Math.max(1, parseInt(d.buyXGetYFreeQuantity) || 1);
+            return { buy, free, group: buy + free };
+        }
+
+        function calculateBuyXGetYFreeQuantity(totalQuantity) {
+            const cfg = getBuyXGetYConfig();
+            const q = Math.max(0, parseInt(totalQuantity) || 0);
+            return Math.floor(q / cfg.buy) * cfg.free;
+        }
+
+        function getBuyXGetYFreeQuantityForItem(itemId) {
+            if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY) return 0;
+            const itemIndex = cartItems.findIndex(i => i.id === itemId);
+            if (itemIndex < 0) return 0;
+            const item = cartItems[itemIndex];
+            if (!isBuyXGetYEligible(item.key)) return 0;
+            const cfg = getBuyXGetYConfig();
+            const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(item.key) ? sum + (Number(i.quantity) || 0) : sum, 0);
+            let remainingFree = Math.floor(totalForProduct / cfg.buy) * cfg.free;
+            for (let i = 0; i < itemIndex; i++) {
+                const prev = cartItems[i];
+                if (String(prev.key) === String(item.key)) remainingFree -= Math.min(Number(prev.quantity) || 0, Math.max(0, Math.floor(totalForProduct / cfg.group) * cfg.free));
+            }
+            return Math.max(0, Math.min(Number(item.quantity) || 0, remainingFree));
+        }
+
+        function getBuyXGetYFreeQuantityByProduct(productKey) {
+            if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY || !isBuyXGetYEligible(productKey)) return 0;
+            const cfg = getBuyXGetYConfig();
+            const totalForProduct = cartItems.reduce((sum, i) => String(i.key) === String(productKey) ? sum + (Number(i.quantity) || 0) : sum, 0);
+            return Math.floor(totalForProduct / cfg.buy) * cfg.free;
+        }
+
+        function calculateBuyXGetYDiscount() {
+            if (!STORE_CONFIG.DISCOUNTS?.enableBuyXGetY) return 0;
+            let total = 0;
+            const seen = new Set();
+            cartItems.forEach(item => {
+                const key = String(item.key);
+                if (seen.has(key) || !isBuyXGetYEligible(item.key)) return;
+                seen.add(key);
+                const freeQty = getBuyXGetYFreeQuantityByProduct(item.key);
+                const price = Number(item.price) || 0;
+                total += freeQty * price;
+            });
+            return total;
+        }
+
         function calculateDiscountedPrice(originalPrice, quantity, productKey = null) {
             if (!STORE_CONFIG.DISCOUNTS) {
                 return {
@@ -8256,6 +8360,9 @@ updateDeliveryCost();
                 }
             }
             
+            // عرض X+Y المجاني يضيف وحدات مجانية إلى الطلب ولا يخصم من سعر الوحدات المدفوعة.
+            // لذلك لا نطرح قيمة القطعة المجانية من الإجمالي؛ العميل يدفع X ويحصل على X+Y فعليًا.
+
             if (STORE_CONFIG.DISCOUNTS.enablePromotionalDiscount) {
                 const promoScope = STORE_CONFIG.DISCOUNTS.promoDiscountScope || 'all';
                 const promoPercent = STORE_CONFIG.DISCOUNTS.promotionalDiscountPercent || 0;
@@ -8277,6 +8384,46 @@ updateDeliveryCost();
             }
             
             return totalDiscount;
+        }
+
+        // ===== تخصيص رسالة التوصيل المجاني حسب الولايات المضمنة في الإعدادات =====
+        function getFreeDeliveryWilayaLabel(deliveryConfig) {
+            if (!deliveryConfig || !Array.isArray(deliveryConfig.wilayas) || !deliveryConfig.wilayas.length) {
+                return '';
+            }
+
+            const select = document.getElementById('wilaya');
+            const options = select ? Array.from(select.options) : [];
+
+            const names = deliveryConfig.wilayas
+                .map(value => {
+                    const raw = String(value ?? '').trim();
+                    if (!raw) return '';
+
+                    const option = options.find(opt =>
+                        String(opt.value).trim() === raw ||
+                        String(opt.textContent).trim() === raw
+                    );
+
+                    let name = option ? option.textContent.trim() : raw;
+                    name = name.replace(/^\d{1,2}\s*[-–—]\s*/, '').trim();
+                    return name;
+                })
+                .filter(Boolean);
+
+            const uniqueNames = [...new Set(names)];
+            if (!uniqueNames.length) return '';
+
+            if (uniqueNames.length === 1) {
+                return `في ولاية ${uniqueNames[0]}`;
+            }
+
+            return `في الولايات: ${uniqueNames.join('، ')}`;
+        }
+
+        function getFreeDeliveryScopeText(deliveryConfig, deliveryTypeLabel) {
+            const location = getFreeDeliveryWilayaLabel(deliveryConfig);
+            return location ? `${deliveryTypeLabel} ${location}` : deliveryTypeLabel;
         }
 
         // ===== Free Delivery =====
@@ -8737,7 +8884,7 @@ updateDeliveryCost();
                 facebook: document.getElementById('facebookBtn'),
                 instagram: document.getElementById('instagramBtn'),
                 messenger: document.getElementById('messengerBtn'),
-                viber: document.getElementById('viberBtn'),
+                telegram: document.getElementById('telegramBtn'),
                 tiktok: document.getElementById('tiktokBtn')
             };
             
@@ -8753,7 +8900,7 @@ updateDeliveryCost();
                 instagram: document.getElementById('instagramFooter'),
                 whatsapp: document.getElementById('whatsappFooter'),
                 messenger: document.getElementById('messengerFooter'),
-                viber: document.getElementById('viberFooter'),
+                telegram: document.getElementById('telegramFooter'),
                 tiktok: document.getElementById('tiktokFooter')
             };
             
@@ -8909,11 +9056,19 @@ updateDeliveryCost();
             const priceDetails = calculateTotalPrice();
             const orderItems = cartItems.map(item => {
                 const itemDiscountInfo = calculateDiscountedPrice(item.price, item.quantity, item.key);
+                const buyXGetYFree = getBuyXGetYFreeQuantityForItem(item.id);
+                const chargedQuantity = Math.max(0, Number(item.quantity) || 0);
+                const unitPriceAfterDiscount = Number(itemDiscountInfo.finalPrice) || Number(item.price) || 0;
+                const lineTotal = Math.max(0, chargedQuantity * unitPriceAfterDiscount);
+                const totalDeliveredQuantity = chargedQuantity + buyXGetYFree;
                 return {
                     name: item.name,
-                    quantity: item.quantity,
+                    quantity: totalDeliveredQuantity,
+                    chargedQuantity,
+                    freeQuantity: buyXGetYFree,
                     price: item.price,
                     finalPrice: itemDiscountInfo.finalPrice,
+                    lineTotal,
                     size: item.size,
                     color: item.color,
                     image: item.image
@@ -10498,6 +10653,8 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     if(delivery)delivery.style.display='none';
     if(customer)customer.style.display='none';
     removeAllStagePulses();
+    const backBtn=document.querySelector('#page2 .smart-back-btn');
+    if(backBtn) backBtn.classList.remove('smart-back-hidden');
     const w=$('wilaya'); if(w)w.classList.add('smart-wilaya-pulse');
     pulseNumber(2);setStage(2);
     scrollTo('smartRegionPanel',0);
@@ -10620,6 +10777,10 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     const head=$('smartCheckoutIntro');
     const delivery=$('smartDeliveryPanel'), customer=$('personalInfoSection'), region=$('smartRegionPanel');
 
+    // «الرجوع إلى صفحة المنتجات» تبقى مخفية منذ بداية Checkout، ولا تظهر إلا بعد انتهاء رمز تأكيد المرحلة الأولى ✓ والانتقال إلى المرحلة 2.
+    const backBtn=document.querySelector('#page2 .smart-back-btn');
+    if(backBtn) backBtn.classList.add('smart-back-hidden');
+
     // نمنع أي دالة قديمة من تشغيل الرقم 2 أثناء المقدمة.
     window.smartIntroSequenceActive = true;
 
@@ -10662,6 +10823,13 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
   window.addToCartWithTelegraphEffects=function(event){
     if(event)event.preventDefault();
     if(!selectedColor || !selectedAge){if(typeof window.showColorSizeGuidance==='function')window.showColorSizeGuidance();return}
+
+    // عند الضغط على «أطلب الآن» من تفاصيل المنتج:
+    // إخفاء زر «الرجوع إلى صفحة المنتجات» فوراً.
+    // لا يُعاد إظهاره هنا؛ startStage2() سيعيده فقط عند بدء نبض الولاية.
+    const backShoppingBtn=document.querySelector('#page2 .smart-back-btn');
+    if(backShoppingBtn) backShoppingBtn.classList.add('smart-back-hidden');
+
     const q=parseInt(($('quantityDisplay')?.textContent||'1'),10)||1;
 
     // نفس تأثير الزر الأصلي: البرق + الصوت.
@@ -11010,13 +11178,24 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     }catch(err){}
     await wait(2000);
 
-    // 3 — نخفي رسالة المعالجة قبل ظهور السلة، ثم نضع بطاقة السلة وحدها في وسط الشاشة.
+    // 3 — نخفي رسالة المعالجة قبل ظهور السلة.
+    // قبل تحريك الصفحة إلى بطاقة السلة، نخفي زر «الرجوع إلى صفحة المنتجات»
+    // حتى لا يظهر أثناء حركة الصعود؛ وبعد استقرار السلة نعيده دون تغيير تصميمه.
+    const backShoppingBtn = document.querySelector('#page2 .smart-back-btn');
+    const backShoppingBtnWasVisible = !!backShoppingBtn && !backShoppingBtn.classList.contains('smart-back-hidden') && getComputedStyle(backShoppingBtn).display !== 'none';
+    if(backShoppingBtn) backShoppingBtn.classList.add('smart-back-hidden');
+
     try{
       const processingModal=document.getElementById('orderConfirmationModal');
       if(processingModal) processingModal.classList.remove('show');
     }catch(err){}
     await wait(220);
     await scrollCartClearly();
+
+    // لا نعيد زر «الرجوع إلى صفحة المنتجات» هنا.
+    // يجب أن يبقى مخفياً حتى تنتهي حركة خروج صورة المنتج بالكامل.
+    // سيُعاد إظهاره فقط بعد اكتمال playOrderDepartureAnimation.
+
     // تقليل زمن التوقف بعد استقرار السلة في منتصف الشاشة إلى النصف.
     await wait(90);
 
@@ -11026,6 +11205,9 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
         await window.playOrderDepartureAnimation({alreadyScrolled:true});
       }
     }catch(err){ console.warn('Departure sequence:',err); }
+
+    // لا يظهر «الرجوع إلى صفحة المنتجات» إلا بعد التأكد من انتهاء حركة خروج الصورة.
+    if(backShoppingBtn && backShoppingBtnWasVisible) backShoppingBtn.classList.remove('smart-back-hidden');
 
     // 4 — الإرسال لا يبدأ إلا بعد انتهاء الحركة.
     const form=document.getElementById('orderForm');
@@ -11654,8 +11836,14 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
 </script>
 
 
+<style id="smart-shopping-back-visibility-v1">
+/* الرجوع إلى صفحة المنتجات: مخفية في البداية حتى تبدأ نبضة/اهتزاز الولاية،
+   ثم تُخفى مجدداً أثناء معالجة الطلب وخروج صورة المنتج. */
+#page2 .smart-back-btn.smart-back-hidden{display:none !important;}
+</style>
+
 <style id="single-color-shopping-back-button">
-/* زر متابعة التسوق: كبير وواضح للعودة لاختيار منتج/لون آخر */
+/* زر الرجوع إلى صفحة المنتجات: كبير وواضح للعودة لاختيار منتج/لون آخر */
 #page2 .smart-back-btn{
   min-width:180px !important;
   min-height:52px !important;
