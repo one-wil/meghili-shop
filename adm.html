@@ -564,6 +564,14 @@
         .btn-danger { background: linear-gradient(135deg, var(--danger), #ef476f); color: white; }
         .btn-secondary { background: linear-gradient(135deg, var(--gray), #adb5bd); color: white; }
         .btn-info { background: linear-gradient(135deg, var(--info), #06d6a0); color: white; }
+        .order-status-dirty {
+            animation: orderSavePulse 1.2s ease-in-out infinite;
+            box-shadow: 0 0 0 3px rgba(248, 150, 30, 0.18), 0 6px 20px rgba(248, 150, 30, 0.22);
+        }
+        @keyframes orderSavePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.015); }
+        }
 
         /* زر إعدادات السيرفر */
         .server-settings-import-btn {
@@ -8969,43 +8977,32 @@ setTimeout(function(){
       return `<div class="order-product-card">${x.image?`<img class="order-product-image" src="${escOrder(x.image)}" onerror="this.style.display='none'">`:''}<div class="order-product-title">المنتج ${i+1}</div><div class="order-copy-grid">${itemFields}</div></div>`;
     }).join('')||'<div class="orders-empty">لا توجد تفاصيل منتجات.</div>';
     const orderId=escOrder(o.orderId||o.id||'');
-    const statusOptions=ORDER_STATUSES.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('');
+    const currentStatus=String(o.status||'');
+    const statusOptions=ORDER_STATUSES.map(s=>`<option ${s===currentStatus?'selected':''}>${s}</option>`).join('');
     const hiddenAction=String(o.status||'')==='En attente'?(isOrderHidden(o)?`<button class="btn order-secondary-action" style="margin-top:8px;width:100%" onclick="restoreOrderToScreen('${orderId}');document.getElementById('orderDetailsModal')?.remove()"><i class="fas fa-eye"></i> إظهار الطلب</button>`:`<button class="btn order-secondary-action" style="margin-top:8px;width:100%" onclick="hideOrderFromScreen('${orderId}')"><i class="fas fa-eye-slash"></i> إخفاء من الشاشة فقط</button>`):'';
     const html=`<div class="order-detail-screen-body">
       <div class="order-detail-section"><div class="order-detail-section-title"><i class="fas fa-info-circle"></i> جميع بيانات الطلب</div><div class="order-copy-grid">${fieldsHtml||'<div class="orders-empty">لا توجد بيانات إضافية.</div>'}</div></div>
       <div class="order-detail-section"><div class="order-detail-section-title"><i class="fas fa-box-open"></i> المنتجات وتفاصيلها</div><div class="order-products-stack">${itemsHtml}</div></div>
-      <div class="order-detail-section order-detail-actions-section"><div class="order-detail-section-title"><i class="fas fa-sliders-h"></i> إدارة الطلب</div><div class="order-status-wrap"><label for="orderDetailStatus">الحالة</label><select id="orderDetailStatus" class="order-status-select">${statusOptions}</select></div><button class="btn btn-info" style="margin-top:8px;width:100%" onclick="updateOrderStatus('${orderId}')"><i class="fas fa-save"></i> حفظ الحالة</button><button class="btn order-secondary-action" style="margin-top:8px;width:100%" onclick="document.getElementById('orderDetailsModal')?.remove()"><i class="fas fa-times"></i> خروج</button>${hiddenAction}</div>
+      <div class="order-detail-section order-detail-actions-section"><div class="order-detail-section-title"><i class="fas fa-sliders-h"></i> إدارة الطلب</div><div class="order-status-wrap"><label for="orderDetailStatus">الحالة</label><select id="orderDetailStatus" class="order-status-select" data-original-status="${escOrder(currentStatus)}" onchange="markOrderStatusDirty(this)">${statusOptions}</select></div><button id="saveOrderStatusBtn" class="btn btn-info" style="margin-top:8px;width:100%" onclick="updateOrderStatus('${orderId}')" disabled><i class="fas fa-save"></i> حفظ الحالة</button><div id="orderStatusSaveState" style="display:none;margin-top:8px;text-align:center;font-weight:700"></div><button class="btn order-secondary-action" style="margin-top:8px;width:100%" onclick="document.getElementById('orderDetailsModal')?.remove()"><i class="fas fa-times"></i> خروج</button>${hiddenAction}</div>
     </div>`;
     showOrderModal(html);
   }
 
   window.openOrderDetails=function(orderId){
     const id=String(orderId);
+    // فتح تفاصيل الطلب من الذاكرة/الكاش فقط. لا يوجد أي استدعاء للشيت هنا.
     const immediate=ordersCache.find(x=>String(x.orderId||x.id)===id);
     if(immediate){
       renderOrderDetailsModal(immediate);
-      smartPutOrder(immediate);
-    }else{
-      smartGetOrder(id).then(cached=>{
-        if(cached) renderOrderDetailsModal(cached);
-        ordersApi('getOrder',{orderId:id}).then(d=>{
-          if(!d.order){if(!cached)showNotification?.('الطلب غير موجود','error');return}
-          smartPutOrder(d.order);
-          const idx=ordersCache.findIndex(x=>String(x.orderId||x.id)===id);
-          if(idx>=0)ordersCache[idx]={...ordersCache[idx],...d.order};else ordersCache.push(d.order);
-          renderOrderDetailsModal(d.order);
-        }).catch(e=>{if(!cached)showNotification?.(e.message||'تعذر تحميل الطلب','error')});
-      });
       return;
     }
-    // تحديث صامت من السيرفر بعد فتح التفاصيل فوراً.
-    ordersApi('getOrder',{orderId:id}).then(d=>{
-      if(!d.order)return;
-      smartPutOrder(d.order);
-      const idx=ordersCache.findIndex(x=>String(x.orderId||x.id)===id);
-      if(idx>=0)ordersCache[idx]={...ordersCache[idx],...d.order};else ordersCache.push(d.order);
-      renderOrderDetailsModal(d.order);
-    }).catch(e=>console.warn('تحديث تفاصيل الطلب في الخلفية:',e));
+    smartGetOrder(id).then(cached=>{
+      if(cached){
+        renderOrderDetailsModal(cached);
+        return;
+      }
+      showNotification?.('الطلب غير موجود في البيانات المحملة حالياً. حدّث قائمة الطلبات ثم حاول مرة أخرى.','warning');
+    }).catch(()=>showNotification?.('تعذر قراءة الطلب من الكاش المحلي','error'));
   };
 
   window.clearSmartOrderCache=async function(){
@@ -9020,34 +9017,92 @@ setTimeout(function(){
     m.addEventListener('click',e=>{if(e.target===m)m.remove()});
     document.body.appendChild(m);
   }
-  window.updateOrderStatus=async function(orderId){
-    const status=document.getElementById('orderDetailStatus')?.value;
-    if(!status)return;
-    try{
-      const d=await ordersApi('updateOrderStatus',{orderId,status});
-      const updated=d.order;
-      if(updated){
-        const id=String(orderId);
-        const idx=ordersCache.findIndex(x=>String(x.orderId||x.id)===id);
-        if(idx>=0)ordersCache[idx]={...ordersCache[idx],...updated};
-        else ordersCache.push(updated);
-
-        // مزامنة النسخة المحلية حتى لا تعيد loadOrders الحالة القديمة.
-        if(window.__smLocalDataMode){
-          const local=Array.isArray(window.__smOrdersLocalData)?window.__smOrdersLocalData.slice():[];
-          const li=local.findIndex(x=>String(x.orderId||x.id)===id);
-          if(li>=0) local[li]={...local[li],...updated};
-          else local.push(updated);
-          window.__smOrdersLocalData=local;
-          try{ localStorage.setItem(window.__smDataHubKeys?.orders || 'storemaster_orders_v1', JSON.stringify(local)); }catch(_){}
-        }
-        await smartPutOrder(updated);
+  window.markOrderStatusDirty=function(select){
+    if(!select)return;
+    const original=String(select.dataset.originalStatus||'');
+    const current=String(select.value||'');
+    const dirty=current!==original;
+    const btn=document.getElementById('saveOrderStatusBtn');
+    const state=document.getElementById('orderStatusSaveState');
+    if(btn){
+      btn.disabled=!dirty;
+      btn.classList.toggle('order-status-dirty',dirty);
+      if(!dirty){
+        btn.innerHTML='<i class="fas fa-save"></i> حفظ الحالة';
       }
-      document.getElementById('orderDetailsModal')?.remove();
-      await loadOrders();
-      showNotification?.('تم تحديث حالة الطلب بنجاح','success');
+    }
+    if(state){
+      state.style.display=dirty?'block':'none';
+      state.textContent=dirty?'● يوجد تغيير غير محفوظ':'';
+      state.style.color=dirty?'#f8961e':'';
+    }
+  };
+
+  window.updateOrderStatus=async function(orderId){
+    const select=document.getElementById('orderDetailStatus');
+    const btn=document.getElementById('saveOrderStatusBtn');
+    const state=document.getElementById('orderStatusSaveState');
+    const status=select?.value;
+    const original=String(select?.dataset?.originalStatus||'');
+    if(!status || status===original || !btn || btn.dataset.saving==='1')return;
+
+    const id=String(orderId);
+    const oldHtml=btn.innerHTML;
+    btn.dataset.saving='1';
+    btn.disabled=true;
+    btn.style.cursor='wait';
+    btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+    if(state){
+      state.style.display='block';
+      state.style.color='#4361ee';
+      state.textContent='جاري حفظ التغيير على السيرفر...';
+    }
+
+    try{
+      // الاتصال بالسيرفر يتم هنا فقط، بعد ضغط المستخدم على زر الحفظ.
+      const d=await ordersApi('updateOrderStatus',{orderId:id,status});
+      const updated=d?.order || {...(ordersCache.find(x=>String(x.orderId||x.id)===id)||{}),orderId:id,status};
+      const idx=ordersCache.findIndex(x=>String(x.orderId||x.id)===id);
+      if(idx>=0) ordersCache[idx]={...ordersCache[idx],...updated};
+      else ordersCache.push(updated);
+
+      // مزامنة الكاش المحلي بعد نجاح الحفظ فقط.
+      if(window.__smLocalDataMode){
+        const local=Array.isArray(window.__smOrdersLocalData)?window.__smOrdersLocalData.slice():[];
+        const li=local.findIndex(x=>String(x.orderId||x.id)===id);
+        if(li>=0) local[li]={...local[li],...updated};
+        else local.push(updated);
+        window.__smOrdersLocalData=local;
+        try{ localStorage.setItem(window.__smDataHubKeys?.orders || 'storemaster_orders_v1', JSON.stringify(local)); }catch(_){}
+      }
+      await smartPutOrder(updated);
+
+      if(select) select.dataset.originalStatus=String(status);
+      btn.dataset.saving='0';
+      btn.style.cursor='pointer';
+      btn.disabled=true;
+      btn.innerHTML='<i class="fas fa-check"></i> تم الحفظ';
+      if(state){
+        state.style.color='#06d6a0';
+        state.textContent='✓ تم حفظ الحالة بنجاح';
+      }
+      showNotification?.('تم حفظ حالة الطلب بنجاح','success');
+      setTimeout(()=>{
+        if(document.getElementById('orderDetailsModal')){
+          document.getElementById('orderDetailsModal')?.remove();
+        }
+      },650);
     }catch(e){
-      showNotification?.(e.message||'فشل تحديث الحالة','error');
+      btn.dataset.saving='0';
+      btn.disabled=false;
+      btn.style.cursor='pointer';
+      btn.innerHTML=oldHtml;
+      if(state){
+        state.style.display='block';
+        state.style.color='#f72585';
+        state.textContent='✕ فشل الحفظ — يمكنك إعادة المحاولة';
+      }
+      showNotification?.(e.message||'فشل حفظ حالة الطلب','error');
     }
   };
   // ============================================================
