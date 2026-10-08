@@ -8534,6 +8534,48 @@ setTimeout(function(){
     });
     return filterHiddenOrders(out);
   }
+  // حساب أعداد الحالات من جميع الطلبات، وليس من 50 طلبًا في الصفحة الحالية.
+  async function loadOrdersGlobalStats(){
+    const counts={new:0,pending:0,confirmed:0,delivery:0,delivered:0,cancelled:0};
+    try{
+      if(window.__smLocalDataMode){
+        const all=Array.isArray(window.__smOrdersLocalData)?window.__smOrdersLocalData:[];
+        all.forEach(o=>{
+          const st=String(o.status||'');
+          if(st==='En attente')counts.pending++;
+          else if(st==='Confirmée')counts.confirmed++;
+          else if(st.includes('livraison'))counts.delivery++;
+          else if(st==='Livrée')counts.delivered++;
+          else if(st==='Retour')counts.cancelled++;
+          else counts.new++;
+        });
+      }else{
+        let page=1,total=0,all=[];
+        do{
+          const d=await ordersApi('list',{filters:{},page,pageSize:100});
+          const rows=Array.isArray(d.orders)?d.orders:[];
+          all.push(...rows);
+          total=Number(d.total)||all.length;
+          page++;
+          if(!rows.length||all.length>=total||page>100)break;
+        }while(true);
+        all.forEach(o=>{
+          const st=String(o.status||'');
+          if(st==='En attente')counts.pending++;
+          else if(st==='Confirmée')counts.confirmed++;
+          else if(st.includes('livraison'))counts.delivery++;
+          else if(st==='Livrée')counts.delivered++;
+          else if(st==='Retour')counts.cancelled++;
+          else counts.new++;
+        });
+      }
+    }catch(e){
+      console.warn('تعذر حساب إجمالي حالات الطلبات:',e);
+      return null;
+    }
+    return counts;
+  }
+
   window.loadOrders=async function(showMessage=false){
     const body=document.getElementById('ordersTableBody'), loading=document.getElementById('ordersLoading'); if(!body)return;
     if(window.__smLocalDataMode){
@@ -8544,13 +8586,26 @@ setTimeout(function(){
       const start=(ordersPage-1)*ORDERS_PAGE_SIZE;
       renderOrders(filtered.slice(start,start+ORDERS_PAGE_SIZE),null);
       renderOrdersPagination();
+      const globalStats=await loadOrdersGlobalStats();
+      if(globalStats) updateOrdersStats(globalStats);
       if(showMessage&&typeof showNotification==='function')showNotification('تم تحديث الطلبات بنجاح','success');
       return;
     }
     if(loading)loading.style.display='block';
-    try{const d=await ordersApi('list',{filters:getOrderFilters(),page:ordersPage,pageSize:ORDERS_PAGE_SIZE});ordersCache=Array.isArray(d.orders)?d.orders:[];ordersTotal=Number(d.total)||ordersCache.length;smartCacheOrders(ordersCache).catch(()=>{});renderOrders(ordersCache,d.stats||null);renderOrdersPagination();if(showMessage&&typeof showNotification==='function')showNotification('تم تحديث الطلبات بنجاح','success')}
-    catch(e){body.innerHTML=`<tr><td colspan="9" class="orders-empty">${escOrder(e.message||'تعذر تحميل الطلبات')}</td></tr>`;if(typeof showNotification==='function')showNotification(e.message||'تعذر تحميل الطلبات','error')}
-    finally{if(loading)loading.style.display='none'}
+    try{
+      const d=await ordersApi('list',{filters:getOrderFilters(),page:ordersPage,pageSize:ORDERS_PAGE_SIZE});
+      ordersCache=Array.isArray(d.orders)?d.orders:[];
+      ordersTotal=Number(d.total)||ordersCache.length;
+      smartCacheOrders(ordersCache).catch(()=>{});
+      renderOrders(ordersCache,d.stats||null);
+      renderOrdersPagination();
+      const globalStats=await loadOrdersGlobalStats();
+      if(globalStats) updateOrdersStats(globalStats);
+      if(showMessage&&typeof showNotification==='function')showNotification('تم تحديث الطلبات بنجاح','success')
+    }catch(e){
+      body.innerHTML=`<tr><td colspan="9" class="orders-empty">${escOrder(e.message||'تعذر تحميل الطلبات')}</td></tr>`;
+      if(typeof showNotification==='function')showNotification(e.message||'تعذر تحميل الطلبات','error')
+    }finally{if(loading)loading.style.display='none'}
   };
   // إخفاء الطلبات من شاشة الإدارة فقط (لا يتم حذفها من Google Sheet).
   // التخزين محلي على هذا المتصفح/المتجر.
@@ -8606,11 +8661,18 @@ setTimeout(function(){
     host.innerHTML=`<div class="orders-page-info">عرض ${start}–${end} من ${ordersTotal}</div><div class="orders-page-controls"><button class="order-page-btn" ${ordersPage<=1?'disabled':''} onclick="goOrdersPage(${ordersPage-1})"><i class="fas fa-chevron-right"></i> السابق</button><span>صفحة ${ordersPage} / ${totalPages}</span><button class="order-page-btn" ${ordersPage>=totalPages?'disabled':''} onclick="goOrdersPage(${ordersPage+1})">التالي <i class="fas fa-chevron-left"></i></button></div>`;
   }
 
+  function updateOrdersStats(counts){
+    if(!counts)return;
+    ['new','pending','confirmed','delivery','delivered','cancelled'].forEach(k=>{
+      let e=document.getElementById('ordersStat'+k[0].toUpperCase()+k.slice(1));
+      if(e)e.textContent=Number(counts[k]||0).toLocaleString('fr-DZ');
+    });
+  }
   function renderOrders(list,stats){
     const counts={new:0,pending:0,confirmed:0,delivery:0,delivered:0,cancelled:0};
     list.forEach(o=>{const s=String(o.status||'');if(s==='En attente')counts.pending++;if(s==='Confirmée')counts.confirmed++;if(s.includes('livraison'))counts.delivery++;if(s==='Livrée')counts.delivered++;if(s==='Retour')counts.cancelled++;});
     if(stats){Object.assign(counts,stats)}
-    ['new','pending','confirmed','delivery','delivered','cancelled'].forEach(k=>{let e=document.getElementById('ordersStat'+k[0].toUpperCase()+k.slice(1));if(e)e.textContent=counts[k]||0});
+    updateOrdersStats(counts);
     // الشعار الأصفر يُدار حصرياً بواسطة نظام الطلبات غير المكشوفة (Unseen Orders).
     // لا نربطه بعدد الطلبات الجديدة حسب الحالة حتى لا نخلط بين New و Unseen.
     // كما لا نرسل أي Request إضافي من هنا.
