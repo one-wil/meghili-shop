@@ -456,8 +456,10 @@ const STORE_CONFIG = {
     "enableBuyXGetY": true,
     "buyXGetYBuyQuantity": 2,
     "buyXGetYFreeQuantity": 1,
-    "buyXGetYScope": "all",
-    "buyXGetYProducts": []
+    "buyXGetYScope": "selected",
+    "buyXGetYProducts": [
+      1789476986031
+    ]
   },
   "STORE_INFO": {
     "name": "Meghili-shop",
