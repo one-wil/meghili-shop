@@ -5999,7 +5999,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                             <div class="form-group">
                                 <label>الأحداث المتابعة:</label>
                                 <div style="margin-top: 10px;">
-                                    ${['pageView', 'addToCart', 'purchase', 'initiateCheckout', 'viewContent'].map(event => `
+                                    ${['pageView', 'viewContent', 'addToCart', 'initiateCheckout', 'purchase'].map(event => `
                                         <div style="margin-bottom: 8px;">
                                             <input type="checkbox" id="facebook_event_${event}" 
                                                    ${CONFIG.PIXEL_CODES?.facebook?.events?.[event] ? 'checked' : ''}
@@ -6038,7 +6038,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                             <div class="form-group">
                                 <label>الأحداث المتابعة:</label>
                                 <div style="margin-top: 10px;">
-                                    ${['pageView', 'addToCart', 'purchase', 'initiateCheckout', 'viewContent'].map(event => `
+                                    ${['pageView', 'viewContent', 'addToCart', 'initiateCheckout', 'purchase'].map(event => `
                                         <div style="margin-bottom: 8px;">
                                             <input type="checkbox" id="tiktok_event_${event}" 
                                                    ${CONFIG.PIXEL_CODES?.tiktok?.events?.[event] ? 'checked' : ''}
@@ -6087,10 +6087,10 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         function getEventArabicName(event) {
             const eventNames = {
                 'pageView': 'زيارة الصفحة (PageView)',
+                'viewContent': 'عرض المنتج (ViewContent)',
                 'addToCart': 'إضافة إلى السلة (AddToCart)',
-                'purchase': 'إنشاء الطلب بنجاح (Purchase)',
                 'initiateCheckout': 'بدء إتمام الطلب (InitiateCheckout)',
-                'viewContent': 'عرض المنتج (ViewContent)'
+                'purchase': 'إنشاء الطلب بنجاح (Purchase)'
             };
             return eventNames[event] || event;
         }
