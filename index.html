@@ -12643,6 +12643,133 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   };
 })();
 </script>
+
+<style id="premium-gold-measurements-and-clean-summary-v1">
+/* جدول القياسات: ذهبي فاخر هادئ */
+#productModal #measurementsTableContainer{
+  border:1px solid #e8d5ad!important;
+  border-radius:18px!important;
+  background:#fffdf8!important;
+  box-shadow:0 5px 18px rgba(143,103,35,.09)!important;
+  animation:none!important;
+  transition:none!important;
+  overflow:hidden!important;
+}
+#productModal #measurementsTableContainer .measurements-table-title{
+  background:linear-gradient(135deg,#9a6a20,#c79b48)!important;
+  color:#fffdf7!important;
+  border-bottom:0!important;
+  text-shadow:none!important;
+}
+#productModal #measurementsTableContainer .measurements-table-title i{
+  color:#fff7df!important;
+  animation:none!important;
+}
+#productModal #measurementsTableContainer .measurements-table th{
+  background:#faf3e5!important;
+  color:#805619!important;
+  border-bottom:1px solid #eadcc1!important;
+}
+#productModal #measurementsTableContainer .measurements-table td{
+  color:#263b50!important;
+  background:#fff!important;
+  border-bottom:1px solid #f0ece4!important;
+}
+#productModal #measurementsTableContainer .measurements-table tr:nth-child(even) td{
+  background:#fffdf9!important;
+}
+#productModal #measurementsTableContainer .measurements-table tr:hover td{
+  background:#fbf4e7!important;
+}
+#productModal #measurementsTableContainer .measurements-table td i,
+#productModal #measurementsTableContainer .measurements-table-footer i{
+  color:#b1812f!important;
+  animation:none!important;
+}
+#productModal #measurementsTableContainer .measurements-table-footer{
+  background:#faf5eb!important;
+  color:#6c737b!important;
+  border-top:1px solid #eee2ce!important;
+}
+
+/* بطاقات الكمية والسعر والإجمالي: أبيض راقٍ وظلال خفيفة */
+#productModal .modern-summary{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  padding:0!important;
+  margin:14px 0 8px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#productModal .modern-summary-item{
+  min-width:0!important;
+  padding:13px 8px!important;
+  border:1px solid #f0ece5!important;
+  border-radius:17px!important;
+  background:#fff!important;
+  box-shadow:0 5px 16px rgba(26,43,58,.055)!important;
+  text-align:center!important;
+}
+#productModal .modern-summary-item small{
+  display:block!important;
+  margin-bottom:5px!important;
+  color:#7b8792!important;
+  font-size:.76rem!important;
+  font-weight:600!important;
+}
+#productModal .modern-summary-item strong{
+  color:#20364b!important;
+  font-size:1.12rem!important;
+  font-weight:900!important;
+  line-height:1.35!important;
+}
+#productModal .quantity-selector{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+  margin:12px 0 16px!important;
+}
+#productModal .quantity-btn{
+  width:48px!important;
+  height:44px!important;
+  min-width:48px!important;
+  border-radius:13px!important;
+  border:1px solid #d8b66d!important;
+  background:#fff!important;
+  color:#9a6a20!important;
+  font-size:1.35rem!important;
+  font-weight:800!important;
+  box-shadow:0 3px 10px rgba(26,43,58,.045)!important;
+}
+#productModal .quantity-btn:hover,
+#productModal .quantity-btn:active{
+  background:#fbf5e8!important;
+  border-color:#bd8d36!important;
+  color:#805619!important;
+  transform:none!important;
+  box-shadow:0 3px 10px rgba(143,103,35,.12)!important;
+}
+#productModal .quantity-display{
+  min-width:42px!important;
+  padding:7px 10px!important;
+  border-radius:12px!important;
+  background:#fffdf9!important;
+  color:#20364b!important;
+  font-size:1.2rem!important;
+  font-weight:900!important;
+}
+@media(max-width:480px){
+  #productModal .modern-summary{gap:7px!important}
+  #productModal .modern-summary-item{padding:11px 4px!important;border-radius:14px!important}
+  #productModal .modern-summary-item small{font-size:.68rem!important}
+  #productModal .modern-summary-item strong{font-size:.98rem!important}
+  #productModal .quantity-btn{width:44px!important;height:42px!important;min-width:44px!important}
+}
+</style>
+
 </html>
 <style id="index31-size-match-color-final">
 /* =========================================================
