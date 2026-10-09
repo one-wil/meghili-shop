@@ -2389,6 +2389,23 @@
             direction: ltr;
         }
 
+
+        /* بطاقة اشتراك StoreMaster */
+        .subscription-state-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;box-shadow:var(--shadow);color:var(--gray)}
+        .subscription-summary-card{display:flex;align-items:center;gap:18px;padding:24px;border-radius:18px;background:linear-gradient(135deg,#1a1b2e,#3a0ca3);color:#fff;box-shadow:var(--shadow-lg);margin-bottom:20px}
+        .subscription-summary-icon{width:64px;height:64px;flex:0 0 64px;border-radius:18px;background:rgba(255,255,255,.13);display:grid;place-items:center;font-size:28px;color:#fff}
+        .subscription-eyebrow{font-size:13px;opacity:.8}.subscription-summary-main h3{font-size:23px;margin:5px 0}.subscription-summary-main p{margin:0;opacity:.9}
+        .subscription-status-pill{display:inline-block;padding:5px 12px;border-radius:99px;background:#e6f7ed;color:#16824b;font-size:13px;font-weight:800;margin-top:7px}
+        .subscription-status-pill.expired{background:#ffe8e6;color:#c0392b}.subscription-status-pill.warning{background:#fff4d7;color:#9a6700}
+        .subscription-details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:20px}
+        .subscription-detail{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);min-width:0}
+        .subscription-detail span{display:block;color:var(--gray);font-size:13px;margin-bottom:9px}.subscription-detail strong{display:block;color:var(--dark);font-size:18px;overflow-wrap:anywhere}
+        .subscription-remaining{border-top:4px solid var(--primary)}
+        .subscription-pricing-reference{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+        .subscription-pricing-reference h3{margin:0 0 16px}.subscription-pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+        .subscription-price-card{border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;background:#f8f9ff}.subscription-price-card span{display:block;color:var(--gray);font-size:13px;margin-bottom:7px}.subscription-price-card strong{font-size:19px;color:var(--dark)}.subscription-price-card.selected{border:2px solid var(--primary);background:#eef1ff;box-shadow:0 0 0 3px rgba(67,97,238,.08)}
+        .subscription-footnote{margin-top:16px;color:var(--gray);font-size:13px;line-height:1.8}.subscription-alert{padding:15px 18px;border-radius:12px;margin-bottom:18px;font-weight:700;line-height:1.8;background:#fff4d7;color:#875b00;border-right:5px solid #f8961e}.subscription-alert.danger{background:#ffe8e6;color:#a61e4d;border-right-color:#d90429}.subscription-alert.success{background:#e6f7ed;color:#16824b;border-right-color:#16824b}
+        @media(max-width:600px){.subscription-summary-card{align-items:flex-start;padding:17px}.subscription-summary-icon{width:48px;height:48px;flex-basis:48px;font-size:21px}.subscription-summary-main h3{font-size:19px}.subscription-pricing-grid{grid-template-columns:1fr}.subscription-detail strong{font-size:16px}}
 </style>
 
 <style id="mobile-full-height-modals">
@@ -3106,7 +3123,11 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         <i class="fas fa-users"></i>
                         <span>من نحن</span>
                     </li>
-                    <li class="menu-item" onclick="logout()">
+                    <li class="menu-item subscription-menu-item" onclick="switchTab('subscription')">
+                        <i class="fas fa-id-card"></i>
+                        <span>اشتراكي وصلاحية متجري</span>
+                    </li>
+                    <li class="menu-item logout-menu-item" onclick="logout()">
                         <i class="fas fa-sign-out-alt"></i>
                         <span> </span>
                     </li>
@@ -3604,6 +3625,38 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                                 <a href="tel:0551102155"><i class="fas fa-phone-alt"></i> 0551102155</a>
                                 <a href="tel:0671466489"><i class="fas fa-phone-alt"></i> 0671466489</a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم الاشتراك والصلاحية -->
+                <div id="subscription" class="tab-content">
+                    <div class="content-header">
+                        <h2><i class="fas fa-id-card"></i> اشتراكي وصلاحية متجري</h2>
+                        <p>تفاصيل العرض المسجل لدى STOREMASTER وتواريخ التفعيل والانتهاء.</p>
+                    </div>
+                    <div id="subscriptionLoading" class="subscription-state-card"><i class="fas fa-spinner fa-spin"></i> جارٍ تحميل معلومات الاشتراك من الخادم...</div>
+                    <div id="subscriptionContent" style="display:none">
+                        <div id="subscriptionAlert" class="subscription-alert" style="display:none"></div>
+                        <div class="subscription-summary-card">
+                            <div class="subscription-summary-icon"><i class="fas fa-store"></i></div>
+                            <div class="subscription-summary-main"><div class="subscription-eyebrow">حالة الاشتراك</div><div id="subscriptionStatus" class="subscription-status-pill">—</div><h3 id="subscriptionStoreName">متجري الإلكتروني</h3><p id="subscriptionPlanLine">العرض المختار: —</p></div>
+                        </div>
+                        <div class="subscription-details-grid">
+                            <div class="subscription-detail"><span><i class="fas fa-tags"></i> العرض المختار</span><strong id="subscriptionPlan">—</strong></div>
+                            <div class="subscription-detail"><span><i class="fas fa-money-bill-wave"></i> مبلغ الاشتراك</span><strong id="subscriptionPrice">—</strong></div>
+                            <div class="subscription-detail"><span><i class="fas fa-calendar-check"></i> تاريخ التفعيل</span><strong id="subscriptionActivation">—</strong></div>
+                            <div class="subscription-detail"><span><i class="fas fa-calendar-times"></i> تاريخ انتهاء الصلاحية</span><strong id="subscriptionExpiration">—</strong></div>
+                            <div class="subscription-detail subscription-remaining"><span><i class="fas fa-hourglass-half"></i> المدة المتبقية</span><strong id="subscriptionRemaining">—</strong></div>
+                        </div>
+                        <div class="subscription-pricing-reference">
+                            <h3><i class="fas fa-list-alt"></i> عروض الاشتراك</h3>
+                            <div class="subscription-pricing-grid">
+                                <div class="subscription-price-card" data-plan="3m"><span>3 أشهر</span><strong>3000 دج</strong></div>
+                                <div class="subscription-price-card" data-plan="6m"><span>6 أشهر</span><strong>5000 دج</strong></div>
+                                <div class="subscription-price-card" data-plan="12m"><span>12 شهرًا</span><strong>9000 دج</strong></div>
+                            </div>
+                            <p class="subscription-footnote">يتم اختيار العرض وتجديد الاشتراك من إدارة STOREMASTER فقط. هذا القسم مخصص لعرض بيانات اشتراك متجرك.</p>
                         </div>
                     </div>
                 </div>
@@ -4235,6 +4288,9 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             
             checkConnection();
             setInterval(checkConnection, 10000);
+            loadSubscriptionPanel().then(info => {
+                if (info && (info.expired || !info.licensed)) switchTab('subscription');
+            });
         }
         
         function loadConfig() {
@@ -4647,6 +4703,9 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     loadSecurityContent();
                     break;
                 case 'about':
+                    break;
+                case 'subscription':
+                    loadSubscriptionPanel();
                     break;
                 case 'tools':
                     loadToolsContent();
@@ -8576,7 +8635,8 @@ async function smLogin(password) {
         storeName: data.storeName || "",
         clientName: data.clientName || data.client || "",
         repository: data.repository || data.store?.repository || "",
-        githubOwner: data.githubOwner || data.github?.owner || ""
+        githubOwner: data.githubOwner || data.github?.owner || "",
+        subscriptionOnly: !!data.subscriptionOnly
     });
     return data;
 }
@@ -8618,11 +8678,25 @@ window.fetch = async function(input, init = {}) {
 
         const result = await response.json().catch(() => null);
         if (response.status === 401) {
-            smClearSession();
-            const login = document.getElementById('loginScreen');
-            const dashboard = document.getElementById('dashboard');
-            if (dashboard) dashboard.style.display = 'none';
-            if (login) login.style.display = 'flex';
+            let expiredReadOnly = !!auth.subscriptionOnly;
+            if (!expiredReadOnly) {
+                try {
+                    const statusResponse = await __smOriginalFetch(
+                        smWorkerBase() + "/api/store/license-status?site=" + encodeURIComponent(smSiteKey()),
+                        { method: "GET", cache: "no-store", headers: { "Accept": "application/json" } }
+                    );
+                    const statusData = await statusResponse.json().catch(() => null);
+                    expiredReadOnly = !!statusData?.expired;
+                    if (expiredReadOnly) { auth.subscriptionOnly = true; smSaveSession(auth); }
+                } catch (_) {}
+            }
+            if (!expiredReadOnly) {
+                smClearSession();
+                const login = document.getElementById('loginScreen');
+                const dashboard = document.getElementById('dashboard');
+                if (dashboard) dashboard.style.display = 'none';
+                if (login) login.style.display = 'flex';
+            }
         }
         if (!response.ok || !result || !result.success) {
             throw new Error(result?.error || "فشل الاتصال بالسيرفر");
@@ -10003,14 +10077,61 @@ function load(){try{Object.assign(state,JSON.parse(localStorage.getItem(KEY)||'{
 function touch(){state.lastInteractionAt=now();clearTimeout(idle);idle=setTimeout(()=>smartEvaluate('idle'),8000)}
 function record(type,data){state.events.push({type,at:now(),tab:state.lastTab,data:data||{}});touch();save()}
 function activeTab(){
- const known=['dashboard-home','products','delivery','settings','orders','archive','checkout-analytics','tools','about'];
+ const known=['dashboard-home','products','delivery','settings','orders','archive','checkout-analytics','tools','about','subscription'];
  const current=String(window.currentTab||'').trim();
  if(current&&known.includes(current))return current;
  const visible=known.find(id=>{const e=$(id);return e&&e.classList.contains('active')});
  if(visible)return visible;
  return state.lastTab||'dashboard-home';
 }
-function tabName(id){return ({'dashboard-home':'الرئيسية',dashboard:'الرئيسية',products:'المنتجات',delivery:'التوصيل',settings:'إعدادات المتجر',tools:'أدوات النظام',orders:'الطلبات',archive:'أرشيف الطلبات','checkout-analytics':'تحليل Checkout',about:'من نحن'})[id]||id} 
+async function loadSubscriptionPanel(){
+  const loading=document.getElementById('subscriptionLoading');
+  const content=document.getElementById('subscriptionContent');
+  const alertBox=document.getElementById('subscriptionAlert');
+  if(loading)loading.style.display='block';if(content)content.style.display='none';
+  try{
+    const host=String(location.hostname||'').trim().toLowerCase();
+    if(!host)throw new Error('تعذر تحديد نطاق المتجر.');
+    const url=smWorkerBase()+'/api/store/license-status?site='+encodeURIComponent(host);
+    const response=await fetch(url,{method:'GET',headers:{'Accept':'application/json','Cache-Control':'no-cache'},cache:'no-store'});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||data.success!==true)throw new Error(data.error||'تعذر قراءة بيانات الاشتراك من الخادم.');
+    const planMap={'3m':'3 أشهر','6m':'6 أشهر','12m':'12 شهرًا'};
+    const priceMap={'3m':3000,'6m':5000,'12m':9000};
+    const plan=data.subscriptionName||planMap[data.subscriptionPlan]||'غير مسجل';
+    const price=data.subscriptionPrice!==null&&data.subscriptionPrice!==undefined&&data.subscriptionPrice!==''&&Number.isFinite(Number(data.subscriptionPrice))?Number(data.subscriptionPrice):(priceMap[data.subscriptionPlan]||null);
+    const dateText=v=>v?String(v).slice(0,10):'غير مسجل';
+    const status=data.status==='not_found'?'غير مسجل':data.expired?'منتهي الصلاحية':data.licensed?'نشط':data.status==='active'?'غير نشط':'قيد التحقق';
+    const subscriptionOnly=!!data.expired||!data.licensed;
+    document.querySelectorAll('.sidebar-menu .menu-item').forEach(item=>{if(!item.classList.contains('subscription-menu-item')&&!item.classList.contains('logout-menu-item'))item.style.display=subscriptionOnly?'none':'';});
+    const statusEl=document.getElementById('subscriptionStatus');
+    statusEl.textContent=status;statusEl.className='subscription-status-pill'+(data.expired?' expired':(!data.licensed?'warning':''));
+    document.getElementById('subscriptionStoreName').textContent=data.storeName||CONFIG?.STORE_INFO?.name||'متجري الإلكتروني';
+    document.getElementById('subscriptionPlanLine').textContent='العرض المختار: '+plan;
+    document.getElementById('subscriptionPlan').textContent=plan;
+    document.getElementById('subscriptionPrice').textContent=price===null?'غير مسجل':price.toLocaleString('fr-DZ')+' دج';
+    document.getElementById('subscriptionActivation').textContent=dateText(data.activationDate);
+    document.getElementById('subscriptionExpiration').textContent=dateText(data.expirationDate);
+    let remaining='غير محددة';
+    if(data.daysRemaining!==null&&data.daysRemaining!==undefined&&data.daysRemaining!==''&&Number.isFinite(Number(data.daysRemaining))){const n=Number(data.daysRemaining);remaining=n<0?'انتهت منذ '+Math.abs(n)+' يوم':n===0?'تنتهي اليوم':n===1?'يوم واحد':n+' يومًا';}
+    document.getElementById('subscriptionRemaining').textContent=remaining;
+    document.querySelectorAll('.subscription-price-card').forEach(card=>card.classList.toggle('selected',card.dataset.plan===data.subscriptionPlan));
+    if(alertBox){alertBox.style.display='none';alertBox.className='subscription-alert';alertBox.textContent='';
+      if(data.status==='not_found'){alertBox.style.display='block';alertBox.classList.add('danger');alertBox.textContent='لم يعثر الخادم على ترخيص مرتبط بهذا النطاق. يرجى التواصل مع إدارة STOREMASTER.';}
+      else if(data.expired){alertBox.style.display='block';alertBox.classList.add('danger');alertBox.textContent='انتهت صلاحية متجرك. يمكنك الاطلاع على بيانات الاشتراك هنا، أما إعادة التفعيل فتتم من خلال إدارة STOREMASTER فقط.';}
+      else if(data.daysRemaining!==null&&data.daysRemaining<=7){alertBox.style.display='block';alertBox.textContent=data.daysRemaining<=0?'تنبيه: تنتهي صلاحية متجرك اليوم. يرجى التواصل مع إدارة STOREMASTER للتجديد.':'اقترب موعد انتهاء صلاحية متجرك. بقي '+data.daysRemaining+' يومًا. يرجى التواصل مع إدارة STOREMASTER للتجديد.';}
+      else {alertBox.style.display='block';alertBox.classList.add('success');alertBox.textContent='اشتراك متجرك مسجل لدى STOREMASTER. تُدار عمليات التفعيل والتجديد من لوحة الإدارة المركزية.';}
+    }
+    if(loading)loading.style.display='none';if(content)content.style.display='block';
+    return data;
+  }catch(error){
+    if(loading)loading.innerHTML='<i class="fas fa-exclamation-triangle"></i> '+String(error.message||error);
+    if(content)content.style.display='none';
+    return null;
+  }
+}
+
+function tabName(id){return ({'dashboard-home':'الرئيسية',dashboard:'الرئيسية',products:'المنتجات',delivery:'التوصيل',settings:'إعدادات المتجر',tools:'أدوات النظام',orders:'الطلبات',archive:'أرشيف الطلبات','checkout-analytics':'تحليل Checkout',about:'من نحن',subscription:'اشتراكي وصلاحية متجري'})[id]||id} 
 function escapeHtml(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function formatExplanation(v){
  // اجعل كل جملة تنتهي بنقطة تبدأ في سطر جديد داخل مساعد StoreMaster.
@@ -10307,7 +10428,7 @@ function pageDescription(t){return ({
  orders:'إدارة الطلبات هي مكان متابعة الطلبات الواردة: حدّد الفترة والحالة والرؤية وطريقة التوصيل، ابحث عن الطلب، افتح تفاصيله، راجع العميل والمنتجات والمبالغ ثم حدّث الحالة أو صدّر البيانات عند الحاجة.',
  'checkout-analytics':'تحليل Checkout يشرح سلوك رحلة الطلب والمؤشرات المالية ضمن الفترة المحددة. هو للتحليل والمقارنة وليس لتعديل بيانات الطلب مباشرة.',
  archive:'أرشيف الطلبات مساحة منفصلة للبحث في الطلبات المؤرشفة ومراجعتها وتصديرها. راجع الفلاتر قبل التصدير حتى لا تخلط بيانات فترة أو حالة بأخرى.',
- about:'قسم «من نحن» يعرّف بفريق StoreMaster. لا يُستخدم لتعديل المنتجات أو أسعار التوصيل أو الطلبات.'
+ about:'قسم «من نحن» يعرّف بفريق StoreMaster. لا يُستخدم لتعديل المنتجات أو أسعار التوصيل أو الطلبات.',subscription:'يعرض العرض المسجل للمتجر ومبلغ الاشتراك وتاريخ التفعيل والانتهاء والمدة المتبقية. يتم التفعيل والتجديد من STOREMASTER فقط.'
  })[t]||'أنت داخل جزء من لوحة التحكم. سأشرح ما يظهر في السياق الحالي، وأميّز بين الإعداد والحفظ والمزامنة، دون افتراض وظيفة غير مؤكدة.'}
 function pageDetail(t){
  const details={
