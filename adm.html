@@ -1371,25 +1371,6 @@
         .badge-info { background: rgba(67, 97, 238, 0.1); color: var(--primary); }
         
         /* ترويسة */
-        .google-sheets-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: white;
-            color: #34A853;
-            border: 2px solid #34A853;
-            border-radius: var(--radius-sm);
-            text-decoration: none;
-            transition: var(--transition);
-            margin-top: 10px;
-        }
-        
-        .google-sheets-link:hover {
-            background: #34A853;
-            color: white;
-        }
-        
         /* تمرير سلس */
         * {
             scroll-behavior: smooth;
@@ -3716,11 +3697,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 whatsappUrl: "",
                 tiktokUrl: ""
             },
-            GOOGLE_SHEETS: {
-                url: "",
-                description: "",
-                autoUpdate: false
-            },
             AVAILABLE_COLORS: ["أبيض", "أسود", "أحمر", "أزرق"],
             AVAILABLE_SIZES: ["S", "M", "L", "XL", "XXL", "A"],
             SIZE_GUIDE: {
@@ -4199,7 +4175,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     if (!CONFIG.FREE_DELIVERY.freeDeliveryProducts) CONFIG.FREE_DELIVERY.freeDeliveryProducts = [];
                     if (!CONFIG.DISCOUNTS) CONFIG.DISCOUNTS = { ...DEFAULT_CONFIG.DISCOUNTS };
                     if (!CONFIG.STORE_INFO) CONFIG.STORE_INFO = { ...DEFAULT_CONFIG.STORE_INFO };
-                    if (!CONFIG.GOOGLE_SHEETS) CONFIG.GOOGLE_SHEETS = { ...DEFAULT_CONFIG.GOOGLE_SHEETS };
                     if (!CONFIG.AVAILABLE_COLORS) CONFIG.AVAILABLE_COLORS = [...DEFAULT_CONFIG.AVAILABLE_COLORS];
                     if (!CONFIG.AVAILABLE_SIZES) CONFIG.AVAILABLE_SIZES = [...DEFAULT_CONFIG.AVAILABLE_SIZES];
                     if (!CONFIG.SIZE_GUIDE) CONFIG.SIZE_GUIDE = { ...DEFAULT_CONFIG.SIZE_GUIDE };
@@ -6199,11 +6174,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
             }
         }
         
-        function updateGoogleSheetsField(field, value) {
-            if (!CONFIG.GOOGLE_SHEETS) CONFIG.GOOGLE_SHEETS = {};
-            CONFIG.GOOGLE_SHEETS[field] = value;
-        }
-        
         function toggleQuantityDiscount() {
             const enabled = document.getElementById('enableQuantityDiscount').checked;
             updateDiscountField('enableQuantityDiscount', enabled);
@@ -6275,10 +6245,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         }
         
         function saveDiscountSettings() {
-            saveConfig();
-        }
-        
-        function saveGoogleSheetsSettings() {
             saveConfig();
         }
         
