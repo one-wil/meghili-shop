@@ -11549,6 +11549,27 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
 </style>
 
 
+
+<style id="smart-submit-pulse-overlay-style">
+#smartSubmitPulseOverlay{
+  position:fixed!important;inset:0!important;z-index:2147483647!important;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff!important;opacity:1;visibility:visible;
+  pointer-events:all!important;
+}
+#smartSubmitPulseOverlay span{
+  display:inline-block;color:#0066cc;font-family:"Cairo",sans-serif;
+  font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;
+  text-shadow:0 0 12px rgba(0,153,255,.22);
+  animation:smartSubmitPulseOverlayPulse .72s ease-in-out infinite;
+}
+@keyframes smartSubmitPulseOverlayPulse{
+  0%,100%{transform:scale(1);opacity:1;text-shadow:0 0 5px rgba(0,153,255,.18)}
+  50%{transform:scale(1.08);opacity:.78;text-shadow:0 0 18px rgba(0,153,255,.48)}
+}
+#smartSubmitPulseOverlay.smart-submit-pulse-overlay-hide{opacity:0;visibility:hidden;transition:opacity .12s linear,visibility 0s linear .12s}
+</style>
+
 <script id="smart-final-submit-single-click-v4">
 (function(){
   'use strict';
@@ -11617,6 +11638,21 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
       const processingModal=document.getElementById('orderConfirmationModal');
       if(processingModal) processingModal.classList.remove('show');
     }catch(err){}
+
+    // أثناء تجهيز موضع السلة، غطِّ الصفحة بالكامل وأظهر فقط عبارة «إرسال الطلب» النابضة.
+    // بذلك يصبح تمرير الصفحة إلى الأعلى غير مرئي للزبون.
+    let submitPulseOverlay = document.getElementById('smartSubmitPulseOverlay');
+    if(!submitPulseOverlay){
+      submitPulseOverlay = document.createElement('div');
+      submitPulseOverlay.id = 'smartSubmitPulseOverlay';
+      submitPulseOverlay.innerHTML = '<span>إرسال الطلب</span>';
+      submitPulseOverlay.setAttribute('role','status');
+      submitPulseOverlay.setAttribute('aria-live','polite');
+      document.body.appendChild(submitPulseOverlay);
+    }
+    submitPulseOverlay.classList.remove('smart-submit-pulse-overlay-hide');
+    submitPulseOverlay.style.display = 'flex';
+
     await wait(220);
     await scrollCartClearly();
 
@@ -11624,10 +11660,12 @@ html[data-store-template="PRO_PRODUCT_LANDING"] #ageOptions .size-option-small {
     // يجب أن يبقى مخفياً حتى تنتهي حركة خروج صورة المنتج بالكامل.
     // سيُعاد إظهاره فقط بعد اكتمال playOrderDepartureAnimation.
 
-    // تقليل زمن التوقف بعد استقرار السلة في منتصف الشاشة إلى النصف.
-    await wait(90);
+    // تختفي عبارة «إرسال الطلب» قبل فتح مقبض العربة بثلث ثانية فقط.
+    submitPulseOverlay.classList.add('smart-submit-pulse-overlay-hide');
+    await wait(330);
+    submitPulseOverlay.style.display = 'none';
 
-    // 4 — حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
+    // حركة المغادرة كاملة: فتح المقبض ← ارتفاع الصورة ← تثبيت ← خروج أفقي.
     try{
       if(typeof window.playOrderDepartureAnimation==='function'){
         await window.playOrderDepartureAnimation({alreadyScrolled:true});
