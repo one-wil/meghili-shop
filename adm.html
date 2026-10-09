@@ -9448,13 +9448,30 @@ async function saveSnapshot(showMessage){
   if(ra.status==='fulfilled'){results.archive=ra.value;}else{errors.push('الأرشيف: '+(ra.reason?.message||ra.reason||'فشل التحميل'));}
 
   if(results.orders){
-    if(hadPrevious){
-      const oldIds=new Set(previous.map(o=>String(o.orderId||o.id||'')).filter(Boolean));
-      const fresh=results.orders.filter(o=>{const id=String(o.orderId||o.id||'');return id&&!oldIds.has(id)});
-      if(fresh.length) window.showNotification?.(`لديك ${fresh.length} طلب جديد`, 'warning');
+    // إشعار البداية يعرض مؤشرين محددين فقط: الطلبات الجديدة غير المكشوفة،
+    // والطلبات التي ما زالت غير مؤكدة وحالتها قيد الانتظار.
+    const seenKey='storemaster_orders_seen_v1_'+String(location.hostname||'').toLowerCase();
+    let seenIds=[];
+    try{
+      const rawSeen=localStorage.getItem(seenKey);
+      seenIds=rawSeen?JSON.parse(rawSeen):[];
+      if(!Array.isArray(seenIds))seenIds=[];
+    }catch(_){seenIds=[]}
+    const seenSet=new Set(seenIds.map(String));
+    if(!localStorage.getItem(seenKey)){
+      // عند أول تشغيل لا نعتبر الطلبات القديمة الموجودة مسبقاً طلبات جديدة.
+      results.orders.forEach(o=>{const id=o&&(o.orderId||o.id);if(id)seenSet.add(String(id));});
+      try{localStorage.setItem(seenKey,JSON.stringify(Array.from(seenSet).slice(-1000)));}catch(_){}
     }
+    const unseenCount=results.orders.filter(o=>{
+      const id=o&&(o.orderId||o.id);
+      return id&&!seenSet.has(String(id));
+    }).length;
+    const pendingCount=results.orders.filter(o=>String(o.status||'').trim().toLowerCase()==='en attente').length;
     write(KEYS.orders,results.orders);
     window.__smApplyOrdersLocal?.(results.orders);
+    window.__smInitialOrderNotice={unseen:unseenCount,pending:pendingCount};
+    window.showNotification?.(`الطلبات الجديدة غير المكشوفة: ${unseenCount} — الطلبات غير المؤكدة قيد الانتظار: ${pendingCount}`,'warning');
   }
   if(results.archive){
     write(KEYS.archive,results.archive);
@@ -9466,8 +9483,6 @@ async function saveSnapshot(showMessage){
     console.warn('StoreMaster Data Hub partial sync:',errors);
     if(showMessage) window.showNotification?.('تم تحديث المتاح، مع تعذر: '+errors.join(' | '),'warning');
     else window.showNotification?.('تعذر تحديث بعض البيانات من المصدر؛ تم الاحتفاظ بآخر نسخة محفوظة محلياً.','warning');
-  }else if(showMessage){
-    window.showNotification?.('تم تحديث البيانات من المصدر بنجاح','success');
   }
  }catch(e){
   console.error('StoreMaster Data Hub:',e);
