@@ -12414,43 +12414,6 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     will-change: transform, text-shadow !important;
 }
 </style>
-
-
-<style id="calm-gold-selected-sizes-and-compact-quantity-v2">
-/* المقاس المختار: نفس الذهبي الهادئ في الزر وفي صف الجدول */
-#productModal #ageOptions .size-option-small.selected{
-  color:#a87925!important;
-  background:#fbf3df!important;
-  border:2px solid #d8b96f!important;
-  box-shadow:0 0 0 2px rgba(216,185,111,.18),0 3px 9px rgba(143,103,35,.09)!important;
-  font-weight:800!important;
-}
-#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check) td,
-#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check-circle) td,
-#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check) td{
-  background:#fbf1d4!important;
-  color:#93691e!important;
-  border-top:1px solid #e4c875!important;
-  border-bottom:1px solid #e4c875!important;
-  font-weight:800!important;
-}
-#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check) td i,
-#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check-circle) td i,
-#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check) td i{
-  color:#b1812f!important;
-}
-/* تقليص عرض مساحة أزرار الكمية السفلية بنسبة 30% */
-#productModal .quantity-selector{
-  width:70%!important;
-  max-width:420px!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-@media(max-width:480px){
-  #productModal .quantity-selector{width:70%!important;max-width:100%!important}
-}
-</style>
-
 </body>
 
 <style id="index31-size-motion-absolute-final">
@@ -13309,3 +13272,69 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     }, true);
 })();
 </script>
+
+
+<style id="actual-fix-gold-selected-sizes-and-compact-lower-section">
+/* إصلاح نهائي: توحيد لون المقاس المحدد في الزر والجدول */
+#productModal #ageOptions .size-option-small.selected,
+#productModal #ageOptions .size-option-small.selected:hover,
+#productModal #ageOptions .size-option-small.selected:focus {
+  background: #fff4cf !important;
+  color: #a87920 !important;
+  border: 2px solid #c6a04a !important;
+  box-shadow: inset 0 0 0 1px rgba(198,160,74,.14), 0 2px 8px rgba(166,125,39,.10) !important;
+  transform: none !important;
+}
+#productModal #ageOptions .size-option-small.selected::after {
+  color: #fff !important;
+  background: #c6a04a !important;
+  border-color: #c6a04a !important;
+}
+/* صفوف المقاسات المختارة: نفس الذهبي الهادئ تماماً */
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check),
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check) td,
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check),
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check) td {
+  background: #fff0b8 !important;
+  color: #78551b !important;
+  border-top: 2px solid #d2ad50 !important;
+  border-bottom: 2px solid #d2ad50 !important;
+}
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check) td i,
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check) td i {
+  color: #b58a2c !important;
+}
+/* تقليص عرض الجزء السفلي (البطاقات + التحكم بالكمية) بنسبة 30% */
+#productModal .modern-summary {
+  width: 70% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#productModal .quantity-selector {
+  width: 70% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+@media (max-width: 600px) {
+  #productModal .modern-summary,
+  #productModal .quantity-selector {
+    width: 70% !important;
+  }
+  #productModal .modern-summary {
+    gap: 6px !important;
+  }
+  #productModal .modern-summary-item {
+    min-width: 0 !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+  #productModal .modern-summary-item small {
+    font-size: .65rem !important;
+  }
+  #productModal .modern-summary-item strong {
+    font-size: .9rem !important;
+  }
+}
+</style>
