@@ -6054,14 +6054,24 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     </div>
                 </div>
                 
+                <div class="action-card" style="border-right: 4px solid var(--info); margin-bottom: 20px;">
+                    <h3><i class="fas fa-code-branch"></i> كيف تُربط الأحداث؟</h3>
+                    <ul style="color: var(--gray); margin: 0; padding-right: 15px;">
+                        <li>أسماء الأحداث القياسية تُربط بمفاتيح الإعدادات الصغيرة الأحرف: PageView ← pageView، AddToCart ← addToCart، InitiateCheckout ← initiateCheckout، ViewContent ← viewContent، Purchase ← purchase.</li>
+                        <li><strong>Purchase</strong> هنا يعني نجاح إنشاء/إرسال الطلب في المتجر، ولا يعني أن الدفع اكتمل أو أن الطلب سُلّم.</li>
+                        <li>لا تستخدم CompletePayment لمجرد أن العميل أرسل طلبًا بالدفع عند الاستلام؛ لا يوجد هذا الحدث ضمن إعدادات المتجر الحالية.</li>
+                        <li>هذا القسم يضبط أحداث Facebook Pixel وTikTok Pixel فقط، ولا يعيد تفعيل نظام التحليلات المنفصل <code>storemaster-checkout-analytics-v2</code> لإرسال الأحداث إلى الخادم.</li>
+                    </ul>
+                </div>
+
                 <div class="action-card">
                     <h3><i class="fas fa-info-circle"></i> معلومات مهمة</h3>
                     <ul style="color: var(--gray); margin: 0; padding-right: 15px;">
-                        <li>للبكسلات فوائد لمتابعة سلوك العملاء وتحسين الحملات التسويقية</li>
-                        <li>فيسبوك بكسل: لتحسين إعلانات الفيسبوك وإنستغرام</li>
-                        <li>تيك توك بكسل: لتحسين إعلانات تيك توك</li>
-                        <li>يجب الحصول على معرف البكسل من منصة الإعلانات لكل شبكة</li>
-                        <li>تساعد الأحداث في فهم سلوك العميل ومتابعة التحويلات</li>
+                        <li>تساعد البيكسلات على قياس سلوك الزوار وأداء الحملات الإعلانية.</li>
+                        <li>Facebook Pixel مخصص لتتبع أحداث المتجر المرتبطة بإعلانات Facebook وInstagram.</li>
+                        <li>TikTok Pixel مخصص لتتبع أحداث المتجر المرتبطة بإعلانات TikTok.</li>
+                        <li>يجب إدخال معرّف صحيح لكل منصة وتفعيل المنصة والحدث المطلوب.</li>
+                        <li>ترك حقل Pixel ID فارغًا يمنع تهيئة البيكسل حتى لو كانت خيارات الأحداث مفعّلة.</li>
                     </ul>
                 </div>
                 
@@ -6076,11 +6086,11 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         
         function getEventArabicName(event) {
             const eventNames = {
-                'pageView': 'زيارة الصفحة',
-                'addToCart': 'إضافة إلى السلة',
-                'purchase': 'شراء كامل',
-                'initiateCheckout': 'بدء الدفع',
-                'viewContent': 'عرض المنتج'
+                'pageView': 'زيارة الصفحة (PageView)',
+                'addToCart': 'إضافة إلى السلة (AddToCart)',
+                'purchase': 'إنشاء الطلب بنجاح (Purchase)',
+                'initiateCheckout': 'بدء إتمام الطلب (InitiateCheckout)',
+                'viewContent': 'عرض المنتج (ViewContent)'
             };
             return eventNames[event] || event;
         }
