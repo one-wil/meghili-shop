@@ -22,6 +22,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        .delivery-price-warning {
+            direction: rtl;
+            text-align: right;
+            color: #d90429;
+            font-weight: 800;
+            margin: 14px 0 22px;
+            padding: 12px 16px;
+            border: 1px solid rgba(217, 4, 41, .25);
+            border-right: 5px solid #d90429;
+            border-radius: 10px;
+            background: rgba(217, 4, 41, .06);
+            animation: deliveryWarningBlink 1s ease-in-out infinite;
+        }
+        @keyframes deliveryWarningBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .35; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .delivery-price-warning { animation: none; }
+        }
+
         /* متغيرات الألوان والتصميم */
         :root {
             --primary: #4361ee;
@@ -3426,6 +3447,9 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="content-header">
                         <h2><i class="fas fa-truck"></i> إدارة التوصيل</h2>
                         <p>إدارة أسعار التوصيل والتوصيل المجاني للولايات والمنتجات</p>
+                        <p class="delivery-price-warning" role="alert">
+                            هام جدا: أسعار التوصيل تختلف حسب الولاية والمسافة، يرجى الاتصال بمكتب التوصيل الذي تتعامل معه لتزويدك بالأسعار من أجل تحيينها في هذه الصفحة.
+                        </p>
                     </div>
                     
                     <div class="tabs">
