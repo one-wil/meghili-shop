@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "title": "دليل شركات توصيل الطرود في الجزائر",
+    "currency": "DZD",
+    "generated_on": "2026-10-09",
+    "important_note": "لا توجد تعريفة موحّدة منشورة وموثوقة لجميع شركات التوصيل. الأسعار قد تختلف حسب ولاية الانطلاق والوجهة والوزن والعقد التجاري. القيم null تعني أن السعر لم يتم التحقق منه، ولا يجوز اعتبارها صفراً.",
+    "wilaya_numbering_note": "تحقق من دعم الشركة للولايات المستحدثة وأرقامها قبل استعمال الملف في حساب أسعار المتجر."
+  },
+  "carriers": [
+    {
+      "id": "yalidine",
+      "name": "Yalidine Express",
+      "tariff_status": "partial_public_sample",
+      "official_tariff_source": "https://yalidine.app/app/conditions_transport.php",
+      "rate_basis": "مثال منشور لأسعار وجهات محددة؛ قد لا يطابق عقد التاجر الحالي",
+      "rates_by_destination": {
+        "الجزائر": {
+          "home": 600,
+          "stopdesk": 500
+        },
+        "البليدة": {
+          "home": 700,
+          "stopdesk": 500
+        },
+        "بومرداس": {
+          "home": 700,
+          "stopdesk": 500
+        },
+        "تيبازة": {
+          "home": 700,
+          "stopdesk": 500
+        },
+        "الشلف": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "أم البواقي": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "باتنة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "بجاية": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "البويرة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "تلمسان": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "تيارت": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "تيزي وزو": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "جيجل": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "سطيف": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "سعيدة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "سكيكدة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "سيدي بلعباس": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "عنابة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "قالمة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "قسنطينة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "المدية": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "مستغانم": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "المسيلة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "معسكر": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "وهران": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "برج بوعريريج": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "الطارف": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "تيسمسيلت": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "خنشلة": {
+          "home": 900,
+          "stopdesk": 650
+        },
+        "سوق أهراس": {
+          "home": 900,
+          "stopdesk": 650
+        }
+      }
+    },
+    {
+      "id": "zr_express",
+      "name": "ZR Express",
+      "tariff_status": "requires_current_company_tariff_or_api",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "maystro",
+      "name": "Maystro Delivery",
+      "tariff_status": "requires_current_company_tariff_or_api",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "noest",
+      "name": "Noest Express",
+      "tariff_status": "requires_current_company_tariff_or_api",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "ecotrack_network",
+      "name": "شركات تعمل عبر منظومة EcoTrack",
+      "tariff_status": "carrier_specific_tariff_required",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "mdm_express",
+      "name": "MDM Express",
+      "tariff_status": "requires_manual_tariff_entry",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "near_delivery",
+      "name": "Near Delivery",
+      "tariff_status": "requires_manual_tariff_entry",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "elogistia",
+      "name": "Elogistia",
+      "tariff_status": "requires_current_company_tariff_or_api",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "algerie_poste",
+      "name": "Algérie Poste",
+      "tariff_status": "separate_parcel_tariff_required",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "dhl",
+      "name": "DHL Express",
+      "tariff_status": "quote_based_destination_and_weight",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    },
+    {
+      "id": "aramex",
+      "name": "Aramex",
+      "tariff_status": "quote_based_destination_and_weight",
+      "official_tariff_source": null,
+      "rates_by_destination": {}
+    }
+  ],
+  "rate_schema": {
+    "home": "سعر التوصيل إلى المنزل بالدينار الجزائري",
+    "stopdesk": "سعر التوصيل إلى مكتب/نقطة استلام الشركة بالدينار الجزائري",
+    "null": "سعر غير متحقق منه؛ لا تستعمله في الحساب حتى يتم تأكيده"
+  }
+}
