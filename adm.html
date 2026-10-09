@@ -10462,43 +10462,53 @@ window.caClearSessionDateFilter=function(){
             }
         }
 
-        /* توسيط جميع نصوص ومحتويات صفحة إعدادات البيكسل فقط */
-        .pixel-settings-page,
+        /* صفحة إعدادات البيكسل: اتجاه عربي من اليمين إلى اليسار */
+        .pixel-settings-page {
+            direction: rtl !important;
+            text-align: right !important;
+        }
         .pixel-settings-page .action-card,
         .pixel-settings-page .action-card h3,
         .pixel-settings-page .form-group,
         .pixel-settings-page .form-group label,
         .pixel-settings-page li {
-            text-align: center !important;
+            direction: rtl !important;
+            text-align: right !important;
         }
         .pixel-settings-page .form-control {
-            text-align: center !important;
+            direction: rtl !important;
+            text-align: right !important;
         }
         .pixel-settings-page .form-group > div[style*="display: flex"] {
-            justify-content: center;
+            direction: rtl !important;
+            justify-content: flex-start !important;
         }
         .pixel-settings-page #facebookPixelSettings > .form-group > div,
         .pixel-settings-page #tiktokPixelSettings > .form-group > div {
-            text-align: center;
+            direction: rtl !important;
+            text-align: right !important;
         }
         .pixel-settings-page #facebookPixelSettings > .form-group > div > div,
         .pixel-settings-page #tiktokPixelSettings > .form-group > div > div {
             display: flex;
-            justify-content: center;
+            flex-direction: row;
+            direction: rtl !important;
+            justify-content: flex-start !important;
             align-items: center;
             gap: 6px;
         }
         .pixel-settings-page #facebookPixelSettings label,
         .pixel-settings-page #tiktokPixelSettings label {
-            margin-right: 0 !important;
+            margin-right: 5px !important;
         }
         .pixel-settings-page ul {
-            padding: 0 !important;
-            list-style-position: inside;
+            padding-right: 20px !important;
+            padding-left: 0 !important;
+            list-style-position: outside;
         }
         .pixel-settings-page .btn {
             margin-left: auto;
-            margin-right: auto;
+            margin-right: 0;
         }
 </style>
 
