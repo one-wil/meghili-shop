@@ -2338,6 +2338,21 @@
             text-align: right !important;
         }
 
+
+        /* توسيط اسم المنتج والسعر داخل نافذة إضافة/تعديل المنتج فقط */
+        #productModal .modal-body > .form-group:first-child > label,
+        #productModal .modal-body > .form-row > .form-group > label {
+            display: block;
+            width: 100%;
+            text-align: center !important;
+        }
+
+        #productModal #productName,
+        #productModal #productPrice {
+            text-align: center !important;
+            direction: ltr;
+        }
+
 </style>
 
 <style id="mobile-full-height-modals">
