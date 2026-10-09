@@ -5933,6 +5933,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
         
         function loadPixelSettings(container) {
             container.innerHTML = `
+                <div class="pixel-settings-page">
                 <div class="action-card" style="margin-bottom: 20px;">
                     <h3><i class="fab fa-facebook"></i> فيسبوك بكسل</h3>
                     
@@ -6026,6 +6027,7 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <button class="btn btn-primary" onclick="savePixelSettings()">
                         <i class="fas fa-save"></i> حفظ إعدادات البكسل
                     </button>
+                </div>
                 </div>
             `;
         }
@@ -10458,6 +10460,45 @@ window.caClearSessionDateFilter=function(){
             .phone-numbers-split .phone-comma {
                 font-size: 22px;
             }
+        }
+
+        /* توسيط جميع نصوص ومحتويات صفحة إعدادات البيكسل فقط */
+        .pixel-settings-page,
+        .pixel-settings-page .action-card,
+        .pixel-settings-page .action-card h3,
+        .pixel-settings-page .form-group,
+        .pixel-settings-page .form-group label,
+        .pixel-settings-page li {
+            text-align: center !important;
+        }
+        .pixel-settings-page .form-control {
+            text-align: center !important;
+        }
+        .pixel-settings-page .form-group > div[style*="display: flex"] {
+            justify-content: center;
+        }
+        .pixel-settings-page #facebookPixelSettings > .form-group > div,
+        .pixel-settings-page #tiktokPixelSettings > .form-group > div {
+            text-align: center;
+        }
+        .pixel-settings-page #facebookPixelSettings > .form-group > div > div,
+        .pixel-settings-page #tiktokPixelSettings > .form-group > div > div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+        .pixel-settings-page #facebookPixelSettings label,
+        .pixel-settings-page #tiktokPixelSettings label {
+            margin-right: 0 !important;
+        }
+        .pixel-settings-page ul {
+            padding: 0 !important;
+            list-style-position: inside;
+        }
+        .pixel-settings-page .btn {
+            margin-left: auto;
+            margin-right: auto;
         }
 </style>
 
