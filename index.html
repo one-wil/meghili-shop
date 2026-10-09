@@ -12414,6 +12414,43 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     will-change: transform, text-shadow !important;
 }
 </style>
+
+
+<style id="calm-gold-selected-sizes-and-compact-quantity-v2">
+/* المقاس المختار: نفس الذهبي الهادئ في الزر وفي صف الجدول */
+#productModal #ageOptions .size-option-small.selected{
+  color:#a87925!important;
+  background:#fbf3df!important;
+  border:2px solid #d8b96f!important;
+  box-shadow:0 0 0 2px rgba(216,185,111,.18),0 3px 9px rgba(143,103,35,.09)!important;
+  font-weight:800!important;
+}
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check) td,
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check-circle) td,
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check) td{
+  background:#fbf1d4!important;
+  color:#93691e!important;
+  border-top:1px solid #e4c875!important;
+  border-bottom:1px solid #e4c875!important;
+  font-weight:800!important;
+}
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check) td i,
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-check-circle) td i,
+#productModal #measurementsTableContainer .measurements-table tr:has(td .fa-circle-check) td i{
+  color:#b1812f!important;
+}
+/* تقليص عرض مساحة أزرار الكمية السفلية بنسبة 30% */
+#productModal .quantity-selector{
+  width:70%!important;
+  max-width:420px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+@media(max-width:480px){
+  #productModal .quantity-selector{width:70%!important;max-width:100%!important}
+}
+</style>
+
 </body>
 
 <style id="index31-size-motion-absolute-final">
