@@ -7733,6 +7733,19 @@ body.order-departure-focus .order-departure-clone{
                     `;
                     
                     colorOption.addEventListener('click', function(event) {
+                        // عند الرجوع لاختيار اللون، نلغي كل المقاسات السابقة ليعيد المستخدم تحديدها.
+                        selectedAges = [];
+                        selectedAge = null;
+                        document.querySelectorAll('#productModal #ageOptions .size-option-small').forEach(option => {
+                            option.classList.remove('selected', 'blinking-size');
+                        });
+                        const selectedSizeLabelOnColorChange = document.getElementById('modernSelectedSize');
+                        if (selectedSizeLabelOnColorChange) selectedSizeLabelOnColorChange.textContent = 'لم يتم الاختيار';
+                        const sizeStepOnColorChange = document.getElementById('sizeOptionsContainer');
+                        if (sizeStepOnColorChange) {
+                            sizeStepOnColorChange.classList.remove('step-done');
+                            sizeStepOnColorChange.classList.add('step-attention');
+                        }
                         // اللون أحادي فقط: اختيار لون جديد يستبدل اللون السابق.
                         document.querySelectorAll('#colorOptions .color-option-small').forEach(option => {
                             option.classList.remove('selected');
@@ -7755,6 +7768,7 @@ body.order-departure-focus .order-departure-clone{
                         if (selectedColors.length) {
                             updateProductImageByColor(productKey, color);
                             showAvailableSizesForColor(productKey, color);
+                            highlightSelectedSizeInMeasurements();
 
                             // بعد اختيار اللون: يظهر المقاس فقط.
                             // كل ما بعد المقاس يبقى مخفياً حتى يختار الزبون المقاس فعلياً.
@@ -13335,6 +13349,132 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
   }
   #productModal .modern-summary-item strong {
     font-size: .9rem !important;
+  }
+}
+</style>
+
+
+<style id="fix-selected-size-row-using-real-js-class-v4">
+/* السبب: JavaScript يضع class باسم measurement-size-selected على الصف المختار.
+   لذلك ننسّق هذه الفئة مباشرة بدلاً من البحث عن أيقونة ✓ داخل الخلايا. */
+#productModal #ageOptions .size-option-small.selected,
+#productModal #ageOptions .size-option-small.selected:hover,
+#productModal #ageOptions .size-option-small.selected:focus,
+#productModal #ageOptions .size-option-small.selected:active {
+  background: #fff0b8 !important;
+  background-color: #fff0b8 !important;
+  color: #8b641b !important;
+  border: 2px solid #c9a341 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+#productModal #ageOptions .size-option-small.selected::after {
+  background: #c9a341 !important;
+  color: #fff !important;
+  border-color: #c9a341 !important;
+  box-shadow: none !important;
+}
+/* تطابق صف الجدول المختار مع خلفية زر المقاس المحدد */
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected,
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected > td,
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected:nth-child(even),
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected:nth-child(odd),
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected:hover,
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected:hover > td {
+  background: #fff0b8 !important;
+  background-color: #fff0b8 !important;
+  color: #8b641b !important;
+  border-top: 2px solid #c9a341 !important;
+  border-bottom: 2px solid #c9a341 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected td i,
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected td .fa-check,
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected td .fa-check-circle,
+#productModal #measurementsTableContainer .measurements-table tbody tr.measurement-size-selected td .fa-circle-check {
+  color: #c9a341 !important;
+}
+</style>
+
+
+<style id="compact-product-summary-and-quantity-v1">
+/* تصغير مجموعة بطاقات الكمية والسعر والإجمالي */
+#productModal .modern-summary {
+  width: 70% !important;
+  max-width: 70% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  gap: 8px !important;
+}
+#productModal .modern-summary-item {
+  min-width: 0 !important;
+  padding: 10px 6px !important;
+  border-radius: 22px !important;
+}
+#productModal .modern-summary-item small,
+#productModal .modern-summary-item .summary-label {
+  font-size: .78rem !important;
+  line-height: 1.3 !important;
+}
+#productModal .modern-summary-item strong,
+#productModal .modern-summary-item .summary-value {
+  font-size: 1.05rem !important;
+  line-height: 1.3 !important;
+}
+/* تصغير مجموعة أزرار + و− والعدد معاً */
+#productModal .quantity-selector {
+  width: 70% !important;
+  max-width: 70% !important;
+  margin: 18px auto !important;
+  gap: 12px !important;
+}
+#productModal .quantity-selector .quantity-btn,
+#productModal .quantity-selector button {
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  border-radius: 15px !important;
+  font-size: 1.15rem !important;
+}
+#productModal .quantity-selector .quantity-display {
+  min-width: 30px !important;
+  font-size: 1.2rem !important;
+}
+@media (max-width: 600px) {
+  #productModal .modern-summary {
+    width: 82% !important;
+    max-width: 82% !important;
+    gap: 6px !important;
+  }
+  #productModal .modern-summary-item {
+    padding: 8px 3px !important;
+    border-radius: 18px !important;
+  }
+  #productModal .modern-summary-item small,
+  #productModal .modern-summary-item .summary-label {
+    font-size: .68rem !important;
+  }
+  #productModal .modern-summary-item strong,
+  #productModal .modern-summary-item .summary-value {
+    font-size: .9rem !important;
+  }
+  #productModal .quantity-selector {
+    width: 70% !important;
+    max-width: 70% !important;
+    gap: 10px !important;
+    margin: 14px auto !important;
+  }
+  #productModal .quantity-selector .quantity-btn,
+  #productModal .quantity-selector button {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    border-radius: 13px !important;
   }
 }
 </style>
