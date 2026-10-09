@@ -10057,6 +10057,17 @@ function fieldExplanation(t){
    return {title:exactTip.title,text:exactTip.text,detail};
  }
 
+ // شروحات مباشرة لحقول جدول العمر/المقاس المرتبط بكل لون.
+ const ageField=/^newAge(From|To)_(.+)_(\d+)$/i.exec(id);
+ if(ageField && t.closest('#colorsSizesModal')){
+   const isFrom=ageField[1].toLowerCase()==='from';
+   return {title:isFrom?'من العمر — ربط المقاس باللون':'إلى العمر — ربط المقاس باللون',
+     text:'هذا الحقل يحدد بداية أو نهاية النطاق العمري للمقاس المرتبط باللون الحالي.',
+     detail:`أدخل العمر بالأرقام في هذا الحقل. ${isFrom?'«من العمر» هي بداية النطاق.':'«إلى العمر» هي نهاية النطاق.'} إذا أردت تحديد نطاق عمري، املأ الحقلين معًا وتأكد أن البداية لا تتجاوز النهاية. بعد اختيار المقاس اضغط «إضافة» للتحقق من ظهور الربط في جدول اللون. ترك الحقلين فارغين يعني عدم تحديد نطاق عمري لهذا الربط.`};
+ }
+ if(/^newSize_/i.test(id) && t.closest('#colorsSizesModal')){
+   return {title:'المقاس المرتبط باللون',text:'اختر المقاس الذي تريد ربطه باللون الحالي.',detail:'تعرض القائمة المقاسات المتاحة التي لم تُربط بعد بهذا اللون. اختر المقاس الصحيح، وحدد «من العمر» و«إلى العمر» معًا إذا كان الربط خاصًا بعمر معين، ثم اضغط «إضافة». اختفاء مقاس من القائمة قد يعني أنه مرتبط بالفعل بهذا اللون.'};
+ }
  const isColor=/^product_color_(.+)$/i.exec(id);
  if(isColor){
    const name=isColor[1].replace(/_/g,' ');
@@ -10397,7 +10408,7 @@ function bind(){
  $('smcExplainCurrent').onclick=()=>{const focused=document.activeElement;const target=focused&&focused.matches?.('input,textarea,select,button,[contenteditable="true"]')&&!focused.closest('#smCoachPanel')?focused:null;const ex=target?(target.matches('input,textarea,select')?fieldExplanation(target):clickExplanation(target)):null;if(ex)show(ex,'شرح العنصر المحدد حاليًا',false);else show({title:`العنصر الحالي في ${tabName(activeTab())}`,text:pageDescription(activeTab()),detail:pageDetail(activeTab())+'\n\nلم يتم العثور على حقل أو زر محدد حاليًا؛ لذلك أعرض شرح القسم بدلًا من اختلاق عنصر غير محدد.'},'شرح السياق الحالي',false)};
  $('smcEnabled').checked=enabled();$('smcEnabled').onchange=e=>{localStorage.setItem(ENABLE,e.target.checked?'1':'0');if(!e.target.checked)hide();else{show({title:'تم تفعيل المساعد',text:'هذا المفتاح يتحكم في تشغيل الشرح التلقائي داخل الواجهة.',detail:'عند وضع علامة ✓ (cocher): يكون المساعد مفعّلًا ويشرح الصفحات والحقول والعناصر عند الوصول إليها. عند إزالة العلامة (décocher): يتوقف الشرح التلقائي وتُغلق النافذة. هذا المفتاح لا يغيّر إعدادات المتجر ولا بياناته.'},'شرح التفعيل والتعطيل',false)}};
  $('smcEnabled').addEventListener('focus',()=>{if(enabled())show({title:'تفعيل / تعطيل المساعد',text:'هذا هو مفتاح تشغيل المساعد الذكي.',detail:'✓ مفعّل (coché): الشروحات تظهر أثناء التنقل والتفاعل.\n○ غير مفعّل (décoché): يتوقف المساعد عن الشرح التلقائي.\nالضغط على المفتاح يبدّل الحالة مباشرة.'},'شرح العنصر الحالي',false)});
- document.addEventListener('click',e=>{touch();const el=e.target?.closest?.('button,a,.menu-item,[role="button"]');if(!el||el.id==='smCoachLauncher'||el.closest('#smCoachPanel'))return;const ex=nestedTabExplanation(el)||clickExplanation(el);if(ex&&enabled()){record('action',{label:(el.innerText||el.getAttribute('aria-label')||'').slice(0,60)});clearTimeout(timer);timer=setTimeout(()=>show(ex,'فهمت الإجراء الذي اخترته',false),900)}},true);
+ document.addEventListener('click',e=>{touch();const el=e.target?.closest?.('button,a,.menu-item,[role="button"],#productModal label,#productModal h3,#productModal h4,#productModal .form-group,#colorsSizesModal label,#colorsSizesModal h3,#colorsSizesModal h4,#colorsSizesModal th,#colorsSizesModal td,#colorsSizesModal tr');if(!el||el.id==='smCoachLauncher'||el.closest('#smCoachPanel'))return;const ex=nestedTabExplanation(el)||clickExplanation(el);if(ex&&enabled()){record('action',{label:(el.innerText||el.getAttribute('aria-label')||'').slice(0,60)});clearTimeout(timer);timer=setTimeout(()=>show(ex,'فهمت الإجراء الذي اخترته',false),900)}},true);
  document.addEventListener('focusin',e=>{
  touch();
  const t=e.target;
@@ -10406,7 +10417,8 @@ function bind(){
  record('field',{id:t.id||t.name||t.getAttribute('aria-label')||'field'});
  if(enabled()){
    clearTimeout(timer);
-   const ex=t.matches('input,textarea,select')?fieldExplanation(t):clickExplanation(t);
+   const inProductContext=!!t.closest('#productModal,#colorsSizesModal');
+   const ex=inProductContext?(clickExplanation(t)||fieldExplanation(t)):(t.matches('input,textarea,select')?fieldExplanation(t):clickExplanation(t));
    if(ex) show(ex,'شرح العنصر الحالي',false);
  }
 },true);
