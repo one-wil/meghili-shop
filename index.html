@@ -5792,6 +5792,20 @@ body.order-departure-focus .order-departure-clone{
 }
 
 </style>
+
+<style id="product-edit-description-centered">
+/* توسيط نص وصف المنتج داخل حقل التعديل فقط */
+textarea[id*="description" i],
+textarea[name*="description" i],
+textarea[placeholder*="الوصف"],
+textarea[aria-label*="الوصف"],
+input[id*="description" i],
+input[name*="description" i],
+input[placeholder*="الوصف"]{
+    text-align: center !important;
+    direction: rtl !important;
+}
+</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
