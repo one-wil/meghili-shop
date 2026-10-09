@@ -5718,6 +5718,80 @@ body.order-departure-focus .order-departure-clone{
 #productModal #measurementsTableContainer tr:hover,
 #productModal #measurementsTableContainer tr:hover td{transform:none!important;box-shadow:none!important}
 </style>
+<style id="product-description-expand-collapse-v1">
+
+/* ===== عنوان ووصف المنتج: فتح/غلق رأسي بإشارة سهمين ===== */
+#productModal .product-detail-meta-top{
+    position:relative !important;
+}
+#productModal .product-detail-meta-top .design-seven-modal-text{
+    position:relative !important;
+    cursor:pointer !important;
+    padding-left:48px !important;
+    transition:background-color .28s ease !important;
+}
+#productModal .product-detail-meta-top .design-seven-modal-text:focus-visible{
+    outline:2px solid #1599df !important;
+    outline-offset:-3px !important;
+}
+#productModal .product-detail-meta-top .modern-description{
+    display:block !important;
+    overflow:hidden !important;
+    white-space:normal !important;
+    max-height:2.9em !important;
+    -webkit-line-clamp:unset !important;
+    transition:max-height .42s ease, opacity .25s ease !important;
+    opacity:.9;
+}
+#productModal .product-detail-meta-top.description-expanded .modern-description{
+    max-height:1000px !important;
+    opacity:1;
+}
+#productModal .product-detail-meta-top .description-toggle-arrows{
+    position:absolute;
+    left:8px;
+    top:50%;
+    transform:translateY(-50%);
+    width:32px;
+    height:42px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+    border:1px solid rgba(21,153,223,.35);
+    border-radius:10px;
+    background:linear-gradient(180deg,#fff,#eaf7ff);
+    color:#078bd0;
+    box-shadow:0 0 8px rgba(21,153,223,.16);
+    animation:descriptionArrowsGlow 1.25s ease-in-out infinite;
+    pointer-events:none;
+}
+#productModal .product-detail-meta-top .description-toggle-arrows i{
+    display:block;
+    font-size:15px;
+    line-height:.8;
+}
+#productModal .product-detail-meta-top .description-toggle-arrows i:first-child{
+    transform:translateY(2px);
+}
+#productModal .product-detail-meta-top .description-toggle-arrows i:last-child{
+    transform:translateY(-2px);
+}
+#productModal .product-detail-meta-top.description-expanded .description-toggle-arrows{
+    animation-duration:.85s;
+}
+@keyframes descriptionArrowsGlow{
+    0%,100%{opacity:.72;filter:drop-shadow(0 0 0 rgba(0,153,255,0));box-shadow:0 0 5px rgba(21,153,223,.12)}
+    50%{opacity:1;filter:drop-shadow(0 0 5px rgba(0,153,255,.65));box-shadow:0 0 13px rgba(21,153,223,.42)}
+}
+@media(max-width:480px){
+    #productModal .product-detail-meta-top .design-seven-modal-text{padding-left:43px !important}
+    #productModal .product-detail-meta-top .description-toggle-arrows{left:6px;width:29px;height:38px}
+    #productModal .product-detail-meta-top .description-toggle-arrows i{font-size:13px}
+}
+
+</style>
 </head>
 <body>
     <!-- Flying Hearts Container -->
@@ -5941,10 +6015,14 @@ body.order-departure-focus .order-departure-clone{
             </button>
             
             <div class="product-modal-body modern-product-details">
-                <div class="design-seven-modal-info product-detail-meta-top">
-                    <div class="design-seven-modal-text">
+                <div class="design-seven-modal-info product-detail-meta-top" id="productDescriptionDisclosure">
+                    <div class="design-seven-modal-text" role="button" tabindex="0" aria-expanded="false" aria-label="فتح أو إغلاق وصف المنتج">
                         <h2 class="modern-product-title" id="modernProductTitle"></h2>
                         <p class="modern-description" id="modernProductDescription"></p>
+                        <span class="description-toggle-arrows" aria-hidden="true">
+                            <i class="fas fa-chevron-up"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
                     </div>
                     <div class="design-seven-modal-price">
                         <div class="modern-price-row modern-price-top" id="productModalPriceContainer"></div>
@@ -12424,6 +12502,38 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     will-change: transform, text-shadow !important;
 }
 </style>
+
+<script id="product-description-expand-collapse-js">
+(function(){
+  function initProductDescriptionDisclosure(){
+    const panel = document.getElementById('productDescriptionDisclosure');
+    const trigger = panel && panel.querySelector('.design-seven-modal-text');
+    if (!panel || !trigger || trigger.dataset.disclosureReady === '1') return;
+    trigger.dataset.disclosureReady = '1';
+
+    function toggleDescription(){
+      const expanded = panel.classList.toggle('description-expanded');
+      trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+    trigger.addEventListener('click', function(event){
+      if (event.target.closest('a,button,input,select,textarea')) return;
+      toggleDescription();
+    });
+    trigger.addEventListener('keydown', function(event){
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleDescription();
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProductDescriptionDisclosure);
+  } else {
+    initProductDescriptionDisclosure();
+  }
+})();
+</script>
+
 </body>
 
 <style id="index31-size-motion-absolute-final">
