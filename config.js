@@ -473,7 +473,7 @@ const STORE_CONFIG = {
     ]
   },
   "DISCOUNTS": {
-    "enableQuantityDiscount": false,
+    "enableQuantityDiscount": true,
     "minQuantityForDiscount": 2,
     "discountPerItem": 100,
     "discountScope": "selected",
@@ -511,11 +511,6 @@ const STORE_CONFIG = {
     "telegramUrl": "",
     "whatsappNumber": "213671466489",
     "whatsappUrl": "https://wa.me/213671466489"
-  },
-  "GOOGLE_SHEETS": {
-    "url": "",
-    "description": "  جدول الطلبات",
-    "autoUpdate": false
   },
   "AVAILABLE_COLORS": [
     "أبيض",
@@ -755,6 +750,11 @@ const STORE_CONFIG = {
         "viewContent": true
       }
     }
+  },
+  "GOOGLE_SHEETS": {
+    "url": "",
+    "description": "  جدول الطلبات",
+    "autoUpdate": false
   },
   "COMMUNES_SOURCE": "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json",
   "POINTS_SYSTEM": {
