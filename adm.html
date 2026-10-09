@@ -884,6 +884,33 @@
             to { opacity: 1; }
         }
         
+
+        /* نظام الخصم: لوحتان واضحتان بترتيب عربي من اليمين إلى اليسار */
+        .discount-quantity-panel,
+        .discount-promo-panel {
+            direction: rtl;
+            text-align: right;
+        }
+        .discount-quantity-panel > div:first-child,
+        .discount-promo-panel > div:first-child {
+            direction: rtl;
+            justify-content: flex-start;
+        }
+        .discount-quantity-panel > div:first-child label,
+        .discount-promo-panel > div:first-child label {
+            text-align: right;
+        }
+        .discount-quantity-panel .form-row,
+        .discount-promo-panel .form-row,
+        .discount-quantity-panel .checkbox-group,
+        .discount-promo-panel .checkbox-group {
+            direction: rtl;
+        }
+        .discount-quantity-panel label,
+        .discount-promo-panel label {
+            text-align: right;
+        }
+
         /* بطاقات الولايات */
         .wilaya-grid {
             display: grid;
@@ -5685,8 +5712,8 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 <div class="action-card" style="margin-bottom: 20px;">
                     <h3><i class="fas fa-percentage"></i> نظام الخصم</h3>
                     
-                    <div class="form-group">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div class="form-group discount-quantity-panel" dir="rtl" style="direction:rtl;text-align:right;border:2px solid #2563eb;border-radius:14px;padding:16px;background:linear-gradient(135deg,#eff6ff,#ffffff);box-shadow:0 4px 14px rgba(37,99,235,.10);">
+                        <div style="display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:15px;color:#1d4ed8;">
                             <input type="checkbox" id="enableQuantityDiscount" 
                                    ${CONFIG.DISCOUNTS?.enableQuantityDiscount ? 'checked' : ''}
                                    onchange="toggleQuantityDiscount()">
@@ -5746,8 +5773,8 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         </div>
                     </div>
                     
-                    <div class="form-group" style="margin-top: 20px;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div class="form-group discount-promo-panel" dir="rtl" style="margin-top:20px;direction:rtl;text-align:right;border:2px solid #d97706;border-radius:14px;padding:16px;background:linear-gradient(135deg,#fff7ed,#ffffff);box-shadow:0 4px 14px rgba(217,119,6,.12);">
+                        <div style="display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:15px;color:#b45309;">
                             <input type="checkbox" id="enablePromotionalDiscount" 
                                    ${CONFIG.DISCOUNTS?.enablePromotionalDiscount ? 'checked' : ''}
                                    onchange="togglePromotionalDiscount()">
