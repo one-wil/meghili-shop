@@ -8020,14 +8020,10 @@ body.order-departure-focus .order-departure-clone{
                         setAfterSizeReveal(false);
                     }
 
+                    // تثبيت موضع نافذة المنتج عند تغيير المقاس من الزر أو من الجدول.
+                    // لا ننفذ تمريراً تلقائياً هنا؛ ظهور الجدول وبطاقات السعر لا يجب أن يحرك الشاشة.
                     requestAnimationFrame(() => {
-                        const discount = document.getElementById('discountMessage');
-                        const freeDelivery = document.getElementById('freeDeliveryMessage');
-                        const summary = document.querySelector('.modern-summary.post-size-element');
-                        const target = (discount && discount.style.display !== 'none') ? discount
-                            : (freeDelivery && freeDelivery.style.display !== 'none') ? freeDelivery
-                            : summary;
-                        if (selectedAges.length && target && !window.__measurementRowSwitch) smoothProductStepScroll(target, 28);
+                        highlightSelectedSizeInMeasurements();
                     });
 
                     if (selectedColors.length && selectedAges.length) {
@@ -13476,5 +13472,25 @@ let tries=0; const timer=setInterval(()=>{tries++;if(install()||tries>=40)clearI
     min-height: 40px !important;
     border-radius: 13px !important;
   }
+}
+</style>
+
+
+<style id="keep-size-selection-viewport-stable-v1">
+/* عند اختيار المقاس لا تحرّك عناصر قسم المقاسات أو الجدول رأسياً */
+#productModal #sizeOptionsContainer,
+#productModal #measurementsTableContainer,
+#productModal #measurementsTableContainer .measurements-table,
+#productModal .modern-summary.post-size-element,
+#productModal .quantity-selector.post-size-element {
+  scroll-margin-block: 0 !important;
+}
+#productModal #sizeOptionsContainer,
+#productModal #measurementsTableContainer {
+  scroll-behavior: auto !important;
+}
+#productModal #measurementsTableContainer,
+#productModal #measurementsTableContainer.visible {
+  transform: none !important;
 }
 </style>
