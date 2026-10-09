@@ -1021,6 +1021,18 @@
         .notification.show {
             transform: translate(-50%, -50%);
         }
+
+        /* إخفاء قاطع لإشعار الطلبات عند إزالة الصنف show */
+        #notification:not(.show) {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        #notification.show {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
         
         .notification.success {
             background: linear-gradient(135deg, var(--success), #06b6d4);
@@ -8367,40 +8379,53 @@ function updateConfig(newConfig) {
         let __smNotificationTimer = null;
         let __smLastNotificationKey = '';
         let __smLastNotificationAt = 0;
+        function hideNotificationNow(notification) {
+            if (!notification) return;
+            notification.classList.remove('show');
+            notification.setAttribute('aria-hidden', 'true');
+            notification.style.setProperty('opacity', '0', 'important');
+            notification.style.setProperty('visibility', 'hidden', 'important');
+            notification.style.setProperty('pointer-events', 'none', 'important');
+            notification.style.setProperty('transform', 'translate(-50%, -150%)', 'important');
+        }
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const text = document.getElementById('notificationText');
             if (!notification || !text) return;
-            // امنع إعادة عرض الرسالة نفسها مباشرة بسبب تكرار استدعائها من التحديثات الخلفية.
             const key = String(type || 'success') + '::' + String(message ?? '').trim();
             const now = Date.now();
-            if (key === __smLastNotificationKey && now - __smLastNotificationAt < 12000) return;
+            if (key === __smLastNotificationKey && now - __smLastNotificationAt < 12000) {
+                if (!__smNotificationTimer && !notification.classList.contains('show')) hideNotificationNow(notification);
+                return;
+            }
             __smLastNotificationKey = key;
             __smLastNotificationAt = now;
             if (__smNotificationTimer) clearTimeout(__smNotificationTimer);
-            text.textContent = message;
+            __smNotificationTimer = null;
             notification.className = `notification ${type}`;
-            
+            notification.style.removeProperty('opacity');
+            notification.style.removeProperty('visibility');
+            notification.style.removeProperty('pointer-events');
+            notification.style.removeProperty('transform');
+            notification.setAttribute('aria-hidden', 'false');
+            text.textContent = String(message ?? '');
             const icon = notification.querySelector('i');
             if (icon) {
-                if (type === 'success') {
-                    icon.className = 'fas fa-check-circle';
-                } else if (type === 'error') {
-                    icon.className = 'fas fa-exclamation-circle';
-                } else if (type === 'warning') {
-                    icon.className = 'fas fa-exclamation-triangle';
-                } else if (type === 'info') {
-                    icon.className = 'fas fa-info-circle';
-                }
+                const icons = {success:'fas fa-check-circle',error:'fas fa-exclamation-circle',warning:'fas fa-exclamation-triangle',info:'fas fa-info-circle'};
+                icon.className = icons[type] || icons.info;
             }
-            
+            notification.classList.remove('show');
+            void notification.offsetHeight;
             notification.classList.add('show');
-            
             __smNotificationTimer = setTimeout(() => {
-                notification.classList.remove('show');
+                hideNotificationNow(notification);
                 __smNotificationTimer = null;
             }, 5000);
         }
+        document.addEventListener('DOMContentLoaded', () => {
+            const n = document.getElementById('notification');
+            if (n && !n.classList.contains('show')) hideNotificationNow(n);
+        });
 
         // =============================================================================
         // 🚀 تهيئة النظام عند التحميل
