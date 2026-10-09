@@ -3472,9 +3472,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                         <button class="tab" onclick="switchSettingsTab('sizes-colors')">
                             <i class="fas fa-ruler"></i> 
                         </button>
-                        <button class="tab" onclick="switchSettingsTab('advanced')">
-                            <i class="fas fa-sliders-h"></i>
-                        </button>
                         <button class="tab" onclick="switchSettingsTab('pixels')">
                             <i class="fas fa-chart-line"></i>  
                         </button>
@@ -3494,10 +3491,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     
                     <div id="sizes-colors-tab" class="tab-content">
                         <!-- إعدادات المقاسات والألوان -->
-                    </div>
-                    
-                    <div id="advanced-tab" class="tab-content">
-                        <!-- إعدادات متقدمة -->
                     </div>
                     
                     <div id="pixels-tab" class="tab-content">
@@ -5575,9 +5568,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 case 'sizes-colors':
                     loadSizesColorsSettings(container);
                     break;
-                case 'advanced':
-                    loadAdvancedSettings(container);
-                    break;
                 case 'pixels':
                     loadPixelSettings(container);
                     break;
@@ -5963,50 +5953,6 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                 </div>
                 
 
-            `;
-        }
-        
-        function loadAdvancedSettings(container) {
-            container.innerHTML = `
-                <div class="action-card">
-                    <h3><i class="fab fa-google"></i> إعدادات جداول جوجل</h3>
-                    
-                    <div class="form-group">
-                        <label>رابط جدول جوجل</label>
-                        <input type="url" class="form-control" id="googleSheetsUrl" 
-                               value="${CONFIG.GOOGLE_SHEETS?.url || ''}" 
-                               onchange="updateGoogleSheetsField('url', this.value)">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>وصف الجدول</label>
-                        <input type="text" class="form-control" id="googleSheetsDescription" 
-                               value="${CONFIG.GOOGLE_SHEETS?.description || ''}" 
-                               onchange="updateGoogleSheetsField('description', this.value)">
-                    </div>
-                    
-                    <div class="form-group">
-                        <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
-                            <input type="checkbox" class="form-check-input" id="googleSheetsAutoUpdate" 
-                                   ${CONFIG.GOOGLE_SHEETS?.autoUpdate ? 'checked' : ''}
-                                   onchange="updateGoogleSheetsField('autoUpdate', this.checked)">
-                            <label for="googleSheetsAutoUpdate" style="margin: 0;">تفعيل التحديث التلقائي</label>
-                        </div>
-                    </div>
-                    
-                    ${CONFIG.GOOGLE_SHEETS?.url ? `
-                        <div style="margin-top: 15px;">
-                            <a href="${CONFIG.GOOGLE_SHEETS.url}" target="_blank" class="google-sheets-link">
-                                <i class="fab fa-google"></i>
-                                <span>${CONFIG.GOOGLE_SHEETS.description || 'فتح جدول البيانات'}</span>
-                            </a>
-                        </div>
-                    ` : ''}
-                    
-                    <button class="btn btn-primary" onclick="saveGoogleSheetsSettings()" style="margin-top: 15px;">
-                        <i class="fas fa-save"></i> حفظ إعدادات جداول جوجل
-                    </button>
-                </div>
             `;
         }
         
@@ -10052,7 +9998,6 @@ function nestedTabExplanation(el){
   social:{title:'التواصل والروابط',text:'هذا التبويب يربط واجهة المتجر بقنوات التواصل الخارجية مثل فيسبوك وإنستغرام وماسنجر وتيك توك وواتساب وفايبر.',detail:'الهدف: تقليل الخطوات التي يحتاجها الزبون للوصول إلى المتجر عبر قنواته الاجتماعية.\nالروابط: يجب أن تشير إلى الحساب أو الصفحة المقصودة فعليًا.\nالأرقام: تستخدم لقنوات الاتصال التي تعتمد على رقم الهاتف.\nمهم: روابط التواصل ليست أكواد تتبع؛ لا تضع Pixel ID هنا.'},
   design:{title:'تصميم المتجر والخصومات',text:'هذا التبويب يجمع إعدادات تؤثر في طريقة تقديم الأسعار والعروض، ومنها خصم الكمية والخصم الترويجي.',detail:'خصم الكمية: يعتمد على عدد القطع ويستخدم حدًا أدنى وقيمة خصم لكل قطعة، مع إمكانية تحديد نطاق المنتجات.\nالخصم الترويجي: قاعدة مستقلة تعتمد على نسبة/سعر ترويجي ونطاق منتجات.\nالهدف: التحكم في من يستفيد من كل نوع من التخفيضات دون الخلط بين القاعدتين.'},
   'sizes-colors':{title:'المقاسات والألوان ودليل المقاسات',text:'هذا التبويب يدير القوائم العامة للمقاسات والألوان، ويتيح إدارة دليل المقاسات.',detail:'المقاسات والألوان العامة: تحدد الخيارات التي يمكن أن تعتمد عليها المنتجات.\nإتاحة الخيار داخل المنتج: تتم بشكل مستقل عند إعداد المنتج.\nدليل المقاسات: يربط المقاسات بنطاقات الطول والوزن عندما يحتاج المنتج إلى اختيار مبني على القياسات.\nالهدف: جعل خيارات المنتج واضحة وقابلة للاستخدام بدل كتابة قيم مختلفة يدويًا لكل منتج.'},
-  advanced:{title:'الإعدادات المتقدمة',text:'هذا التبويب يحتوي إعدادات التكامل مع Google Sheets والتحديث المرتبط بها.',detail:'رابط جدول جوجل: يحدد الوجهة المرتبطة بالبيانات.\nوصف الجدول: يساعد الإدارة على معرفة الجدول المرتبط.\nالتحديث التلقائي: يتحكم في استخدام آلية التحديث التلقائي المتاحة في النظام.\nمهم: هذه الإعدادات تخص التكامل مع الجدول، بينما المزامنة مع السرفر عملية أخرى.'},
   pixels:{title:'أكواد التتبع',text:'هذا التبويب يربط المتجر بمصادر التتبع في منصات الإعلانات مثل Facebook وTikTok، ويحدد الأحداث التي يريد المتجر قياسها.',detail:'لماذا البكسل؟ البكسل/كود التتبع يرسل إشارات عن أفعال تحدث داخل المتجر إلى منصة الإعلانات. هذه الإشارات تحول ما يحدث في الموقع من زيارات وأفعال غير مرئية للمنصة إلى أحداث قابلة للقياس.\nما الفائدة؟ قياس الزيارات والأحداث مثل عرض المنتج والإضافة إلى السلة وبدء إتمام الطلب والشراء، ثم استخدام البيانات في تحليل أداء الحملات، فهم رحلة العميل، وبناء جماهير أو تحسين الحملات عندما تدعم المنصة ذلك.\nمعرف البكسل: يحدد مصدر البيانات الذي يجب أن يستقبل الأحداث.\nالأحداث: كل مفتاح يحدد هل يُرسل الحدث المقابل.\nمهم: البكسل لا يضمن مبيعات ولا يخفض تكلفة الإعلان تلقائيًا؛ هو أداة قياس وربط بيانات تساعد المنصة وصاحب المتجر على فهم النتائج.'},
   wilayas:{title:'أسعار التوصيل حسب الولاية',text:'هذا التبويب هو جدول التكلفة الأساسية للتوصيل: لكل ولاية سعر مستقل للمنزل وسعر مستقل للمكتب.',detail:'سعر المنزل: التكلفة العادية عندما يختار الزبون التوصيل إلى عنوانه.\nسعر المكتب: التكلفة العادية عندما يختار الزبون الاستلام عبر المكتب/النقطة المعتمدة.\nلماذا فصل السعرين؟ لأن طريقة التسليم مختلفة وقد تختلف تكلفتها.\nالعلاقة مع التوصيل المجاني: هذه الأسعار هي التكلفة الأساسية، بينما قواعد التوصيل المجاني تحدد متى تصبح التكلفة صفرًا للطلب المؤهل.\nالهدف: منع ظهور تكلفة توصيل خاطئة للزبون بسبب نقص أو خلط أسعار الولايات.'},
   free:{title:'قواعد التوصيل المجاني',text:'هذا التبويب لا يحدد سعر التوصيل العادي؛ بل يحدد شروط تحويل تكلفة التوصيل إلى مجانية للطلبات التي تستوفي القاعدة.',detail:'يوجد مساران منفصلان: التوصيل المجاني إلى المكتب والتوصيل المجاني إلى المنزل.\nلكل مسار: تفعيل القاعدة، حد أدنى للكمية عند استخدامه، وقائمة الولايات المشمولة.\nمثال منطقي: إذا كانت قاعدة المنزل مفعلة والولاية مشمولة والطلب يحقق شرط الكمية، تصبح تكلفة المنزل مؤهلة للمجانية وفق منطق المتجر.\nمهم: لا تعتبر «تفعيل التوصيل المجاني» وحده كافيًا؛ يجب مراجعة شروطه ونطاقه.\nالهدف: منح المجانية وفق سياسة تجارية محددة بدل إلغاء تكلفة التوصيل للجميع.'},
