@@ -50,9 +50,10 @@
         'https://connect.facebook.net/en_US/fbevents.js');
         
         fbq('init', pixelId);
-        fbq('track', 'PageView');
-        
         window.fbPixelEvents = events;
+        if (events.pageView !== false) {
+            fbq('track', 'PageView');
+        }
     }
 
     // ===== TikTok Pixel Initialization =====
@@ -71,18 +72,33 @@
             a.parentNode.insertBefore(o,a)};
         
             ttq.load(pixelId);
-            ttq.page();
         }(window, document, 'ttq');
         
         window.ttPixelEvents = events;
+        if (events.pageView !== false && window.ttq) {
+            ttq.page();
+        }
+    }
+
+    // Map platform-standard event names to the lowercase keys in config.js.
+    function getPixelConfigEventKey(eventName) {
+        const eventKeys = {
+            PageView: 'pageView',
+            AddToCart: 'addToCart',
+            Purchase: 'purchase',
+            InitiateCheckout: 'initiateCheckout',
+            ViewContent: 'viewContent'
+        };
+        return eventKeys[eventName] || eventName;
     }
 
     function trackPixelEvent(eventName, eventData = {}) {
-        if (window.fbq && window.fbPixelEvents && window.fbPixelEvents[eventName]) {
+        const configKey = getPixelConfigEventKey(eventName);
+        if (window.fbq && window.fbPixelEvents && window.fbPixelEvents[configKey] === true) {
             fbq('track', eventName, eventData);
         }
 
-        if (window.ttq && window.ttPixelEvents && window.ttPixelEvents[eventName]) {
+        if (window.ttq && window.ttPixelEvents && window.ttPixelEvents[configKey] === true) {
             ttq.track(eventName, eventData);
         }
     }
